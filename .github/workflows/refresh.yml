@@ -1,0 +1,79 @@
+# Rebuild the site's data once a day.
+#
+# The job fetches from NYC OpenData and the DCAS exam pages, rewrites the JSON
+# and calendar files under docs/, and commits only if something actually
+# changed. A day where DCAS published nothing produces no commit at all.
+#
+# Two failure modes this is built around:
+#
+#   1. A source changes shape or comes back short. The pipeline raises rather
+#      than writing a half-empty site, so the workflow goes red and the site
+#      keeps serving yesterday's correct data.
+#
+#   2. This workflow quietly stops running. GitHub disables scheduled
+#      workflows after 60 days without repository activity, and it does not
+#      warn you. Nothing here can prevent that, so the site shows how old its
+#      data is on every page instead. See the README.
+
+name: Refresh data
+
+on:
+  schedule:
+    # 07:20 UTC, which is early morning in New York. Not on the hour: GitHub's
+    # scheduler is busiest then and delays runs by up to an hour.
+    - cron: "20 7 * * *"
+  workflow_dispatch:
+
+# Needed to push the rebuilt data back to the branch.
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pandas requests
+
+      - name: Check colour contrast
+        # Cheap, and it fails before the network work rather than after.
+        run: python tools/contrast.py
+
+      - name: Run the pipeline
+        env:
+          # Optional. Raises the Socrata rate limit if the secret exists, and
+          # everything still works if it does not.
+          SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
+        run: python run.py
+
+      - name: Commit only if something changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # --quiet exits non-zero when there is a difference, which is the
+          # signal we want, so this is checked rather than allowed to fail.
+          if git diff --quiet -- docs/; then
+            echo "No change in the published data. Nothing to commit."
+            exit 0
+          fi
+
+          git add docs/
+          git commit -m "Refresh data $(date -u +%Y-%m-%d)"
+          git push
+
+      - name: Say what changed
+        if: always()
+        run: git log --oneline -1
