@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exam</title>
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the details</a>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="wordmark"><a href="index.html">NYC Civil Service Exams</a></p>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Exams</a>
+      <a href="titles.html">Job titles</a>
+      <a href="how-to-apply.html">How to apply</a>
+      <a href="methodology.html">About the data</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <p class="asof" id="exam-no"></p>
+    <h1 class="page-title" id="exam-title">Loading</h1>
+    <p id="status-line"></p>
+
+    <div class="btn-row" id="actions"></div>
+
+    <section class="section">
+      <h2>The details</h2>
+      <dl class="facts" id="facts"></dl>
+    </section>
+
+    <section class="section" id="what-next">
+      <h2>What happens after</h2>
+      <div class="prose" id="what-next-body"></div>
+    </section>
+
+    <div id="freshness"></div>
+
+    <p class="note"><a href="index.html">Back to all exams</a></p>
+  </main>
+
+  <footer class="foot">
+    <p>
+      Application dates come from the City's
+      <a href="https://data.cityofnewyork.us/d/4ptz-hmtc">exam schedule</a>
+      dataset, reconciled against the DCAS exam pages, which are updated first
+      when a period is extended. Confirm on
+      <a href="https://www.nyc.gov/examsforjobs">nyc.gov</a> before you rely on a date.
+    </p>
+    <p>
+      <a href="methodology.html">How this is put together</a> ·
+      <a href="https://github.com/jaramana/civilservice.nyc">Source code</a>
+    </p>
+  </footer>
+
+</div>
+
+<script type="module" src="js/exam.js"></script>
+</body>
+</html>

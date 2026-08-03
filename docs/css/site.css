@@ -1,0 +1,530 @@
+/* ==========================================================================
+   civilservice.nyc
+
+   The page is a sheet of paper pinned to a board. Ruled headings, hairline
+   rules, tabular figures, a lot of white. The 1990s part is the bulletin: flat
+   colour, hard rules, monospace for anything the City assigns a number to. The
+   2026 part is everything else: fluid type, real focus states, motion that
+   respects a preference, and a dark mode that is a first-class sheet of paper
+   rather than an inverted one.
+
+   Every colour is a token. If you find a hex code below the token block, it is
+   a bug. Contrast is checked against WCAG AA at the ratios noted inline.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Paper and ink. Light mode is a plain white sheet on a faintly warm board. */
+  --paper:        #ffffff;
+  --board:        #f2f0ec;
+  /* Ratios below are measured, not estimated. Rerun the checker after any
+     colour change: python3 tools/contrast.py */
+  --ink:          #16161a;   /* on --paper: 18.0:1  AAA */
+  --ink-soft:     #55555f;   /* on --paper:  7.4:1  AAA */
+  --ink-faint:    #6e6e78;   /* on --paper:  5.0:1  AA   smallest we allow */
+
+  --rule:         #16161a;   /* the hard rules under headings */
+  --rule-hair:    #d8d5cf;   /* row hairlines. Decorative: they separate rows
+                                that are already separated by whitespace and
+                                carry no information on their own, so the 3:1
+                                rule for interface components does not apply. */
+  --field:        #86868e;   /* on --paper: 3.6:1. A form field's border does
+                                carry information, it is what tells you the
+                                field is there, so this one is held to 3:1. */
+
+  /* One accent, used for links and for the "open now" state. A civic blue
+     that stays legible on paper without turning the page into a form. */
+  --accent:       #14489b;   /* on --paper:  8.6:1  AAA */
+  --accent-soft:  #e7edf8;   /* accent on it:  7.4:1  AAA */
+
+  /* Status. These carry meaning, so each is paired with a word in the markup,
+     never colour alone. Each pair is checked against its own tinted
+     background, not against the paper: a tag's text sits on the tint. */
+  --open:         #1a6b3c;   /* on --open-soft:   5.6:1  AA */
+  --open-soft:    #e3f1e8;
+  --soon:         #8a4b06;   /* on --soon-soft:   6.0:1  AA */
+  --soon-soft:    #fbeede;
+  --closed:       #5c5c66;   /* on --closed-soft: 5.9:1  AA */
+  --closed-soft:  #f3f1f1;   /* was #eceaea with a lighter grey: 4.2:1, under AA */
+  --warn:         #98311a;   /* on --warn-soft:   6.4:1  AA */
+  --warn-soft:    #fbe9e5;
+
+  --focus:        #14489b;
+
+  /* Type. One humanist stack for reading, one mono for anything the City
+     numbers: exam numbers, title codes, dates in tables. */
+  --face-text: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  --face-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+
+  /* Fluid scale. Clamped so the smallest step never drops below 15px, which
+     is where the ink-faint contrast ratios above were measured. */
+  --t-xs:   clamp(0.78rem, 0.76rem + 0.1vw,  0.84rem);
+  --t-sm:   clamp(0.88rem, 0.85rem + 0.15vw, 0.94rem);
+  --t-base: clamp(1rem,    0.97rem + 0.2vw,  1.09rem);
+  --t-lg:   clamp(1.2rem,  1.1rem  + 0.5vw,  1.45rem);
+  --t-xl:   clamp(1.6rem,  1.35rem + 1.2vw,  2.4rem);
+
+  --measure: 34rem;          /* prose line length, roughly 70 characters */
+  --sheet:   62rem;          /* the sheet of paper itself */
+
+  --gap:     1.5rem;
+  --radius:  3px;            /* nearly square. This is a notice, not a card. */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Not an inversion. Warm near-black paper on a darker board, because a
+       pure #000/#fff flip on a text-dense page is glare in both directions. */
+    --paper:       #16161a;
+    --board:       #0e0e11;
+    --ink:         #ece9e4;  /* on --paper: 14.9:1  AAA */
+    --ink-soft:    #b0aca6;  /* on --paper:  8.0:1  AAA */
+    --ink-faint:   #8f8b86;  /* on --paper:  5.3:1  AA  */
+
+    --rule:        #ece9e4;
+    --rule-hair:   #34343c;  /* decorative, see the light block */
+    --field:       #71717b;  /* on --paper: 3.7:1 */
+
+    --accent:      #8fb4ee;  /* on --paper:  8.5:1  AAA */
+    --accent-soft: #1e2836;  /* accent on it:   7.0:1  AAA */
+
+    --open:        #6cc492;  /* on --open-soft:   7.2:1  AAA */
+    --open-soft:   #172a1f;
+    --soon:        #e0a761;  /* on --soon-soft:   7.5:1  AAA */
+    --soon-soft:   #2b2016;
+    --closed:      #8f8b86;  /* on --closed-soft: 4.6:1  AA  */
+    --closed-soft: #232329;
+    --warn:        #f0907a;  /* on --warn-soft:   7.0:1  AAA */
+    --warn-soft:   #301a16;
+
+    --focus:       #8fb4ee;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: var(--face-text);
+  font-size: var(--t-base);
+  line-height: 1.55;
+  /* The sheet sits on the board with a hairline, not a shadow. A drop shadow
+     is the polished-app look this project is deliberately outside of. */
+}
+
+/* Skip link. Visible the moment it is focused, invisible otherwise. */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--rule);
+  z-index: 10;
+}
+.skip:focus { left: 0.5rem; top: 0.5rem; }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+/* --------------------------------------------------------------------------
+   3. The sheet
+   -------------------------------------------------------------------------- */
+
+.sheet {
+  max-width: var(--sheet);
+  margin: 0 auto;
+  background: var(--paper);
+  border-left: 1px solid var(--rule-hair);
+  border-right: 1px solid var(--rule-hair);
+  padding: 0 clamp(1rem, 4vw, 3rem) 4rem;
+  min-height: 100vh;
+}
+
+/* --- masthead ----------------------------------------------------------- */
+
+.masthead {
+  border-bottom: 3px solid var(--rule);
+  padding: 1.4rem 0 0.7rem;
+  margin-bottom: 1.6rem;
+}
+
+.masthead h1,
+.masthead .wordmark {
+  font-size: var(--t-lg);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.1;
+}
+.masthead .wordmark a {
+  color: inherit;
+  text-decoration: none;
+}
+.masthead .wordmark a:hover { text-decoration: underline; }
+
+.masthead .tagline {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  margin: 0.35rem 0 0;
+  max-width: var(--measure);
+}
+
+/* --- navigation --------------------------------------------------------- */
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  margin-top: 0.9rem;
+  font-size: var(--t-sm);
+}
+.nav a {
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+}
+.nav a:hover { border-bottom-color: var(--rule-hair); }
+.nav a[aria-current="page"] {
+  border-bottom-color: var(--rule);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   4. Sections, the ruled-heading pattern
+   -------------------------------------------------------------------------- */
+
+.section { margin: 2.6rem 0 0; }
+
+.section > h2 {
+  font-size: var(--t-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin: 0 0 0.15rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.section > h2 .count {
+  font-family: var(--face-mono);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faint);
+}
+
+.section > .note {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  margin: 0.7rem 0 0;
+  max-width: var(--measure);
+}
+
+h1.page-title {
+  font-size: var(--t-xl);
+  line-height: 1.12;
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.prose { max-width: var(--measure); }
+.prose p { margin: 0 0 1rem; }
+
+/* --------------------------------------------------------------------------
+   5. The bulletin list, one exam per row
+   -------------------------------------------------------------------------- */
+
+.bulletin {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bulletin > li {
+  border-bottom: 1px solid var(--rule-hair);
+}
+
+.bulletin a.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  color: inherit;
+  text-decoration: none;
+  /* 2026: the row responds, but only just, and instantly. */
+  transition: background-color 90ms linear;
+}
+.bulletin a.row:hover {
+  background: var(--accent-soft);
+  /* Bleed the hover to the sheet edge so it reads as a ruled row, not a card */
+  box-shadow: -0.6rem 0 0 var(--accent-soft), 0.6rem 0 0 var(--accent-soft);
+}
+
+.bulletin .name {
+  font-weight: 600;
+  grid-column: 1;
+}
+.bulletin a.row:hover .name { text-decoration: underline; }
+
+.bulletin .when {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-family: var(--face-mono);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  text-align: right;
+  white-space: nowrap;
+}
+.bulletin .when strong { color: var(--ink); font-weight: 600; }
+
+.bulletin .meta {
+  grid-column: 1;
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+  font-family: var(--face-mono);
+}
+
+@media (max-width: 34rem) {
+  .bulletin a.row { grid-template-columns: 1fr; }
+  .bulletin .when {
+    grid-column: 1;
+    grid-row: auto;
+    text-align: left;
+  }
+}
+
+/* --- status tag --------------------------------------------------------- */
+
+.tag {
+  display: inline-block;
+  font-family: var(--face-mono);
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius);
+  white-space: nowrap;
+}
+.tag-open   { background: var(--open-soft);   color: var(--open); }
+.tag-soon   { background: var(--soon-soft);   color: var(--soon); }
+.tag-closed { background: var(--closed-soft); color: var(--closed); }
+
+/* --------------------------------------------------------------------------
+   6. Empty states
+   -------------------------------------------------------------------------- */
+
+/* Applications mostly open on the first Wednesday of the month, so "nothing is
+   open today" is a normal Tuesday, not a broken page. It gets a real sentence
+   and the next date, never a shrug. */
+.empty {
+  padding: 1rem 0 0.2rem;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  max-width: var(--measure);
+}
+.empty strong { color: var(--ink); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   7. Freshness and warnings
+   -------------------------------------------------------------------------- */
+
+.asof {
+  font-family: var(--face-mono);
+  font-size: var(--t-xs);
+  color: var(--ink-faint);
+  margin-top: 0.9rem;
+}
+
+.banner {
+  border: 2px solid var(--warn);
+  background: var(--warn-soft);
+  color: var(--ink);
+  padding: 0.8rem 1rem;
+  margin: 1.2rem 0 0;
+  font-size: var(--t-sm);
+  border-radius: var(--radius);
+}
+.banner strong { color: var(--warn); }
+
+/* --------------------------------------------------------------------------
+   8. Controls: search, filters
+   -------------------------------------------------------------------------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-end;
+  margin: 1.2rem 0 0.4rem;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.3rem; flex: 1 1 18rem; }
+
+.field label {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+input[type="search"], select {
+  font: inherit;
+  font-size: var(--t-sm);
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--field);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.6rem;
+  width: 100%;
+}
+input[type="search"]:focus, select:focus { border-color: var(--focus); }
+
+.checks { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  /* Comfortable tap target without making the row look like a button bar. */
+  padding: 0.4rem 0;
+}
+.check input { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); }
+
+.result-count {
+  font-family: var(--face-mono);
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+  margin: 0.6rem 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   9. Definition rows, used on the exam and title pages
+   -------------------------------------------------------------------------- */
+
+.facts {
+  display: grid;
+  grid-template-columns: minmax(9rem, 14rem) 1fr;
+  gap: 0;
+  margin: 1.2rem 0 0;
+}
+.facts dt {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  padding: 0.6rem 1rem 0.6rem 0;
+  border-top: 1px solid var(--rule-hair);
+}
+.facts dd {
+  margin: 0;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--rule-hair);
+  font-variant-numeric: tabular-nums;
+}
+.facts dd .qualifier {
+  display: block;
+  font-size: var(--t-xs);
+  color: var(--ink-faint);
+  max-width: var(--measure);
+}
+
+@media (max-width: 32rem) {
+  .facts { grid-template-columns: 1fr; }
+  .facts dt { padding-bottom: 0; border-top: 1px solid var(--rule-hair); }
+  .facts dd { border-top: 0; padding-top: 0.1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   10. Buttons and the calendar affordance
+   -------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.85rem;
+  text-decoration: none;
+  transition: transform 90ms ease, background-color 90ms linear;
+}
+.btn:hover { background: var(--accent-soft); }
+.btn:active { transform: translateY(1px); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  /* Both themes: --paper is the readable counterpart to --accent here.
+     Light 8.4:1, dark 8.1:1. */
+  color: var(--paper);
+}
+.btn-primary:hover { background: var(--accent); filter: brightness(1.12); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.4rem 0 0; }
+
+/* --------------------------------------------------------------------------
+   11. Footer
+   -------------------------------------------------------------------------- */
+
+.foot {
+  margin-top: 3.5rem;
+  padding-top: 1rem;
+  border-top: 3px solid var(--rule);
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+.foot p { margin: 0 0 0.5rem; max-width: var(--measure); }
+
+/* --------------------------------------------------------------------------
+   12. Motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print. The page is already a sheet of paper, so this is mostly getting the
+   board and the navigation out of the way. */
+@media print {
+  body { background: #fff; }
+  .sheet { border: 0; max-width: none; }
+  .nav, .controls, .btn-row { display: none; }
+  a { color: #000; }
+}

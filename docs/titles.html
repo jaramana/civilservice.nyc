@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Every NYC civil service job title</title>
+<meta name="description" content="Every job title in the New York City civil service, with hours, salary range and union. Most have no exam running right now and are here anyway.">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the list</a>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="wordmark"><a href="index.html">NYC Civil Service Exams</a></p>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Exams</a>
+      <a href="titles.html">Job titles</a>
+      <a href="how-to-apply.html">How to apply</a>
+      <a href="methodology.html">About the data</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1 class="page-title">Job titles</h1>
+    <div class="prose">
+      <p>
+        Every title in the City's civil service catalog, not only the ones
+        hiring today. Most of these have no exam running and no active list,
+        and they are here because the job still exists and still pays what it
+        pays.
+      </p>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <label for="q">Search by title or code</label>
+        <input type="search" id="q" placeholder="Emergency Preparedness Manager, or 10251"
+               autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="f-active"> Only titles with an exam or an active list</label>
+      <label class="check"><input type="checkbox" id="f-open"> Only titles with an exam open now</label>
+    </div>
+
+    <p class="result-count" id="result-count" role="status"></p>
+
+    <ul class="bulletin" id="results"></ul>
+
+    <div class="btn-row" id="more-row" hidden>
+      <button class="btn" id="more" type="button">Show more</button>
+    </div>
+
+    <div id="freshness"></div>
+  </main>
+
+  <footer class="foot">
+    <p>
+      Titles, hours, salary ranges and unions come from the City's
+      <a href="https://data.cityofnewyork.us/d/nzjr-3966">Civil Service Titles</a>
+      dataset. A salary range is what the title can pay, not what any one
+      person earns.
+    </p>
+    <p>
+      <a href="methodology.html">How this is put together</a> ·
+      <a href="https://github.com/jaramana/civilservice.nyc">Source code</a>
+    </p>
+  </footer>
+
+</div>
+
+<script type="module" src="js/titles.js"></script>
+</body>
+</html>

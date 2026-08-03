@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All NYC civil service exams</title>
+<meta name="description" content="Search every New York City civil service exam we publish: open now, upcoming, and recently closed.">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the list</a>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="wordmark"><a href="index.html">NYC Civil Service Exams</a></p>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Exams</a>
+      <a href="titles.html">Job titles</a>
+      <a href="how-to-apply.html">How to apply</a>
+      <a href="methodology.html">About the data</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1 class="page-title">All exams</h1>
+    <div class="prose">
+      <p id="intro">
+        Every exam on the City's published schedule, including the ones that
+        have already closed.
+      </p>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <label for="q">Search by job or exam number</label>
+        <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
+               autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field" style="flex: 0 1 12rem;">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="">All</option>
+          <option value="accepting">Accepting applications</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+      <div class="field" style="flex: 0 1 12rem;">
+        <label for="type">Who can apply</label>
+        <select id="type">
+          <option value="">Anyone or City staff</option>
+          <option value="open_competitive">Open to the public</option>
+          <option value="promotion">Promotion only</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="result-count" id="result-count" role="status"></p>
+
+    <ul class="bulletin" id="results"></ul>
+
+    <div class="btn-row" id="more-row" hidden>
+      <button class="btn" id="more" type="button">Show more</button>
+    </div>
+
+    <div id="freshness"></div>
+  </main>
+
+  <footer class="foot">
+    <p>
+      Exams that closed before the archive floor are not listed. The City never
+      published its fiscal 2025 schedule to OpenData, so there is a twelve
+      month hole in the record and showing a partial archive would imply a
+      completeness that is not there.
+      <a href="methodology.html">More on that</a>.
+    </p>
+    <p>
+      <a href="methodology.html">How this is put together</a> ·
+      <a href="https://github.com/jaramana/civilservice.nyc">Source code</a>
+    </p>
+  </footer>
+
+</div>
+
+<script type="module" src="js/exams.js"></script>
+</body>
+</html>

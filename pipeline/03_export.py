@@ -225,6 +225,14 @@ def export_titles(exams, lists, catalog, paygap):
             entry["investigation"] = True
 
         if len(e):
+            # The exam numbers themselves, newest first, so the title page can
+            # link to each exam without matching titles back up in the browser.
+            # Exam and catalog slugs are built differently on purpose (a title
+            # slug carries its code, an exam slug does not), so string surgery
+            # in JavaScript would be a silent breakage waiting to happen.
+            entry["exam_nos"] = list(
+                e.sort_values("start", ascending=False).exam_no.astype(str)
+            )
             nxt = e[e.status.isin(["accepting", "upcoming"])].sort_values("start")
             if len(nxt):
                 entry["next_exam_no"] = nxt.exam_no.iloc[0]
@@ -260,6 +268,53 @@ def export_titles(exams, lists, catalog, paygap):
     c.log(f"{sum(1 for x in payload if not x['exams'] and not x['lists']):,} titles "
           f"have neither an exam nor a list and exist here only because of the catalog")
     return payload
+
+
+def export_titles_index(titles):
+    """The slim file the directory page loads.
+
+    titles.json is around 800 KB because every title carries its exam history,
+    list status and payroll context. The directory needs none of that: it draws
+    a name, a salary band and a couple of filter flags. Handing a phone the
+    full file just to render an index is the kind of waste that makes a static
+    site feel slow, so the index is its own file and the full record is fetched
+    only when someone opens a title.
+
+    Keys are short here, and only here. This file is read by one script and
+    nobody hand-edits it. Everything a person or another program might read
+    keeps its long names.
+    """
+    c.stage("titles-index.json")
+    payload = []
+    for t in titles:
+        entry = {
+            "s": t["slug"],
+            "t": t["title"],
+            "c": t["code"],
+            "lo": t.get("salary_min"),
+            "hi": t.get("salary_max"),
+        }
+        # Filter flags, present only when true. 2,227 of 2,632 titles have
+        # neither an exam nor a list, so writing the false case 2,227 times
+        # would cost more than the flags save.
+        # Truncated names are flagged so the directory can mark them. Without
+        # it "Accountant (Board of Elections" reads as a typo on our side
+        # rather than the catalog's 30 character limit.
+        if t.get("name_truncated"):
+            entry["x"] = 1
+        if t["exams"]:
+            entry["e"] = 1
+        if t["lists"]:
+            entry["l"] = 1
+        if t["open_now"]:
+            entry["o"] = 1
+        if t.get("next_status") == "upcoming":
+            entry["u"] = 1
+        payload.append({k: v for k, v in entry.items() if v is not None})
+
+    size = c.write_json(cfg.DATA_DIR / "titles-index.json", payload)
+    c.log(f"{len(payload):,} titles, {size/1024:.0f} KB "
+          f"(the directory page loads this instead of titles.json)")
 
 
 def export_meta(exams, lists, published_exams, catalog):
@@ -330,6 +385,15 @@ def export_meta(exams, lists, published_exams, catalog):
             "archive_floor": cfg.ARCHIVE_FLOOR,
         },
         "oasys_url": cfg.OASYS_URL,
+        # Where stage 4 put the calendar files, so the pages can build a
+        # subscribe link without a second copy of these paths in JavaScript.
+        "calendar": {
+            "feed": cfg.CALENDAR_FEED_FILENAME,
+            "dir": cfg.CALENDAR_DIR_NAME,
+            "webcal": (f"webcal://{cfg.SITE_BASE_URL.split('//')[-1]}"
+                       f"/{cfg.CALENDAR_FEED_FILENAME}"),
+            "reminder_days": cfg.CALENDAR_REMINDER_DAYS_BEFORE_CLOSE,
+        },
     }
     c.write_json(cfg.DATA_DIR / "meta.json", payload)
     for k, v in payload["counts"].items():
@@ -396,7 +460,21 @@ def export_dictionary():
             "bargaining_unit": "The bargaining unit the title falls under. Non-Union covers managerial and some exempt titles.",
             "investigation": "True where the City requires a background investigation before appointment.",
             "salary_hiring": "Mean hiring salary at certification, where this title has a list that has been certified. This is what the job paid at the point of hire, and it is a different question from the title's salary range.",
+            "exam_nos": "The exam numbers we publish for this title, newest first. Present so a title page can link to its exams directly. About one exam in six has no title here at all: CUNY and Health + Hospitals run exams for titles the City catalog does not carry, and the catalog's 30 character name limit means some longer exam names have nothing to match. We leave those unlinked rather than attaching pay to a guess.",
             "paygap": "Median salary for the matching payroll title from thepaygap.nyc, where an exact title match exists. This is what people already in the title earn, which is a third thing again, separate from both the title's range and the hiring salary. Many titles have no match: MTA titles such as Conductor and Train Operator are absent because the MTA is a State authority and does not appear in City payroll data at all.",
+        },
+        "titles-index.json": {
+            "_description": "The same titles as titles.json, cut down to what the directory page draws so a phone does not download 800 KB to render an index. Keys are single letters here and only here, because one script reads this file and nothing else does. Every field below also exists in titles.json under its full name.",
+            "s": "slug, the title's address on this site.",
+            "t": "title, the name.",
+            "c": "code, the five character title code.",
+            "lo": "salary_min.",
+            "hi": "salary_max.",
+            "x": "name_truncated. The directory adds an ellipsis so a cut-off name does not read as our typo.",
+            "e": "Present where the title has at least one exam we publish.",
+            "l": "Present where the title has at least one active list.",
+            "o": "Present where an exam for this title is accepting applications today.",
+            "u": "Present where an exam for this title is scheduled but not yet open.",
         },
         "not_published": {
             "_description": "Deliberately absent.",
@@ -420,7 +498,8 @@ def main():
 
     published = export_exams(exams)
     exported_lists = export_lists(lists)
-    export_titles(published, lists, catalog, paygap)
+    titles = export_titles(published, lists, catalog, paygap)
+    export_titles_index(titles)
     export_meta(exams, exported_lists, published, catalog)
     export_dictionary()
 

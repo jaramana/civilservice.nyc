@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About the data</title>
+<meta name="description" content="Where this site's numbers come from, what they mean, and what they cannot tell you.">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the detail</a>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="wordmark"><a href="index.html">NYC Civil Service Exams</a></p>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Exams</a>
+      <a href="titles.html">Job titles</a>
+      <a href="how-to-apply.html">How to apply</a>
+      <a href="methodology.html">About the data</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1 class="page-title">About the data</h1>
+
+    <div class="prose">
+      <p>
+        Everything here comes from data the City publishes, plus the DCAS exam
+        pages. No numbers are estimated, modelled or filled in. Where a field is
+        missing it is left out rather than guessed at, which is why some pages
+        are shorter than others.
+      </p>
+    </div>
+
+    <section class="section">
+      <h2>What this cannot tell you</h2>
+      <div class="prose">
+        <p>
+          <strong>Whether you will be hired.</strong> Nothing published shows how
+          far down a list an agency has reached, or where any individual sits.
+          This site has no name search and no list number lookup, by choice.
+        </p>
+        <p>
+          <strong>How fast a list moves.</strong> The certification data records
+          that a list was used, not how deep. Some titles are certified hundreds
+          of times because every posting pulls a few names. Uniformed titles are
+          certified a handful of times in large batches. A high count means the
+          title is hired often, not that the list moves quickly.
+        </p>
+        <p>
+          <strong>What you would earn.</strong> A title's salary range is what it
+          is authorised to pay across every assignment level. Where we show a
+          median it is a different statistic, from a different source, describing
+          people currently in the job.
+        </p>
+        <p>
+          <strong>Anything about a person.</strong> The City publishes candidate
+          names, exact scores and credit flags in the active list dataset. This
+          site never requests those columns, never caches them and never
+          publishes them. That is enforced in the pipeline rather than promised
+          in prose.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Known holes, stated plainly</h2>
+      <div class="prose">
+        <p>
+          <strong>A missing year.</strong> No exam has an application period
+          between July 2024 and June 2025. The City never published that fiscal
+          year's schedule as open data. The archive on this site starts after the
+          gap rather than showing a partial record that would look complete.
+        </p>
+        <p>
+          <strong>The feed lags the City.</strong> When DCAS extends an
+          application period, its own pages change first and the open data
+          follows, sometimes weeks later. On one check the City's pages listed
+          eight exams open and the data listed two. The pipeline reads both every
+          day and lets the City's pages win on dates.
+        </p>
+        <p>
+          <strong>Truncated names.</strong> The title catalog cuts names at 30
+          characters, and about half of all rows hit that limit. Where an exam or
+          a list spells a title out in full, that fuller spelling is what you see.
+        </p>
+        <p>
+          <strong>Recycled exam numbers.</strong> The City reuses exam numbers
+          roughly every ten years. Any history attached to an exam here is
+          filtered to the period after that list was established, so an old,
+          unrelated exam's record is not credited to a current one.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Where it comes from <span class="count" id="sources-count"></span></h2>
+      <dl class="facts" id="sources"></dl>
+    </section>
+
+    <section class="section">
+      <h2>How often it updates</h2>
+      <div class="prose">
+        <p id="refresh-line">
+          A scheduled job runs the pipeline once a day, rebuilds the files this
+          site reads, and commits only when something actually changed.
+        </p>
+        <p>
+          The date on every page is the date the City's data says it is current
+          as of, not the date this site last ran. Those are different, and the
+          second one is the useless one: a build that runs perfectly every day on
+          data that stopped updating in April is exactly the failure this site is
+          built to make visible.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Every published field</h2>
+      <p class="note">
+        What each field in the data files means, generated from the pipeline so
+        it cannot drift from what is actually published.
+      </p>
+      <dl class="facts" id="dictionary"></dl>
+    </section>
+
+    <div id="freshness"></div>
+  </main>
+
+  <footer class="foot">
+    <p>
+      Built in the open. The pipeline is four short Python files and every
+      threshold on this page lives in a single config file with a comment
+      explaining it.
+    </p>
+    <p>
+      <a href="https://github.com/jaramana/civilservice.nyc">Source code</a> ·
+      <a href="https://opendata.cityofnewyork.us/">NYC OpenData</a>
+    </p>
+  </footer>
+
+</div>
+
+<script type="module" src="js/methodology.js"></script>
+</body>
+</html>

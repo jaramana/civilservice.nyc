@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job title</title>
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the details</a>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="wordmark"><a href="index.html">NYC Civil Service Exams</a></p>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Exams</a>
+      <a href="titles.html">Job titles</a>
+      <a href="how-to-apply.html">How to apply</a>
+      <a href="methodology.html">About the data</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1 class="page-title" id="title-name">Loading</h1>
+    <p class="asof" id="title-code"></p>
+
+    <section class="section" id="pay-section">
+      <h2>The job</h2>
+      <dl class="facts" id="facts"></dl>
+    </section>
+
+    <section class="section" id="exams-section" hidden>
+      <h2>Exams for this title <span class="count" id="exams-count"></span></h2>
+      <ul class="bulletin" id="exams"></ul>
+    </section>
+
+    <section class="section" id="list-section" hidden>
+      <h2>The list</h2>
+      <div id="list-body"></div>
+    </section>
+
+    <div id="freshness"></div>
+
+    <p class="note"><a href="titles.html">Back to all job titles</a></p>
+  </main>
+
+  <footer class="foot">
+    <p>
+      Hours, salary range and union come from the City's
+      <a href="https://data.cityofnewyork.us/d/nzjr-3966">Civil Service Titles</a>
+      dataset. Where a median is shown it comes from
+      <a href="http://thepaygap.nyc">thepaygap.nyc</a> and describes people
+      currently in the job, which is a different thing from what the title can pay.
+    </p>
+    <p>
+      <a href="methodology.html">How this is put together</a> ·
+      <a href="https://github.com/jaramana/civilservice.nyc">Source code</a>
+    </p>
+  </footer>
+
+</div>
+
+<script type="module" src="js/title.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NYC civil service exams</title>
+<meta name="description" content="Which New York City civil service exams are open for applications, which are coming, and what each job title pays. Free, open source, built on NYC OpenData.">
+<link rel="stylesheet" href="css/site.css">
+<!-- Calendar readers and browsers both understand this. Someone can subscribe
+     to every open exam straight from the page source if they want to. -->
+<link rel="alternate" type="text/calendar" title="NYC civil service exam deadlines" href="exams.ics">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the exams</a>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="wordmark"><a href="index.html">NYC Civil Service Exams</a></p>
+    <p class="tagline">
+      Which exams are open, which are coming, and what the job pays.
+      Public data, plainly. Free, no account, open source.
+    </p>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Exams</a>
+      <a href="titles.html">Job titles</a>
+      <a href="how-to-apply.html">How to apply</a>
+      <a href="methodology.html">About the data</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- Order is deliberate. What you can act on today comes first even when
+         it is empty, because "nothing is open" is an answer. The substantial
+         section is what is coming, since DCAS opens most application periods
+         on the first Wednesday of the month and the open list is often thin. -->
+
+    <section class="section" id="accepting-section">
+      <h2>Accepting applications <span class="count" id="accepting-count"></span></h2>
+      <ul class="bulletin" id="accepting"></ul>
+    </section>
+
+    <section class="section" id="upcoming-section">
+      <h2>Opening soon <span class="count" id="upcoming-count"></span></h2>
+      <ul class="bulletin" id="upcoming"></ul>
+      <p class="note" id="upcoming-note"></p>
+    </section>
+
+    <section class="section" id="closed-section">
+      <h2>Recently closed <span class="count" id="closed-count"></span></h2>
+      <ul class="bulletin" id="closed"></ul>
+      <p class="note">
+        An exam that has closed still matters: the list it produces is how the
+        City hires for that title for the next few years.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Never miss a deadline</h2>
+      <p class="note">
+        DCAS does not send an alert when an exam opens. Subscribe to the
+        calendar below and every application period lands in the calendar you
+        already use, with a reminder <span id="reminder-days">three</span> days
+        before it closes. Nothing is stored and nobody is asked for an email
+        address, because the reminder comes from your own device.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn-primary" id="subscribe" href="exams.ics">Subscribe to exam deadlines</a>
+        <a class="btn" href="exams.ics" download>Download the calendar file</a>
+      </div>
+    </section>
+
+    <div id="freshness"></div>
+
+  </main>
+
+  <footer class="foot">
+    <p>
+      Built from <a href="https://opendata.cityofnewyork.us/">NYC OpenData</a>
+      and the DCAS exam pages. This is not a City website and nobody here works
+      for the City. Dates can change: confirm on
+      <a href="https://www.nyc.gov/examsforjobs">nyc.gov</a> before you rely on one.
+    </p>
+    <p>
+      <a href="methodology.html">How this is put together</a> ·
+      <a href="https://github.com/jaramana/civilservice.nyc">Source code</a>
+    </p>
+  </footer>
+
+</div>
+
+<script type="module" src="js/home.js"></script>
+</body>
+</html>
