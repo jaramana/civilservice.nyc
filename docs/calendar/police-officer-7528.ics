@@ -1,0 +1,56 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Police Officer (Prom) (Exam 7528)
+X-WR-CALNAME:Police Officer (Prom) (Exam 7528)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7528-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:Applications open: Police Officer (Prom) (Exam 7528)
+DESCRIPTION:Applications open for Police Officer (Prom)\, Exam 7528.\nAppli
+ cation period: 2026-12-02 to 2026-12-22.\nApply through OASys: https://www
+ .nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.html?ex
+ am=7528\nDates come from DCAS and can be extended. Confirm on nyc.gov befo
+ re relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7528
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7528-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20261222
+DTEND;VALUE=DATE:20261223
+SUMMARY:Last day to apply: Police Officer (Prom) (Exam 7528)
+DESCRIPTION:Today is the last day to apply for Police Officer (Prom)\, Exam
+  7528.\nApplication period: 2026-12-02 to 2026-12-22.\nApply through OASys
+ : https://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc
+ /exam.html?exam=7528\nDates come from DCAS and can be extended. Confirm on
+  nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7528
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Police Officer (Prom) (Exam 7528) closes in 3 days. Apply at ht
+ tps://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

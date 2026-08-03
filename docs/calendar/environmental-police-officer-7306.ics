@@ -1,0 +1,56 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Environmental Police Officer (Exam 7306)
+X-WR-CALNAME:Environmental Police Officer (Exam 7306)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7306-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270407
+DTEND;VALUE=DATE:20270408
+SUMMARY:Applications open: Environmental Police Officer (Exam 7306)
+DESCRIPTION:Applications open for Environmental Police Officer\, Exam 7306.
+ \nApplication period: 2027-04-07 to 2027-04-27.\nApply through OASys: http
+ s://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.
+ html?exam=7306\nDates come from DCAS and can be extended. Confirm on nyc.g
+ ov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7306
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7306-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270427
+DTEND;VALUE=DATE:20270428
+SUMMARY:Last day to apply: Environmental Police Officer (Exam 7306)
+DESCRIPTION:Today is the last day to apply for Environmental Police Officer
+ \, Exam 7306.\nApplication period: 2027-04-07 to 2027-04-27.\nApply throug
+ h OASys: https://www.nyc.gov/examsforjobs\nExam details: https://civilserv
+ ice.nyc/exam.html?exam=7306\nDates come from DCAS and can be extended. Con
+ firm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7306
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Environmental Police Officer (Exam 7306) closes in 3 days. Appl
+ y at https://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

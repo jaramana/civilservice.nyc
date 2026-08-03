@@ -1,0 +1,58 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Emergency Medical Specialist Trainee (Exam 6126)
+X-WR-CALNAME:Emergency Medical Specialist Trainee (Exam 6126)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-6126-2026-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20260615
+DTEND;VALUE=DATE:20260616
+SUMMARY:Applications open: Emergency Medical Specialist Trainee (Exam 6126)
+DESCRIPTION:Applications open for Emergency Medical Specialist Trainee\, Ex
+ am 6126.\nApplication period: 2026-06-15 to 2026-08-07.\nApply through OAS
+ ys: https://www.nyc.gov/examsforjobs\nNotice of Examination: https://www.n
+ yc.gov/assets/dcas/downloads/pdf/noes/20266126000.pdf\nExam details: https
+ ://civilservice.nyc/exam.html?exam=6126\nDates come from DCAS and can be e
+ xtended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=6126
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-6126-2026-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20260807
+DTEND;VALUE=DATE:20260808
+SUMMARY:Last day to apply: Emergency Medical Specialist Trainee (Exam 6126)
+DESCRIPTION:Today is the last day to apply for Emergency Medical Specialist
+  Trainee\, Exam 6126.\nApplication period: 2026-06-15 to 2026-08-07.\nAppl
+ y through OASys: https://www.nyc.gov/examsforjobs\nNotice of Examination: 
+ https://www.nyc.gov/assets/dcas/downloads/pdf/noes/20266126000.pdf\nExam d
+ etails: https://civilservice.nyc/exam.html?exam=6126\nDates come from DCAS
+  and can be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=6126
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Emergency Medical Specialist Trainee (Exam 6126) closes in 3 da
+ ys. Apply at https://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

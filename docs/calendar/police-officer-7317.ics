@@ -1,0 +1,56 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Police Officer (Exam 7317)
+X-WR-CALNAME:Police Officer (Exam 7317)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7317-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270104
+DTEND;VALUE=DATE:20270105
+SUMMARY:Applications open: Police Officer (Exam 7317)
+DESCRIPTION:Applications open for Police Officer\, Exam 7317.\nApplication 
+ period: 2027-01-04 to 2027-01-19.\nApply through OASys: https://www.nyc.go
+ v/examsforjobs\nExam details: https://civilservice.nyc/exam.html?exam=7317
+ \nDates come from DCAS and can be extended. Confirm on nyc.gov before rely
+ ing on this.
+URL:https://civilservice.nyc/exam.html?exam=7317
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7317-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270119
+DTEND;VALUE=DATE:20270120
+SUMMARY:Last day to apply: Police Officer (Exam 7317)
+DESCRIPTION:Today is the last day to apply for Police Officer\, Exam 7317.\
+ nApplication period: 2027-01-04 to 2027-01-19.\nApply through OASys: https
+ ://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.h
+ tml?exam=7317\nDates come from DCAS and can be extended. Confirm on nyc.go
+ v before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7317
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Police Officer (Exam 7317) closes in 3 days. Apply at https://w
+ ww.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

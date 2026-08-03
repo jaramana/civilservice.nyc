@@ -1,0 +1,58 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Emergency Medical Specialist (Exam 6125)
+X-WR-CALNAME:Emergency Medical Specialist (Exam 6125)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-6125-2026-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20260615
+DTEND;VALUE=DATE:20260616
+SUMMARY:Applications open: Emergency Medical Specialist (Exam 6125)
+DESCRIPTION:Applications open for Emergency Medical Specialist\, Exam 6125.
+ \nApplication period: 2026-06-15 to 2026-08-07.\nApply through OASys: http
+ s://www.nyc.gov/examsforjobs\nNotice of Examination: https://www.nyc.gov/a
+ ssets/dcas/downloads/pdf/noes/20266125000.pdf\nExam details: https://civil
+ service.nyc/exam.html?exam=6125\nDates come from DCAS and can be extended.
+  Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=6125
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-6125-2026-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20260807
+DTEND;VALUE=DATE:20260808
+SUMMARY:Last day to apply: Emergency Medical Specialist (Exam 6125)
+DESCRIPTION:Today is the last day to apply for Emergency Medical Specialist
+ \, Exam 6125.\nApplication period: 2026-06-15 to 2026-08-07.\nApply throug
+ h OASys: https://www.nyc.gov/examsforjobs\nNotice of Examination: https://
+ www.nyc.gov/assets/dcas/downloads/pdf/noes/20266125000.pdf\nExam details: 
+ https://civilservice.nyc/exam.html?exam=6125\nDates come from DCAS and can
+  be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=6125
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Emergency Medical Specialist (Exam 6125) closes in 3 days. Appl
+ y at https://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

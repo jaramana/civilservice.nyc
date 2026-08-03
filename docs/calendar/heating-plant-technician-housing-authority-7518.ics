@@ -1,0 +1,59 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Heating Plant Technician (Housing Authority) (Prom) (Exam 7518)
+X-WR-CALNAME:Heating Plant Technician (Housing Authority) (Prom) (Exam 7518
+ )
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7518-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270407
+DTEND;VALUE=DATE:20270408
+SUMMARY:Applications open: Heating Plant Technician (Housing Authority) (Pr
+ om) (Exam 7518)
+DESCRIPTION:Applications open for Heating Plant Technician (Housing Authori
+ ty) (Prom)\, Exam 7518.\nApplication period: 2027-04-07 to 2027-04-27.\nAp
+ ply through OASys: https://www.nyc.gov/examsforjobs\nExam details: https:/
+ /civilservice.nyc/exam.html?exam=7518\nDates come from DCAS and can be ext
+ ended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7518
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7518-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270427
+DTEND;VALUE=DATE:20270428
+SUMMARY:Last day to apply: Heating Plant Technician (Housing Authority) (Pr
+ om) (Exam 7518)
+DESCRIPTION:Today is the last day to apply for Heating Plant Technician (Ho
+ using Authority) (Prom)\, Exam 7518.\nApplication period: 2027-04-07 to 20
+ 27-04-27.\nApply through OASys: https://www.nyc.gov/examsforjobs\nExam det
+ ails: https://civilservice.nyc/exam.html?exam=7518\nDates come from DCAS a
+ nd can be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7518
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Heating Plant Technician (Housing Authority) (Prom) (Exam 7518)
+  closes in 3 days. Apply at https://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

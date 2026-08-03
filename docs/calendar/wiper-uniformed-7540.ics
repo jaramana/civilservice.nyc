@@ -1,0 +1,56 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Wiper (Uniformed) (Prom) (Exam 7540)
+X-WR-CALNAME:Wiper (Uniformed) (Prom) (Exam 7540)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7540-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270106
+DTEND;VALUE=DATE:20270107
+SUMMARY:Applications open: Wiper (Uniformed) (Prom) (Exam 7540)
+DESCRIPTION:Applications open for Wiper (Uniformed) (Prom)\, Exam 7540.\nAp
+ plication period: 2027-01-06 to 2027-01-26.\nApply through OASys: https://
+ www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.html
+ ?exam=7540\nDates come from DCAS and can be extended. Confirm on nyc.gov b
+ efore relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7540
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7540-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270126
+DTEND;VALUE=DATE:20270127
+SUMMARY:Last day to apply: Wiper (Uniformed) (Prom) (Exam 7540)
+DESCRIPTION:Today is the last day to apply for Wiper (Uniformed) (Prom)\, E
+ xam 7540.\nApplication period: 2027-01-06 to 2027-01-26.\nApply through OA
+ Sys: https://www.nyc.gov/examsforjobs\nExam details: https://civilservice.
+ nyc/exam.html?exam=7540\nDates come from DCAS and can be extended. Confirm
+  on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7540
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Wiper (Uniformed) (Prom) (Exam 7540) closes in 3 days. Apply at
+  https://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,58 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Administrative Management Auditor (Prom) (Exam 7503)
+X-WR-CALNAME:Administrative Management Auditor (Prom) (Exam 7503)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7503-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270407
+DTEND;VALUE=DATE:20270408
+SUMMARY:Applications open: Administrative Management Auditor (Prom) (Exam 7
+ 503)
+DESCRIPTION:Applications open for Administrative Management Auditor (Prom)\
+ , Exam 7503.\nApplication period: 2027-04-07 to 2027-04-27.\nApply through
+  OASys: https://www.nyc.gov/examsforjobs\nExam details: https://civilservi
+ ce.nyc/exam.html?exam=7503\nDates come from DCAS and can be extended. Conf
+ irm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7503
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7503-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270427
+DTEND;VALUE=DATE:20270428
+SUMMARY:Last day to apply: Administrative Management Auditor (Prom) (Exam 7
+ 503)
+DESCRIPTION:Today is the last day to apply for Administrative Management Au
+ ditor (Prom)\, Exam 7503.\nApplication period: 2027-04-07 to 2027-04-27.\n
+ Apply through OASys: https://www.nyc.gov/examsforjobs\nExam details: https
+ ://civilservice.nyc/exam.html?exam=7503\nDates come from DCAS and can be e
+ xtended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7503
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Administrative Management Auditor (Prom) (Exam 7503) closes in 
+ 3 days. Apply at https://www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR

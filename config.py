@@ -255,6 +255,54 @@ FORBIDDEN_COLUMNS = [
 
 
 # ---------------------------------------------------------------------------
+# Calendar feed
+# ---------------------------------------------------------------------------
+#
+# DCAS has no per-exam alert. The closest thing it offers is the NYC Jobs
+# Newsletter, a periodic roundup rather than a "this closes Friday" notice:
+# https://www.nyc.gov/site/dcas/about/citywide-administrative-services-newsletter-sign-up.page
+# Email reminders would need a backend and a list of addresses, which this
+# project does not want. A calendar feed gets the same result with a static
+# file: the reminder fires from the reader's own phone, we never learn who
+# subscribed, and there is nothing to run.
+
+SITE_BASE_URL = "https://civilservice.nyc"
+
+# Where the calendar files go, relative to docs/.
+CALENDAR_FEED_FILENAME = "exams.ics"    # the whole feed, meant to be subscribed to
+CALENDAR_DIR_NAME = "calendar"          # one file per exam, meant to be downloaded
+
+# UIDs must be globally unique and must never change for a given event, or a
+# subscriber gets a duplicate instead of an update. This is the domain part.
+CALENDAR_UID_DOMAIN = "civilservice.nyc"
+
+# What the subscribed feed carries. Closed exams are left out on purpose: a
+# calendar full of deadlines that have already passed is noise, and the reader
+# keeps whatever it already downloaded for exams it saw while they were open.
+CALENDAR_FEED_STATUSES = ["accepting", "upcoming"]
+
+# Days before the last day to apply that the reminder fires. Applications go
+# through OASys and can need documents, so this is not a same-day nudge.
+CALENDAR_REMINDER_DAYS_BEFORE_CLOSE = 3
+
+# How often a calendar reader should re-check the feed. Readers treat this as a
+# hint and Google Calendar in particular refreshes on its own schedule, often
+# closer to a day. The pipeline runs daily, so asking for more is pointless.
+CALENDAR_REFRESH_HOURS = 12
+
+# Where a calendar event points when someone clicks through. The site has to
+# honour this shape, so if the exam page ever moves, this is the one line that
+# changes and the next refresh rewrites every event.
+EXAM_URL_TEMPLATE = "{base}/exam.html?exam={exam_no}"
+
+CALENDAR_NAME = "NYC Civil Service Exams"
+CALENDAR_DESCRIPTION = (
+    "Application periods for New York City civil service exams. "
+    "Dates come from DCAS. Always confirm on nyc.gov before relying on one."
+)
+
+
+# ---------------------------------------------------------------------------
 # Output
 # ---------------------------------------------------------------------------
 

@@ -1,0 +1,56 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//civilservice.nyc//NYC civil service exams//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Special Officer (Exam 7328)
+X-WR-CALNAME:Special Officer (Exam 7328)
+DESCRIPTION:Application periods for New York City civil service exams. Date
+ s come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-CALDESC:Application periods for New York City civil service exams. Dat
+ es come from DCAS. Always confirm on nyc.gov before relying on one.
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+BEGIN:VEVENT
+UID:exam-7328-2027-open@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270303
+DTEND;VALUE=DATE:20270304
+SUMMARY:Applications open: Special Officer (Exam 7328)
+DESCRIPTION:Applications open for Special Officer\, Exam 7328.\nApplication
+  period: 2027-03-03 to 2027-03-23.\nApply through OASys: https://www.nyc.g
+ ov/examsforjobs\nExam details: https://civilservice.nyc/exam.html?exam=732
+ 8\nDates come from DCAS and can be extended. Confirm on nyc.gov before rel
+ ying on this.
+URL:https://civilservice.nyc/exam.html?exam=7328
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:exam-7328-2027-close@civilservice.nyc
+DTSTAMP:20260722T000000Z
+DTSTART;VALUE=DATE:20270323
+DTEND;VALUE=DATE:20270324
+SUMMARY:Last day to apply: Special Officer (Exam 7328)
+DESCRIPTION:Today is the last day to apply for Special Officer\, Exam 7328.
+ \nApplication period: 2027-03-03 to 2027-03-23.\nApply through OASys: http
+ s://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.
+ html?exam=7328\nDates come from DCAS and can be extended. Confirm on nyc.g
+ ov before relying on this.
+URL:https://civilservice.nyc/exam.html?exam=7328
+CATEGORIES:NYC Civil Service Exams
+SEQUENCE:2394
+TRANSP:TRANSPARENT
+STATUS:CONFIRMED
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;RELATED=START:-P3D
+DESCRIPTION:Special Officer (Exam 7328) closes in 3 days. Apply at https://
+ www.nyc.gov/examsforjobs
+END:VALARM
+END:VEVENT
+END:VCALENDAR
