@@ -291,6 +291,12 @@ def export_titles_index(titles):
             "s": t["slug"],
             "t": t["title"],
             "c": t["code"],
+            # 161 titles share a name with a different title code, and the
+            # bargaining unit is what actually tells them apart: Administrative
+            # Staff Analyst is four rows, one Competitive Manager and one
+            # Organization of Staff Analysts, with different pay. A row showing
+            # only the code cannot answer "which one am I".
+            "u": t.get("bargaining_unit"),
             "lo": t.get("salary_min"),
             "hi": t.get("salary_max"),
         }
@@ -309,7 +315,7 @@ def export_titles_index(titles):
         if t["open_now"]:
             entry["o"] = 1
         if t.get("next_status") == "upcoming":
-            entry["u"] = 1
+            entry["n"] = 1
         payload.append({k: v for k, v in entry.items() if v is not None})
 
     size = c.write_json(cfg.DATA_DIR / "titles-index.json", payload)
@@ -468,13 +474,14 @@ def export_dictionary():
             "s": "slug, the title's address on this site.",
             "t": "title, the name.",
             "c": "code, the five character title code.",
+            "u": "bargaining_unit. Present so the directory can tell apart the 161 titles that share a name with a different title code.",
             "lo": "salary_min.",
             "hi": "salary_max.",
             "x": "name_truncated. The directory adds an ellipsis so a cut-off name does not read as our typo.",
             "e": "Present where the title has at least one exam we publish.",
             "l": "Present where the title has at least one active list.",
             "o": "Present where an exam for this title is accepting applications today.",
-            "u": "Present where an exam for this title is scheduled but not yet open.",
+            "n": "Present where an exam for this title is scheduled but not yet open.",
         },
         "not_published": {
             "_description": "Deliberately absent.",

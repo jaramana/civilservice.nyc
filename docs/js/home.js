@@ -1,37 +1,20 @@
 /* ==========================================================================
    The front page, which is also the exam search.
 
-   One shape, held in every state. Three sections in a fixed order, always
-   present, always drawn the same way:
+   One rule, statable in a sentence:
 
-     Accepting applications   what you can act on today
-     Upcoming                 what is coming
-     Closed                   what has already closed
+     Show picks the groups. Search filters within them. Nothing else changes.
 
-   Searching or filtering changes what is inside those sections and how far
-   each one reaches. It never rearranges the page and never redraws a row.
+   No date windows. Every exam we publish sits in one of the three groups all
+   the time, and the only thing deciding what is on screen is a control you
+   can see. The previous version showed 60 days of upcoming exams until you
+   typed something and then silently showed all 138, which made the table look
+   like it had changed its own mind.
 
-   Two rules this file exists to keep:
+   One row function, no modes: an exam's right-hand column comes from its own
+   status, so filtering can never restyle a row already on screen.
 
-     1. A given exam looks the same everywhere. Its right-hand column is
-        derived from the exam's own status and nothing else, so filtering
-        cannot restyle a row that was already on screen. An earlier build drew
-        a tag plus a small date while filtering and a bold date plus a
-        countdown while not, which made a filter look like it had changed the
-        data.
-
-     2. A section never disappears on its own. It empties, and says so in a
-        sentence. The only way a section leaves the page is if you explicitly
-        ask for one group in the Show filter, which is a choice you made and
-        can see in the control.
-
-   Scope is the one thing that does change, because it has to. With nothing
-   filtered the page is a bulletin: upcoming reaches UPCOMING_WINDOW_DAYS
-   ahead and closed reaches RECENTLY_CLOSED_DAYS back. Search or filter for
-   something and those windows open to the full published schedule, because
-   someone searching for "Sanitation Worker" wants every one of them, not the
-   ones inside an arbitrary window. Each section says which of the two it is
-   currently showing.
+   All 345 rows render in about 11ms including layout, so there is no paging.
    ========================================================================== */
 
 import {
@@ -39,44 +22,35 @@ import {
   freshness, markNav, failure, count,
 } from "./common.js";
 
-/* No paging on this page. Rendering all 345 exams at once, layout included,
-   measures at 11ms here and a few times that on a slow phone, which is not
-   worth a button, a shown-count per section, and the state that goes with
-   them. The title directory is a different case: 2,632 rows there do need it.
-*/
-
 const GROUPS = [
-  // `label` reads after a count ("9 exams accepting applications"), `nothing`
-  // reads as its own sentence when a section comes up empty. One string cannot
-  // do both without producing "No accepting applications exams".
-  { key: "accepting", label: "accepting applications", nothing: "No exams accepting applications" },
-  { key: "upcoming",  label: "upcoming",               nothing: "No upcoming exams" },
-  { key: "closed",    label: "closed",                 nothing: "No closed exams" },
+  { key: "accepting", nothing: "No exams accepting applications" },
+  { key: "upcoming", nothing: "No upcoming exams" },
+  { key: "closed", nothing: "No closed exams" },
 ];
 
-const state = { q: "", status: "", type: "" };
-let all = [];
-let windows = {};
+/* Which groups each Show option puts on the page. "" is the default: what you
+   can act on and what is coming. Closed exams are reference rather than news,
+   so they are one choice away instead of on the page by default. */
+const SHOWS = {
+  "": ["accepting", "upcoming"],
+  accepting: ["accepting"],
+  upcoming: ["upcoming"],
+  closed: ["closed"],
+  all: ["accepting", "upcoming", "closed"],
+};
 
-/* Any control with a value means the person is looking for something specific
-   rather than reading the bulletin, which is what opens the date windows. */
-function filtering() {
-  return Boolean(state.q || state.status || state.type);
-}
+const state = { q: "", show: "", type: "" };
+let all = [];
+let archiveFloor = null;
 
 function norm(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
 }
 
 /* --------------------------------------------------------------------------
-   The row. One function, no modes.
+   The row
    -------------------------------------------------------------------------- */
 
-/* The right-hand column answers the question the row's own status raises:
-   an open exam has a deadline and a countdown, an upcoming one has an opening
-   date and a wait, a closed one has the date it closed. No status tag, because
-   the section heading directly above already says it and repeating it on every
-   row is noise. */
 function row(exam) {
   const link = el("a", { class: "row", href: `exam.html?exam=${exam.exam_no}` });
   link.append(el("span", { class: "name", text: exam.title }));
@@ -106,114 +80,44 @@ function row(exam) {
 }
 
 /* --------------------------------------------------------------------------
-   Selecting what goes in each section
+   Render
    -------------------------------------------------------------------------- */
 
-function matchesSearch(e) {
+function matches(e) {
   if (state.type && e.type !== state.type) return false;
   if (!state.q) return true;
   return e._n.includes(state.q) || e.exam_no.startsWith(state.q);
 }
 
-/* The date windows, applied only while reading the bulletin. */
-function inWindow(e) {
-  if (filtering()) return true;
-  if (e.status === "upcoming") {
-    return daysBetween(e.start) <= (windows.upcoming_days ?? 60);
-  }
-  if (e.status === "closed") {
-    return -daysBetween(e.end) <= (windows.recently_closed_days ?? 45);
-  }
-  return true;
-}
-
 function rowsFor(key) {
-  const rows = all.filter((e) => e.status === key && matchesSearch(e) && inWindow(e));
-  if (key === "closed") rows.sort((a, b) => b.end.localeCompare(a.end));
-  else if (key === "accepting") rows.sort((a, b) => a.end.localeCompare(b.end));
-  else rows.sort((a, b) => a.start.localeCompare(b.start));
-  return rows;
+  const rows = all.filter((e) => e.status === key && matches(e));
+  if (key === "closed") return rows.sort((a, b) => b.end.localeCompare(a.end));
+  if (key === "accepting") return rows.sort((a, b) => a.end.localeCompare(b.end));
+  return rows.sort((a, b) => a.start.localeCompare(b.start));
 }
 
-/* --------------------------------------------------------------------------
-   Notes under each section. These carry the scope, so the reader always knows
-   whether they are seeing a window or everything.
-   -------------------------------------------------------------------------- */
-
-function noteFor(key, totalInGroup) {
-  const wide = filtering();
-
-  if (key === "upcoming") {
-    if (wide) {
-      return totalInGroup
-        ? [document.createTextNode("Every upcoming exam on the published schedule, not only the next few weeks.")]
-        : [];
-    }
-    const beyond = all.filter((e) => e.status === "upcoming" && !inWindow(e)).length;
-    const parts = [document.createTextNode(
-      `Exams opening in the next ${windows.upcoming_days ?? 60} days. `)];
-    if (beyond > 0) {
-      parts.push(el("a", {
-        href: "?status=upcoming",
-        text: `${count(beyond)} more are scheduled further out.`,
-      }));
-    }
-    return parts;
-  }
-
-  if (key === "closed") {
-    const meaning = "An exam that has closed still matters: the list it " +
-                    "produces is how the City hires for that title for the " +
-                    "next few years.";
-    if (wide) {
-      const floor = windows.archive_floor;
-      return [document.createTextNode(
-        `${meaning} Everything back to ` +
-        `${floor ? fmtDate(floor, { alwaysYear: true }) : "the archive floor"}. ` +
-        `The City never published its fiscal 2025 schedule as open data, so ` +
-        `the record stops there rather than showing a partial archive that ` +
-        `would look complete.`)];
-    }
-    return [document.createTextNode(
-      `Exams that closed in the last ${windows.recently_closed_days ?? 45} days. ${meaning}`)];
-  }
-
-  return [];
-}
-
-/* The empty line for a section. Never a blank space: a section with nothing in
-   it says why, and the accepting one says when that changes. */
-function emptyFor(key) {
-  if (filtering()) {
-    const what = state.q
-      ? `match “${document.getElementById("q").value.trim()}”`
-      : "match those filters";
-    return [document.createTextNode(
-      `${GROUPS.find((g) => g.key === key).nothing} ${what}.`)];
-  }
+/* One line, and only where it tells someone something they can act on: the
+   next opening date saves checking back daily. */
+function emptyText(key) {
+  const group = GROUPS.find((g) => g.key === key);
+  if (state.q || state.type) return `${group.nothing} match your search.`;
 
   if (key === "accepting") {
     const next = all
       .filter((e) => e.status === "upcoming")
       .sort((a, b) => a.start.localeCompare(b.start))[0];
-    const parts = [el("strong", { text: "No exams are accepting applications today. " })];
-    parts.push(document.createTextNode(next
-      ? `The City opens most application periods on the first Wednesday of the ` +
-        `month. The next one is ${next.title}, opening ` +
+    return next
+      ? `Nothing is accepting applications today. Next to open: ${next.title}, ` +
         `${fmtDate(next.start, { alwaysYear: true })}.`
-      : "There is nothing scheduled to open in the published schedule either, " +
-        "which usually means DCAS has not posted the coming year yet."));
-    return parts;
+      : "Nothing is accepting applications, and nothing is scheduled.";
   }
-
-  return [document.createTextNode("Nothing here right now.")];
+  return `${group.nothing} right now.`;
 }
 
-/* --------------------------------------------------------------------------
-   Render
-   -------------------------------------------------------------------------- */
+function renderGroup(key, visible) {
+  document.getElementById(`section-${key}`).hidden = !visible;
+  if (!visible) return;
 
-function renderGroup(key) {
   const rows = rowsFor(key);
 
   const list = document.getElementById(`list-${key}`);
@@ -223,53 +127,40 @@ function renderGroup(key) {
   document.getElementById(`count-${key}`).textContent = count(rows.length);
 
   const empty = document.getElementById(`empty-${key}`);
-  clear(empty);
+  empty.textContent = rows.length ? "" : emptyText(key);
   empty.hidden = rows.length > 0;
-  if (!rows.length) emptyFor(key).forEach((n) => empty.append(n));
-
-  const note = document.getElementById(`note-${key}`);
-  clear(note);
-  const parts = noteFor(key, rows.length);
-  parts.forEach((n) => note.append(n));
-  note.hidden = parts.length === 0;
-
-  // A section only leaves the page when the Show control asks for one group.
-  document.getElementById(`section-${key}`).hidden =
-    Boolean(state.status) && state.status !== key;
-
-  return rows.length;
 }
 
 function render() {
-  const totals = {};
-  GROUPS.forEach((g) => { totals[g.key] = renderGroup(g.key); });
+  const visible = SHOWS[state.show] || SHOWS[""];
+  GROUPS.forEach((g) => renderGroup(g.key, visible.includes(g.key)));
 
-  // One line above everything saying what the page is currently showing, so
-  // the state is legible without reading three section headings.
-  const summary = document.getElementById("summary");
-  const visible = GROUPS
-    .filter((g) => !state.status || state.status === g.key)
-    .reduce((n, g) => n + totals[g.key], 0);
+  const note = document.getElementById("note-closed");
+  note.textContent = archiveFloor
+    ? `Back to ${fmtDate(archiveFloor, { alwaysYear: true })}. The City never ` +
+      `published its fiscal 2025 schedule, so the record stops there.`
+    : "";
 
-  if (!filtering()) {
-    summary.textContent =
-      `${count(totals.accepting)} exam${totals.accepting === 1 ? "" : "s"} ` +
-      `accepting applications right now. Search or filter to see the whole schedule.`;
-    return;
+  // Matches sitting in a group the current Show is hiding. Silence here reads
+  // as "no such exam", which is a different and wrong answer.
+  const hint = document.getElementById("hint");
+  clear(hint);
+  const hiddenMatches = GROUPS
+    .filter((g) => !visible.includes(g.key))
+    .map((g) => ({ key: g.key, n: rowsFor(g.key).length }))
+    .filter((g) => g.n > 0);
+
+  hint.hidden = !hiddenMatches.length;
+  if (hiddenMatches.length) {
+    const total = hiddenMatches.reduce((n, g) => n + g.n, 0);
+    const where = hiddenMatches.map((g) => g.key === "closed" ? "closed" : g.key).join(" and ");
+    hint.append(document.createTextNode(
+      `${count(total)} ${where} exam${total === 1 ? " also matches" : "s also match"}. `));
+    hint.append(el("button", {
+      class: "linky", type: "button", id: "show-everything",
+      text: "Show everything",
+    }));
   }
-
-  // Built as a sentence rather than a list of clauses. The exam type is an
-  // adjective ("100 promotion exams"), not a trailing fragment, because
-  // "100 exams promotion" is what you get if you just join everything.
-  const kind = state.type ? `${typeLabel(state.type).toLowerCase()} ` : "";
-  const qualifiers = [];
-  if (state.q) qualifiers.push(`matching “${document.getElementById("q").value.trim()}”`);
-  if (state.status) qualifiers.push(GROUPS.find((g) => g.key === state.status).label);
-  const tail = qualifiers.length ? ` ${qualifiers.join(", ")}` : "";
-
-  summary.textContent = visible
-    ? `${count(visible)} ${kind}exam${visible === 1 ? "" : "s"}${tail}.`
-    : `No ${kind}exams${tail}.`;
 }
 
 /* --------------------------------------------------------------------------
@@ -279,20 +170,9 @@ function render() {
 function pushUrl() {
   const params = new URLSearchParams();
   if (state.q) params.set("q", document.getElementById("q").value.trim());
-  if (state.status) params.set("status", state.status);
+  if (state.show) params.set("show", state.show);
   if (state.type) params.set("type", state.type);
   history.replaceState(null, "", params.toString() ? `?${params}` : location.pathname);
-}
-
-function readUrl(controls) {
-  const params = new URLSearchParams(location.search);
-  const q = params.get("q") || "";
-  controls.q.value = q;
-  state.q = norm(q);
-  state.status = params.get("status") || "";
-  state.type = params.get("type") || "";
-  controls.status.value = state.status;
-  controls.type.value = state.type;
 }
 
 async function main() {
@@ -305,38 +185,45 @@ async function main() {
       freshness(document.getElementById("freshness")),
     ]);
 
-    windows = meta.windows || {};
+    archiveFloor = (meta.windows || {}).archive_floor || null;
     all = exams.map((e) => ({ ...e, _n: norm(e.title) }));
 
-    const controls = {
-      q: document.getElementById("q"),
-      status: document.getElementById("status"),
-      type: document.getElementById("type"),
-    };
+    const q = document.getElementById("q");
+    const show = document.getElementById("status");
+    const type = document.getElementById("type");
 
     [...new Set(exams.map((e) => e.type))].sort().forEach((value) => {
-      controls.type.append(el("option", { value, text: typeLabel(value, "who") }));
+      type.append(el("option", { value, text: typeLabel(value, "who") }));
     });
 
-    const change = (fn) => () => { fn(); render(); pushUrl(); };
-    controls.q.addEventListener("input", change(() => { state.q = norm(controls.q.value); }));
-    controls.status.addEventListener("change", change(() => { state.status = controls.status.value; }));
-    controls.type.addEventListener("change", change(() => { state.type = controls.type.value; }));
+    const params = new URLSearchParams(location.search);
+    q.value = params.get("q") || "";
+    state.q = norm(q.value);
+    // `status` is still read so links shared before the control was renamed
+    // keep working.
+    state.show = params.get("show") ?? params.get("status") ?? "";
+    if (!(state.show in SHOWS)) state.show = "";
+    state.type = params.get("type") || "";
+    show.value = state.show;
+    type.value = state.type;
 
-    // The "more are scheduled further out" link points at ?status=upcoming on
-    // this same page. Handled here rather than followed, so it does not
-    // refetch JSON the page is already holding.
-    document.addEventListener("click", (e) => {
-      const link = e.target.closest('a[href^="?"]');
-      if (!link) return;
-      e.preventDefault();
-      history.replaceState(null, "", link.getAttribute("href"));
-      readUrl(controls);
+    const on = (node, event, fn) => node.addEventListener(event, () => {
+      fn();
       render();
-      document.getElementById("section-upcoming").scrollIntoView({ block: "start" });
+      pushUrl();
     });
+    on(q, "input", () => { state.q = norm(q.value); });
 
-    readUrl(controls);
+    document.getElementById("hint").addEventListener("click", (e) => {
+      if (e.target.id !== "show-everything") return;
+      state.show = "all";
+      show.value = "all";
+      render();
+      pushUrl();
+    });
+    on(show, "change", () => { state.show = show.value; });
+    on(type, "change", () => { state.type = type.value; });
+
     render();
   } catch (err) {
     failure(host, err);

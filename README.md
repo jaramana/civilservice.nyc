@@ -21,7 +21,7 @@ pipeline/
 tools/
   contrast.py            checks every color pair against WCAG AA
 docs/                    the website itself, served by GitHub Pages
-  index.html             front page and exam search, one page in two states
+  index.html             every exam, grouped by status, with search
   exam.html              one exam
   titles.html            every job title
   title.html             one job title
@@ -84,8 +84,6 @@ Things you might reasonably want to change:
 
 | To do this | Change |
 |---|---|
-| Show more or fewer upcoming exams on the front page | `UPCOMING_WINDOW_DAYS` |
-| Keep closed exams listed for longer | `RECENTLY_CLOSED_DAYS` |
 | Move the calendar reminder | `CALENDAR_REMINDER_DAYS_BEFORE_CLOSE` |
 | See how the site looks on a future date | `AS_OF_DATE` |
 | Publish more archive | `ARCHIVE_FLOOR`, and read the comment first |

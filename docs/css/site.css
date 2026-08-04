@@ -523,6 +523,20 @@ input[type="search"]:focus, select:focus { border-color: var(--focus); }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.4rem 0 0; }
 
+/* A button that changes what is on the page but reads as a link, for use
+   inside a sentence. It is a button because it acts, not navigates. */
+.linky {
+  font: inherit;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+.linky:hover { text-decoration-thickness: 2px; }
+
 /* --------------------------------------------------------------------------
    11. Footer
    -------------------------------------------------------------------------- */

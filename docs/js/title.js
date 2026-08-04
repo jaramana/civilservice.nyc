@@ -48,16 +48,15 @@ function renderFacts(t) {
   if (t.salary_min && t.salary_max) {
     fact(dl, "Salary range", `${money(t.salary_min)} to ${money(t.salary_max)}`,
       t.salary_bands > 1
-        ? `This title has ${t.salary_bands} assignment levels. The range spans all of them, ` +
-          `so the bottom and the top are usually different jobs in practice.`
-        : "What the title is authorized to pay. Where someone lands in it depends on the job and their experience.");
+        ? `Spans ${t.salary_bands} assignment levels, so the bottom and the top are different jobs.`
+        : "What the title is authorized to pay, not what a posting will offer.");
   }
 
   if (t.paygap) {
     const link = el("a", { href: t.paygap.url, text: money(t.paygap.median_salary) });
     fact(dl, "Median actually paid", link,
-      `Half of the ${count(t.paygap.employees)} people in this title earned more than this ` +
-      `in fiscal year ${t.paygap.fiscal_year}, half earned less. From thepaygap.nyc, which reads the City payroll.`);
+      `${count(t.paygap.employees)} people held this title in fiscal ` +
+      `${t.paygap.fiscal_year}. Half earned more, half less. From thepaygap.nyc.`);
   }
 
   if (t.hours) fact(dl, "Standard hours", `${t.hours} a week`);
@@ -66,13 +65,11 @@ function renderFacts(t) {
 
 
   if (t.investigation) {
-    fact(dl, "Background check", "Yes",
-      "This title requires a background investigation before appointment.");
+    fact(dl, "Background check", "Required before appointment");
   }
 
   if (t.name_truncated) {
-    fact(dl, "About the name", "The City's catalog cuts title names at 30 characters.",
-      "Where an exam or a list spells this title out in full, that fuller spelling is what you see above.");
+    fact(dl, "Name", "Cut short in the City's catalog, which stops at 30 characters");
   }
 }
 
@@ -101,37 +98,51 @@ function renderExams(t, exams) {
   section.hidden = false;
 }
 
-/* Whether a list has been called is the question people ask after they pass,
-   and it is the one this data answers least well. Say what it means. */
+/* Where this title stands, in one sentence, above the fields. Every persona
+   who tried the site arrived with this question and had to infer the answer
+   from which sections happened to be present. */
+function situation(t, exams) {
+  const line = document.getElementById("situation");
+  clear(line);
+
+  const open = (t.exam_nos || [])
+    .map((no) => exams.find((e) => e.exam_no === no))
+    .filter(Boolean)
+    .filter((e) => e.status !== "closed")
+    .sort((a, b) => a.start.localeCompare(b.start))[0];
+
+  const people = t.candidates ? `${count(t.candidates)} people are on it` : null;
+
+  let text;
+  if (open && open.status === "accepting") {
+    text = `An exam for this title is accepting applications until ${fmtDate(open.end, { alwaysYear: true })}.`;
+  } else if (open) {
+    text = `The next exam for this title opens ${fmtDate(open.start, { alwaysYear: true })}.`;
+  } else if (t.lists) {
+    text = t.lists === 1
+      ? `No exam is scheduled. There is one active list${people ? `, and ${people}` : ""}.`
+      : `No exam is scheduled. There are ${count(t.lists)} active lists` +
+        `${t.candidates ? `, with ${count(t.candidates)} people on them` : ""}.`;
+  } else {
+    text = "No exam is scheduled and there is no active list. The title exists and can be filled other ways.";
+  }
+
+  line.append(document.createTextNode(text));
+  line.hidden = false;
+}
+
+/* The list section adds only what the situation line does not already say. */
 function renderList(t) {
   if (!t.lists) return;
   const section = document.getElementById("list-section");
   const body = document.getElementById("list-body");
   clear(body);
 
-  const p = el("p", { class: "note" });
-  const lists = `${count(t.lists)} active list${t.lists === 1 ? "" : "s"}`;
-  const people = t.candidates
-    ? `, with ${count(t.candidates)} people on ${t.lists === 1 ? "it" : "them"}`
-    : "";
-
-  if (t.called === "yes") {
-    p.append(document.createTextNode(
-      `This title has ${lists}${people}. The City has certified from ${t.lists === 1 ? "it" : "at least one"} ` +
-      `since it was established, which means the list is being used for hiring.`
-    ));
-  } else {
-    p.append(document.createTextNode(
-      `This title has ${lists}${people}. There is no certification on record yet, ` +
-      `which usually means the list is new. It does not mean it will not be called.`
-    ));
-  }
-  body.append(p);
-
-  body.append(el("p", { class: "note", text:
-    "A certification is the City pulling names off a list to fill a job. How " +
-    "often it happens varies enormously by title and says more about how that " +
-    "agency hires than about how fast the list moves." }));
+  const one = t.lists === 1;
+  body.append(el("p", { class: "note", text: t.called === "yes"
+    ? `The City has certified from ${one ? "this list" : "at least one of these lists"}, ` +
+      `so ${one ? "it is" : "they are"} being used for hiring.`
+    : `No certification on record yet, which usually means ${one ? "the list is" : "the lists are"} new.` }));
 
   section.hidden = false;
 }
@@ -167,6 +178,7 @@ async function main() {
       t.name_truncated ? t.title + "…" : t.title;
     document.getElementById("title-code").textContent = `Title code ${t.code}`;
 
+    situation(t, exams);
     renderFacts(t);
     renderExams(t, exams);
     renderList(t);

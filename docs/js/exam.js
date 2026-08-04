@@ -100,8 +100,7 @@ function facts(exam, title) {
         ? "A qualified incumbent exam is for people already doing the job provisionally."
         : "Open competitive means open to the public. You do not need to work for the City to take it.");
 
-  fact(dl, "Exam number", exam.exam_no,
-    "The City reuses exam numbers roughly every ten years, so a number on its own does not identify an exam forever.");
+  fact(dl, "Exam number", exam.exam_no);
 
   if (exam.fiscal_year) {
     // Spell out the year actually on screen. A fixed example meant an exam in
@@ -112,9 +111,9 @@ function facts(exam, title) {
   }
 
   if (title) {
-    fact(dl, "The job", el("a", {
+    fact(dl, "Job title", el("a", {
       href: `title.html?title=${encodeURIComponent(title.slug)}`,
-      text: `${title.title}: hours, pay and union`,
+      text: title.title,
     }));
   } else {
     // About one exam in six has no exact match in the City's title catalog.
@@ -123,18 +122,17 @@ function facts(exam, title) {
     // characters so a longer exam title has nothing to match against. We do
     // not guess: putting the wrong salary on a job is worse than showing none.
     // Search is offered instead of a link.
-    fact(dl, "The job", el("a", {
+    fact(dl, "Job title", el("a", {
       href: `titles.html?q=${encodeURIComponent(exam.title.replace(/\s*\(.*$/, ""))}`,
-      text: "Search the title catalog for this job",
-    }), "No title in the City's catalog matches this exam name exactly, so we " +
-        "do not attach pay to it. CUNY and Health + Hospitals titles are the " +
-        "usual reason, and truncated catalog names are the other.");
+      text: "Search job titles",
+    }), "No exact match in the City's title catalog, usually because the exam " +
+        "is run by CUNY or Health + Hospitals.");
   }
 
   if (!exam.noe_url) {
     fact(dl, "Notice of Examination", "Not published yet",
-      "The Notice is the document with the actual requirements, the fee and the subjects tested. " +
-      "DCAS posts it when the application period opens.");
+      "DCAS posts it when the application period opens. It carries the " +
+      "requirements, the fee and what is tested.");
   }
 
   fact(dl, "Source", exam.source === "dcas"
@@ -149,19 +147,12 @@ function whatNext(exam) {
   const body = document.getElementById("what-next-body");
   clear(body);
   body.append(el("p", { text:
-    "Passing an exam does not by itself get you a job. It puts you on a civil " +
-    "service list for this title, in score order. When an agency fills a " +
-    "vacancy it asks for names from the top of that list, which is called a " +
-    "certification, and interviews from the names it gets." }));
-  body.append(el("p", { text:
-    "How much that ranking decides depends on the title. For many entry-level " +
-    "and uniformed jobs the list is the hiring queue and your number is most " +
-    "of the story. For many professional and managerial titles it works more " +
-    "like eligibility: being reachable is what lets you be considered for the " +
-    "postings that require the title, and the hiring is competitive from " +
-    "there." }));
-  body.append(el("p", { text:
-    "Lists usually last four years and can be extended." }));
+    "Passing puts you on a civil service list for this title, in score order. " +
+    "Agencies hire from the top of that list. For entry-level and uniformed " +
+    "jobs your number is most of the story. For professional and managerial " +
+    "titles it works more like eligibility: being reachable is what lets you " +
+    "be considered, and you still interview." }));
+  body.append(el("p", { text: "Lists usually last four years and can be extended." }));
   body.append(el("p", {}, [
     el("a", { href: "how-to-apply.html", text: "More on how the process works" }),
   ]));

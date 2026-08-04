@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NYC civil service exams</title>
+<title>Exams | NYC civil service</title>
 <meta name="description" content="Which New York City civil service exams are open for applications, which are coming, and what each job title pays. Free, open source, built on NYC OpenData.">
 <link rel="stylesheet" href="css/site.css">
 </head>
@@ -27,13 +27,13 @@
 
   <main id="main">
 
-    <!-- The page has one shape and keeps it.
-         Three sections, always in this order, always present. Searching or
-         filtering changes which rows are in them and how far the list reaches,
-         never the structure and never how a row is drawn. An earlier build
-         swapped the whole page for a flat list the moment anything was typed,
-         which meant the same exam appeared two different ways depending on
-         what you had clicked. -->
+    <!-- One rule, and it fits in a sentence: Show picks the groups, Search
+         filters within them, nothing else changes. No date windows that open
+         and close on their own. An earlier build showed 60 days of upcoming
+         exams until you typed something, then silently showed all 138, so the
+         table looked like it had changed its own mind. -->
+
+    <h1 class="page-title">Exams</h1>
 
     <div class="controls">
       <div class="field">
@@ -44,10 +44,11 @@
       <div class="field" style="flex: 0 1 14rem;">
         <label for="status">Show</label>
         <select id="status">
-          <option value="">All three groups</option>
+          <option value="">Open and coming up</option>
           <option value="accepting">Accepting applications</option>
           <option value="upcoming">Upcoming</option>
           <option value="closed">Closed</option>
+          <option value="all">Everything</option>
         </select>
       </div>
       <!-- Exam types are filled in from the data, so a type that turns up in a
@@ -60,20 +61,16 @@
       </div>
     </div>
 
-    <p class="result-count" id="summary" role="status"></p>
-
     <section class="section" id="section-accepting">
       <h2><span class="tag tag-open">Accepting applications</span> <span class="count" id="count-accepting"></span></h2>
       <ul class="bulletin" id="list-accepting"></ul>
       <p class="empty" id="empty-accepting" hidden></p>
-      <p class="note" id="note-accepting" hidden></p>
     </section>
 
     <section class="section" id="section-upcoming">
       <h2><span class="tag tag-soon">Upcoming</span> <span class="count" id="count-upcoming"></span></h2>
       <ul class="bulletin" id="list-upcoming"></ul>
       <p class="empty" id="empty-upcoming" hidden></p>
-      <p class="note" id="note-upcoming"></p>
     </section>
 
     <section class="section" id="section-closed">
@@ -82,6 +79,11 @@
       <p class="empty" id="empty-closed" hidden></p>
       <p class="note" id="note-closed"></p>
     </section>
+
+    <!-- Says when a search matched exams that the current Show is hiding.
+         Without it, searching "Sanitation Worker" on the default view looks
+         like the site has never heard of it. -->
+    <p class="note" id="hint" hidden></p>
 
     <div id="freshness"></div>
 
@@ -95,7 +97,7 @@
       <a href="https://www.nyc.gov/examsforjobs">nyc.gov</a> before you rely on one.
     </p>
     <p>
-      <a href="methodology.html">How this is put together</a> ·
+      <a href="methodology.html">About the data</a> ·
       <a href="https://github.com/jaramana/civilservice.nyc">Source code</a>
     </p>
   </footer>

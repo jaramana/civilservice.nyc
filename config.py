@@ -115,11 +115,13 @@ OASYS_URL = "https://www.nyc.gov/examsforjobs"
 #   2026-12-25   0 exams accepting, which really does happen
 AS_OF_DATE = None
 
-# DCAS opens most application periods on the first Wednesday of the month, so
-# "what is open right now" is legitimately empty or near-empty for a few days
-# each month. The front page leads with what is opening soon instead.
-UPCOMING_WINDOW_DAYS = 60      # how far ahead "opening soon" reaches
-RECENTLY_CLOSED_DAYS = 45      # how far back "recently closed" reaches
+# Reporting windows for the counts in meta.json. The site itself no longer
+# uses them: the front page groups every exam by status and lets the reader
+# choose which groups to see, rather than silently windowing the list. These
+# stay because "how many exams opened in the last 60 days" is a useful number
+# to have in the published metadata.
+UPCOMING_WINDOW_DAYS = 60      # counts only: exams opening within this many days
+RECENTLY_CLOSED_DAYS = 45      # counts only: exams closed within this many days
 
 # The exam schedule dataset stacks published snapshots rather than replacing
 # rows, and there is a twelve month hole where DCAS never published the FY2025

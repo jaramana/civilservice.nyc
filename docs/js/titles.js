@@ -47,9 +47,11 @@ function row(t) {
   // "Accountant (Board of Elections" with nothing after it looks like our bug.
   link.append(el("span", { class: "name", text: t.x ? t.t + "…" : t.t }));
 
-  const bits = [`Title code ${t.c}`];
+  // Bargaining unit first, because it is what distinguishes two rows with the
+  // same name. The code alone cannot answer "which one am I".
+  const bits = [t.u || `Title code ${t.c}`];
   if (t.o) bits.push("exam open now");
-  else if (t.u) bits.push("exam coming");
+  else if (t.n) bits.push("exam coming");
   else if (t.l) bits.push("active list");
   link.append(el("span", { class: "meta", text: bits.join(" · ") }));
 
