@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-Check every colour pair in docs/css/site.css against WCAG AA.
+Check every color pair in docs/css/site.css against WCAG AA.
 
     python3 tools/contrast.py
 
 Exits non-zero if any pair fails, so it can go in the refresh workflow and
-fail a build rather than shipping a colour nobody can read. The project brief
+fail a build rather than shipping a color nobody can read. The project brief
 asks for AA verified rather than assumed: this file is the verification.
 
-Contrast is a property of a pair, not of a colour, so the pairs have to be
-listed by hand. Add a pair here whenever the CSS puts a new colour on a new
+Contrast is a property of a pair, not of a color, so the pairs have to be
+listed by hand. Add a pair here whenever the CSS puts a new color on a new
 background. Nothing can discover that automatically without rendering the page.
 """
 
@@ -57,8 +57,8 @@ def _channel(value):
     return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
 
 
-def luminance(hex_colour):
-    r, g, b = (int(hex_colour[i:i + 2], 16) for i in (1, 3, 5))
+def luminance(hex_color):
+    r, g, b = (int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
     return 0.2126 * _channel(r) + 0.7152 * _channel(g) + 0.0722 * _channel(b)
 
 

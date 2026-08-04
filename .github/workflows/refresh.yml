@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: pip install --quiet pandas requests
 
-      - name: Check colour contrast
+      - name: Check color contrast
         # Cheap, and it fails before the network work rather than after.
         run: python tools/contrast.py
 

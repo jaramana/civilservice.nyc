@@ -37,21 +37,22 @@
         <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
                autocomplete="off" spellcheck="false">
       </div>
-      <div class="field" style="flex: 0 1 12rem;">
+      <div class="field" style="flex: 0 1 14rem;">
         <label for="status">Status</label>
         <select id="status">
-          <option value="">All</option>
+          <option value="">Any status</option>
           <option value="accepting">Accepting applications</option>
           <option value="upcoming">Upcoming</option>
           <option value="closed">Closed</option>
         </select>
       </div>
-      <div class="field" style="flex: 0 1 12rem;">
+      <!-- The exam types are filled in from the data, so a type that appears
+           in a future schedule cannot end up unreachable behind a hardcoded
+           list of two. -->
+      <div class="field" style="flex: 0 1 16rem;">
         <label for="type">Who can apply</label>
         <select id="type">
-          <option value="">Anyone or City staff</option>
-          <option value="open_competitive">Open to the public</option>
-          <option value="promotion">Promotion only</option>
+          <option value="">Any exam type</option>
         </select>
       </div>
     </div>
@@ -69,11 +70,10 @@
 
   <footer class="foot">
     <p>
-      Exams that closed before the archive floor are not listed. The City never
-      published its fiscal 2025 schedule to OpenData, so there is a twelve
-      month hole in the record and showing a partial archive would imply a
-      completeness that is not there.
-      <a href="methodology.html">More on that</a>.
+      Built from <a href="https://opendata.cityofnewyork.us/">NYC OpenData</a>
+      and the DCAS exam pages. Not affiliated with the City of New York. Dates
+      can change: confirm on
+      <a href="https://www.nyc.gov/examsforjobs">nyc.gov</a> before you rely on one.
     </p>
     <p>
       <a href="methodology.html">How this is put together</a> ·

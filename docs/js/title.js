@@ -4,20 +4,29 @@
    The honest shape of this page is that most titles have very little to say:
    a name, a salary band, a union, and no exam. That is not a degraded version
    of the page, it is the normal one, so nothing here renders an empty field or
-   apologises for what the catalog does not carry.
+   apologizes for what the catalog does not carry.
 
    Two numbers on this page could be mistaken for each other and are kept
    apart on purpose:
 
-     salary range   what the title is authorised to pay, from the catalog
+     salary range   what the title is authorized to pay, from the catalog
      median         what people in the job are actually paid, from
-                    thepaygap.nyc, which is a median and is labelled as one
+                    thepaygap.nyc, which is a median and is labeled as one
 
    Calling either of them "the salary" would be wrong, so neither is.
+
+   A third number is deliberately not shown. The certification data carries
+   the salary the City reported when it hired off a list, averaged over the
+   last few years of certifications. It is still exported as salary_hiring for
+   anyone reading the JSON, but it does not belong on this page: it is a mean
+   of past hires, some of them years old and none of them adjusted, so putting
+   it next to a current salary range invites someone to read a stale figure as
+   what the job pays today. Two salary numbers with different meanings is
+   already the most this page can carry honestly.
    ========================================================================== */
 
 import {
-  load, el, clear, tag, fmtDate, fmtRange, money, count,
+  load, el, clear, tag, typeLabel, fmtRange, money, count,
   freshness, markNav, failure, param,
 } from "./common.js";
 
@@ -41,7 +50,7 @@ function renderFacts(t) {
       t.salary_bands > 1
         ? `This title has ${t.salary_bands} assignment levels. The range spans all of them, ` +
           `so the bottom and the top are usually different jobs in practice.`
-        : "What the title is authorised to pay. Where someone lands in it depends on the job and their experience.");
+        : "What the title is authorized to pay. Where someone lands in it depends on the job and their experience.");
   }
 
   if (t.paygap) {
@@ -55,11 +64,6 @@ function renderFacts(t) {
   if (t.union) fact(dl, "Union", t.union);
   if (t.bargaining_unit) fact(dl, "Bargaining unit", t.bargaining_unit);
 
-  if (t.salary_hiring) {
-    fact(dl, "Hired at", money(t.salary_hiring),
-      "The average starting salary reported when the City certified this list. " +
-      "A better guide to a first paycheque than the top of the range.");
-  }
 
   if (t.investigation) {
     fact(dl, "Background check", "Yes",
@@ -85,10 +89,7 @@ function renderExams(t, exams) {
   mine.forEach((e) => {
     const link = el("a", { class: "row", href: `exam.html?exam=${e.exam_no}` });
     link.append(el("span", { class: "name", text: `Exam ${e.exam_no}` }));
-    link.append(el("span", {
-      class: "meta",
-      text: e.type === "promotion" ? "Promotion, current employees only" : "Open to the public",
-    }));
+    link.append(el("span", { class: "meta", text: typeLabel(e.type, "who") }));
     const when = el("span", { class: "when" }, [tag(e.status)]);
     when.append(el("br"));
     when.append(document.createTextNode(fmtRange(e.start, e.end)));

@@ -19,7 +19,7 @@ pipeline/
   04_calendar.py         writes the .ics calendar files
   common.py              shared helpers, no decisions
 tools/
-  contrast.py            checks every colour pair against WCAG AA
+  contrast.py            checks every color pair against WCAG AA
 docs/                    the website itself, served by GitHub Pages
   index.html             front page
   exams.html             every exam, searchable
@@ -28,7 +28,7 @@ docs/                    the website itself, served by GitHub Pages
   title.html             one job title
   how-to-apply.html      how the process works, in plain language
   methodology.html       sources, limits, and the field dictionary
-  css/site.css           all the styling, colours as tokens
+  css/site.css           all the styling, colors as tokens
   js/                    one module per page, plus common.js
   data/                  generated, do not edit by hand
   exams.ics              the calendar feed people subscribe to
@@ -88,7 +88,7 @@ Things you might reasonably want to change:
 | Publish more archive | `ARCHIVE_FLOOR`, and read the comment first |
 | Stop reading the DCAS pages | `USE_DCAS_LIVE`, and read the comment first |
 
-**Colours are tokens** at the top of `docs/css/site.css`, once for light and
+**Colors are tokens** at the top of `docs/css/site.css`, once for light and
 once for dark. After changing one, run:
 
 ```bash

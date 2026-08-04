@@ -11,7 +11,7 @@
    ========================================================================== */
 
 import {
-  load, el, clear, tag, fmtDate, fmtRange, daysBetween, countdown,
+  load, el, clear, tag, typeLabel, fmtDate, fmtRange, daysBetween,
   freshness, markNav, failure, param,
 } from "./common.js";
 
@@ -93,11 +93,12 @@ function facts(exam, title) {
 
   fact(dl, "Application period", fmtRange(exam.start, exam.end));
 
-  fact(dl, "Who can apply",
-    exam.type === "promotion" ? "City employees in a qualifying title" : "Anyone who meets the requirements",
+  fact(dl, "Who can apply", typeLabel(exam.type, "who"),
     exam.type === "promotion"
       ? "A promotion exam is only open to people already working for the City in a related title."
-      : "An open competitive exam is open to the public. You do not need to work for the City to take it.");
+      : exam.type === "qie"
+        ? "A qualified incumbent exam is for people already doing the job provisionally."
+        : "Open competitive means open to the public. You do not need to work for the City to take it.");
 
   fact(dl, "Exam number", exam.exam_no,
     "The City reuses exam numbers roughly every ten years, so a number on its own does not identify an exam forever.");
@@ -145,14 +146,19 @@ function whatNext(exam) {
   const body = document.getElementById("what-next-body");
   clear(body);
   body.append(el("p", { text:
-    "Passing an exam does not get you a job. It puts you on a civil service " +
-    "list, in score order. When an agency has a vacancy it asks for the top " +
-    "of that list, interviews from it, and hires. That is called a " +
-    "certification." }));
+    "Passing an exam does not by itself get you a job. It puts you on a civil " +
+    "service list for this title, in score order. When an agency fills a " +
+    "vacancy it asks for names from the top of that list, which is called a " +
+    "certification, and interviews from the names it gets." }));
   body.append(el("p", { text:
-    "Lists usually last four years and can be extended. How long it takes to " +
-    "be reached depends on your score, how many people passed, and how much " +
-    "the City is hiring for that title." }));
+    "How much that ranking decides depends on the title. For many entry-level " +
+    "and uniformed jobs the list is the hiring queue and your number is most " +
+    "of the story. For many professional and managerial titles it works more " +
+    "like eligibility: being reachable is what lets you be considered for the " +
+    "postings that require the title, and the hiring is competitive from " +
+    "there." }));
+  body.append(el("p", { text:
+    "Lists usually last four years and can be extended." }));
   body.append(el("p", {}, [
     el("a", { href: "how-to-apply.html", text: "More on how the process works" }),
   ]));

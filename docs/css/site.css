@@ -3,12 +3,12 @@
 
    The page is a sheet of paper pinned to a board. Ruled headings, hairline
    rules, tabular figures, a lot of white. The 1990s part is the bulletin: flat
-   colour, hard rules, monospace for anything the City assigns a number to. The
+   color, hard rules, monospace for anything the City assigns a number to. The
    2026 part is everything else: fluid type, real focus states, motion that
    respects a preference, and a dark mode that is a first-class sheet of paper
    rather than an inverted one.
 
-   Every colour is a token. If you find a hex code below the token block, it is
+   Every color is a token. If you find a hex code below the token block, it is
    a bug. Contrast is checked against WCAG AA at the ratios noted inline.
    ========================================================================== */
 
@@ -21,7 +21,7 @@
   --paper:        #ffffff;
   --board:        #f2f0ec;
   /* Ratios below are measured, not estimated. Rerun the checker after any
-     colour change: python3 tools/contrast.py */
+     color change: python3 tools/contrast.py */
   --ink:          #16161a;   /* on --paper: 18.0:1  AAA */
   --ink-soft:     #55555f;   /* on --paper:  7.4:1  AAA */
   --ink-faint:    #6e6e78;   /* on --paper:  5.0:1  AA   smallest we allow */
@@ -41,14 +41,14 @@
   --accent-soft:  #e7edf8;   /* accent on it:  7.4:1  AAA */
 
   /* Status. These carry meaning, so each is paired with a word in the markup,
-     never colour alone. Each pair is checked against its own tinted
+     never color alone. Each pair is checked against its own tinted
      background, not against the paper: a tag's text sits on the tint. */
   --open:         #1a6b3c;   /* on --open-soft:   5.6:1  AA */
   --open-soft:    #e3f1e8;
   --soon:         #8a4b06;   /* on --soon-soft:   6.0:1  AA */
   --soon-soft:    #fbeede;
   --closed:       #5c5c66;   /* on --closed-soft: 5.9:1  AA */
-  --closed-soft:  #f3f1f1;   /* was #eceaea with a lighter grey: 4.2:1, under AA */
+  --closed-soft:  #f3f1f1;   /* was #eceaea with a lighter gray: 4.2:1, under AA */
   --warn:         #98311a;   /* on --warn-soft:   6.4:1  AA */
   --warn-soft:    #fbe9e5;
 
@@ -326,15 +326,17 @@ h1.page-title {
 
 /* --- status tag --------------------------------------------------------- */
 
+/* Sentence case, not caps. The status words are full phrases now
+   ("Accepting applications"), and caps plus letter-spacing made them wide
+   enough to push the date off the row. */
 .tag {
   display: inline-block;
   font-family: var(--face-mono);
   font-size: var(--t-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.01em;
   padding: 0.1rem 0.4rem;
   border-radius: var(--radius);
-  white-space: nowrap;
+  white-space: normal;
 }
 .tag-open   { background: var(--open-soft);   color: var(--open); }
 .tag-soon   { background: var(--soon-soft);   color: var(--soon); }

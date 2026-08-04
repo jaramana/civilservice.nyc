@@ -151,7 +151,7 @@ EXAM_NO_RECYCLE_YEARS = 10
 HOURLY_SALARY_THRESHOLD = 200
 
 # Full time equivalent hours, used only to show an hourly rate as an approximate
-# annual figure. Always labelled as approximate on the site.
+# annual figure. Always labeled as approximate on the site.
 ANNUAL_HOURS = 2080
 
 # Certification counts get noisy going back to 2016. This is how far back we
@@ -291,7 +291,7 @@ CALENDAR_REMINDER_DAYS_BEFORE_CLOSE = 3
 CALENDAR_REFRESH_HOURS = 12
 
 # Where a calendar event points when someone clicks through. The site has to
-# honour this shape, so if the exam page ever moves, this is the one line that
+# honor this shape, so if the exam page ever moves, this is the one line that
 # changes and the next refresh rewrites every event.
 EXAM_URL_TEMPLATE = "{base}/exam.html?exam={exam_no}"
 

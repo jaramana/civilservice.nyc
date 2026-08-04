@@ -117,13 +117,34 @@ export function clear(node) {
 
 /* --- status -------------------------------------------------------------- */
 
-/* Colour never carries the meaning on its own. Each status renders as a word
-   in a tag, and the tag's colour is reinforcement. */
+/* Color never carries the meaning on its own. Each status renders as a word
+   in a tag, and the tag's color is reinforcement. */
+/* Wording follows DCAS where DCAS has a word. It does not have a status
+   vocabulary: its pages simply list what is open under an "Application Period"
+   column. So "Accepting applications" is ours, and it is used in every place
+   the state appears, section heading, tag and filter alike. An earlier build
+   said "Open now" in the tag and "Accepting applications" in the filter for
+   the same thing, which reads as two different states. */
 export const STATUS = {
-  accepting: { label: "Open now", cls: "tag-open" },
-  upcoming:  { label: "Upcoming", cls: "tag-soon" },
-  closed:    { label: "Closed",   cls: "tag-closed" },
+  accepting: { label: "Accepting applications", cls: "tag-open" },
+  upcoming:  { label: "Upcoming",               cls: "tag-soon" },
+  closed:    { label: "Closed",                 cls: "tag-closed" },
 };
+
+/* Exam types, in DCAS's own words. "Open Competitive" is the City's term and
+   its page for those exams is headed "Open Competitive Exams for Anyone", so
+   both halves are worth saying: the label people will see on the Notice, and
+   what it actually means for who can apply. */
+export const EXAM_TYPE = {
+  open_competitive: { short: "Open competitive", who: "Open competitive: anyone who qualifies" },
+  promotion:        { short: "Promotion",       who: "Promotion: current City employees" },
+  qie:              { short: "Provisional",     who: "Qualified incumbent: provisional employees" },
+};
+
+export function typeLabel(type, form = "short") {
+  const t = EXAM_TYPE[type];
+  return t ? t[form] : type;
+}
 
 export function tag(status) {
   const s = STATUS[status] || STATUS.closed;

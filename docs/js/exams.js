@@ -10,7 +10,7 @@
    ========================================================================== */
 
 import {
-  load, el, clear, tag, fmtDate, fmtRange, daysBetween, countdown, count,
+  load, el, clear, tag, typeLabel, fmtDate, count,
   freshness, markNav, failure, param,
 } from "./common.js";
 
@@ -50,7 +50,7 @@ function row(e) {
   link.append(el("span", { class: "name", text: e.title }));
   link.append(el("span", {
     class: "meta",
-    text: `Exam ${e.exam_no} · ${e.type === "promotion" ? "Promotion" : "Open to the public"}`,
+    text: `Exam ${e.exam_no} · ${typeLabel(e.type)}`,
   }));
 
   const when = el("span", { class: "when" }, [tag(e.status)]);
@@ -116,6 +116,14 @@ async function main() {
     const q = document.getElementById("q");
     const status = document.getElementById("status");
     const type = document.getElementById("type");
+
+    // Build the type filter from the types actually present. The first option,
+    // "Any exam type", is the no-filter case: an earlier build labeled it
+    // "Anyone or City staff", which read as a third category rather than as
+    // "do not filter".
+    [...new Set(exams.map((e) => e.type))].sort().forEach((value) => {
+      type.append(el("option", { value, text: typeLabel(value, "who") }));
+    });
 
     // Restore state from the address bar so a shared link opens the same view.
     if (param("q")) { q.value = param("q"); state.q = norm(param("q")); }

@@ -10,7 +10,7 @@
    ========================================================================== */
 
 import {
-  load, el, clear, tag, fmtDate, fmtRange, daysBetween, countdown,
+  load, el, clear, typeLabel, fmtDate, daysBetween, countdown,
   freshness, markNav, failure, count,
 } from "./common.js";
 
@@ -24,7 +24,7 @@ function row(exam, mode) {
 
   const meta = el("span", { class: "meta" });
   meta.append(document.createTextNode(
-    `Exam ${exam.exam_no} · ${exam.type === "promotion" ? "Promotion" : "Open to the public"}`
+    `Exam ${exam.exam_no} · ${typeLabel(exam.type)}`
   ));
   link.append(meta);
 
