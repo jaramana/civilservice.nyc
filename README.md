@@ -21,8 +21,7 @@ pipeline/
 tools/
   contrast.py            checks every color pair against WCAG AA
 docs/                    the website itself, served by GitHub Pages
-  index.html             front page
-  exams.html             every exam, searchable
+  index.html             front page and exam search, one page in two states
   exam.html              one exam
   titles.html            every job title
   title.html             one job title
@@ -31,8 +30,12 @@ docs/                    the website itself, served by GitHub Pages
   css/site.css           all the styling, colors as tokens
   js/                    one module per page, plus common.js
   data/                  generated, do not edit by hand
-  exams.ics              the calendar feed people subscribe to
   calendar/              one .ics per exam, for the download buttons
+  exams.ics              every open and upcoming exam in one subscribable
+                         feed. Not linked from the front page: almost nobody
+                         wants all 147 in their calendar. Kept because it is
+                         one function call and it is the right thing for
+                         anyone who does. Mentioned once, on the About page.
 .github/workflows/
   refresh.yml            the daily rebuild
 ```

@@ -6,9 +6,6 @@
 <title>NYC civil service exams</title>
 <meta name="description" content="Which New York City civil service exams are open for applications, which are coming, and what each job title pays. Free, open source, built on NYC OpenData.">
 <link rel="stylesheet" href="css/site.css">
-<!-- Calendar readers and browsers both understand this. Someone can subscribe
-     to every open exam straight from the page source if they want to. -->
-<link rel="alternate" type="text/calendar" title="NYC civil service exam deadlines" href="exams.ics">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the exams</a>
@@ -30,56 +27,74 @@
 
   <main id="main">
 
-    <!-- Order is deliberate. What you can act on today comes first even when
-         it is empty, because "nothing is open" is an answer. The substantial
-         section is what is coming, since DCAS opens most application periods
-         on the first Wednesday of the month and the open list is often thin. -->
+    <!-- One page, two states.
+         Untouched, it is a bulletin: what you can apply for today, what is
+         coming, what just closed. Search or filter and the same page becomes
+         the full list of every exam we publish. These used to be two pages
+         that showed the same rows at different scopes. -->
 
-    <section class="section" id="accepting-section">
-      <h2>Accepting applications <span class="count" id="accepting-count"></span></h2>
-      <ul class="bulletin" id="accepting"></ul>
-    </section>
-
-    <section class="section" id="upcoming-section">
-      <h2>Opening soon <span class="count" id="upcoming-count"></span></h2>
-      <ul class="bulletin" id="upcoming"></ul>
-      <p class="note" id="upcoming-note"></p>
-    </section>
-
-    <section class="section" id="closed-section">
-      <h2>Recently closed <span class="count" id="closed-count"></span></h2>
-      <ul class="bulletin" id="closed"></ul>
-      <p class="note">
-        An exam that has closed still matters: the list it produces is how the
-        City hires for that title for the next few years.
-      </p>
-    </section>
-
-    <section class="section">
-      <h2>Get a reminder</h2>
-      <p class="note">
-        DCAS does not send an alert when an exam opens or closes, so this site
-        publishes the dates as a calendar instead. Subscribe once and every
-        application period appears in the calendar you already use, opening and
-        closing dates both, with a reminder
-        <span id="reminder-days">three</span> days before an exam closes. It
-        keeps updating on its own when DCAS extends a deadline.
-      </p>
-      <p class="note">
-        There is nothing to fill in. The events are already written. Nobody is
-        asked for an email address and nothing about you is stored, because the
-        reminder comes from your own phone or laptop rather than from us.
-      </p>
-      <div class="btn-row">
-        <a class="btn btn-primary" id="subscribe" href="exams.ics">Subscribe to every exam deadline</a>
-        <a class="btn" href="exams.ics" download>Download the calendar file</a>
+    <div class="controls">
+      <div class="field">
+        <label for="q">Search by job or exam number</label>
+        <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
+               autocomplete="off" spellcheck="false">
       </div>
-      <p class="note">
-        Only want one exam? Every exam page has an <strong>Add to my
-        calendar</strong> button that downloads just that exam, dates and
-        reminder already set.
-      </p>
-    </section>
+      <div class="field" style="flex: 0 1 14rem;">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="">Any status</option>
+          <option value="accepting">Accepting applications</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+      <!-- Exam types are filled in from the data, so a type that turns up in a
+           future schedule cannot end up unreachable behind a hardcoded list. -->
+      <div class="field" style="flex: 0 1 16rem;">
+        <label for="type">Who can apply</label>
+        <select id="type">
+          <option value="">Any exam type</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- The bulletin. Shown when nothing is being searched or filtered. -->
+    <div id="bulletin">
+
+      <section class="section">
+        <h2>Accepting applications <span class="count" id="accepting-count"></span></h2>
+        <ul class="bulletin" id="accepting"></ul>
+      </section>
+
+      <section class="section">
+        <h2>Opening soon <span class="count" id="upcoming-count"></span></h2>
+        <ul class="bulletin" id="upcoming"></ul>
+        <p class="note" id="upcoming-note"></p>
+      </section>
+
+      <section class="section">
+        <h2>Recently closed <span class="count" id="closed-count"></span></h2>
+        <ul class="bulletin" id="closed"></ul>
+        <p class="note">
+          An exam that has closed still matters: the list it produces is how the
+          City hires for that title for the next few years.
+        </p>
+      </section>
+
+    </div>
+
+    <!-- The full list. Shown as soon as anything is typed or picked above. -->
+    <div id="search" hidden>
+      <section class="section">
+        <h2><span id="results-heading">Search results</span> <span class="count" id="results-count"></span></h2>
+        <ul class="bulletin" id="results"></ul>
+        <p class="result-count" id="result-summary" role="status"></p>
+        <div class="btn-row" id="more-row" hidden>
+          <button class="btn" id="more" type="button">Show more</button>
+        </div>
+        <p class="note" id="archive-note"></p>
+      </section>
+    </div>
 
     <div id="freshness"></div>
 
