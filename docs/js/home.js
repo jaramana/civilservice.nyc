@@ -1,43 +1,68 @@
 /* ==========================================================================
    The front page, which is also the exam search.
 
-   These were two pages. The front page showed a curated 54 rows in three
-   sections, the exams page showed all 345 with a search box, and they drew the
-   same rows in the same style. One page with two states is less to maintain
-   and puts the search where people arrive.
+   One shape, held in every state. Three sections in a fixed order, always
+   present, always drawn the same way:
 
-   Untouched, the page is a bulletin:
+     Accepting applications   what you can act on today
+     Upcoming                 what is coming
+     Closed                   what has already closed
 
-     accepting now   what you can act on today. First even when empty, because
-                     "nothing is open" is an answer, and DCAS opens most
-                     application periods on the first Wednesday of the month so
-                     empty is a normal Tuesday rather than a broken page.
-     opening soon    the substantial section, within UPCOMING_WINDOW_DAYS
-     recently closed within RECENTLY_CLOSED_DAYS
+   Searching or filtering changes what is inside those sections and how far
+   each one reaches. It never rearranges the page and never redraws a row.
 
-   Type anything, or pick a filter, and the same page lists every exam we
-   publish. Filters live in the query string, so a filtered view can be linked
-   to and the browser back button behaves.
+   Two rules this file exists to keep:
+
+     1. A given exam looks the same everywhere. Its right-hand column is
+        derived from the exam's own status and nothing else, so filtering
+        cannot restyle a row that was already on screen. An earlier build drew
+        a tag plus a small date while filtering and a bold date plus a
+        countdown while not, which made a filter look like it had changed the
+        data.
+
+     2. A section never disappears on its own. It empties, and says so in a
+        sentence. The only way a section leaves the page is if you explicitly
+        ask for one group in the Show filter, which is a choice you made and
+        can see in the control.
+
+   Scope is the one thing that does change, because it has to. With nothing
+   filtered the page is a bulletin: upcoming reaches UPCOMING_WINDOW_DAYS
+   ahead and closed reaches RECENTLY_CLOSED_DAYS back. Search or filter for
+   something and those windows open to the full published schedule, because
+   someone searching for "Sanitation Worker" wants every one of them, not the
+   ones inside an arbitrary window. Each section says which of the two it is
+   currently showing.
    ========================================================================== */
 
 import {
-  load, el, clear, tag, typeLabel, fmtDate, daysBetween, countdown,
+  load, el, clear, typeLabel, fmtDate, daysBetween, countdown,
   freshness, markNav, failure, count,
 } from "./common.js";
 
-/* Rows added to the document at once in search mode. 345 is fine on a laptop
-   and a visible pause on an old phone, and nobody reads to row 300 without
-   narrowing first. */
-const PAGE = 100;
+/* Rows put in the document per section before the "Show the rest" button
+   appears. Long enough that the button is rare, short enough that an old
+   phone is not asked to lay out 198 rows nobody scrolled to. */
+const PAGE = 50;
 
-const state = { q: "", status: "", type: "", shown: PAGE, rows: [] };
+const GROUPS = [
+  // `label` reads after a count ("9 exams accepting applications"), `nothing`
+  // reads as its own sentence when a section comes up empty. One string cannot
+  // do both without producing "No accepting applications exams".
+  { key: "accepting", label: "accepting applications", nothing: "No exams accepting applications" },
+  { key: "upcoming",  label: "upcoming",               nothing: "No upcoming exams" },
+  { key: "closed",    label: "closed",                 nothing: "No closed exams" },
+];
+
+const state = {
+  q: "", status: "", type: "",
+  shown: { accepting: PAGE, upcoming: PAGE, closed: PAGE },
+};
 let all = [];
 let windows = {};
 
-/* Searching is on as soon as any control has a value. That is the whole state
-   machine: no mode switch to click, and clearing the box brings the bulletin
-   back. */
-function searching() {
+/* Any control with a value means the person is looking for something specific
+   rather than reading the bulletin, which is what opens the date windows. */
+function filtering() {
   return Boolean(state.q || state.status || state.type);
 }
 
@@ -46,14 +71,15 @@ function norm(s) {
 }
 
 /* --------------------------------------------------------------------------
-   Rows
+   The row. One function, no modes.
    -------------------------------------------------------------------------- */
 
-/* Two shapes for the same exam. In the bulletin the section heading already
-   says the status, so the row spends its right-hand column on the date and the
-   countdown, which is what someone is actually deciding on. In search results
-   the rows are mixed, so each carries its own status tag instead. */
-function row(exam, mode) {
+/* The right-hand column answers the question the row's own status raises:
+   an open exam has a deadline and a countdown, an upcoming one has an opening
+   date and a wait, a closed one has the date it closed. No status tag, because
+   the section heading directly above already says it and repeating it on every
+   row is noise. */
+function row(exam) {
   const link = el("a", { class: "row", href: `exam.html?exam=${exam.exam_no}` });
   link.append(el("span", { class: "name", text: exam.title }));
   link.append(el("span", {
@@ -62,20 +88,11 @@ function row(exam, mode) {
   }));
 
   const when = el("span", { class: "when" });
-
-  if (mode === "results") {
-    when.append(tag(exam.status));
-    when.append(el("br"));
-    when.append(document.createTextNode(
-      exam.status === "accepting" ? `closes ${fmtDate(exam.end)}`
-      : exam.status === "upcoming" ? `opens ${fmtDate(exam.start)}`
-      : `closed ${fmtDate(exam.end)}`
-    ));
-  } else if (mode === "accepting") {
+  if (exam.status === "accepting") {
     when.append(el("strong", { text: `Closes ${fmtDate(exam.end)}` }));
     when.append(el("br"));
     when.append(document.createTextNode(countdown(daysBetween(exam.end))));
-  } else if (mode === "upcoming") {
+  } else if (exam.status === "upcoming") {
     const days = daysBetween(exam.start);
     when.append(el("strong", { text: `Opens ${fmtDate(exam.start)}` }));
     when.append(el("br"));
@@ -85,142 +102,195 @@ function row(exam, mode) {
   } else {
     when.append(el("strong", { text: `Closed ${fmtDate(exam.end)}` }));
   }
-
   link.append(when);
+
   return el("li", {}, link);
 }
 
-function fill(listId, countId, exams, mode) {
-  const list = document.getElementById(listId);
-  clear(list);
-  exams.forEach((e) => list.append(row(e, mode)));
-  document.getElementById(countId).textContent = count(exams.length);
-  return list;
-}
-
 /* --------------------------------------------------------------------------
-   The bulletin
+   Selecting what goes in each section
    -------------------------------------------------------------------------- */
 
-/* The empty state carries the next real date. "Nothing is open" on its own
-   invites someone to check back tomorrow and the day after: naming the date
-   saves them the trips. */
-function emptyAccepting(list, upcoming) {
-  const next = upcoming[0];
-  const node = el("p", { class: "empty" });
-  node.append(el("strong", { text: "No exams are accepting applications today. " }));
-  node.append(document.createTextNode(next
-    ? `The City opens most application periods on the first Wednesday of the ` +
-      `month. The next one is ${next.title}, opening ${fmtDate(next.start, { alwaysYear: true })}.`
-    : "There is nothing scheduled to open in the published schedule either, " +
-      "which usually means DCAS has not posted the coming year yet."));
-  list.after(node);
-}
-
-function renderBulletin() {
-  const upcomingDays = windows.upcoming_days ?? 60;
-  const closedDays = windows.recently_closed_days ?? 45;
-
-  const accepting = all
-    .filter((e) => e.status === "accepting")
-    .sort((a, b) => a.end.localeCompare(b.end));          // soonest deadline first
-
-  const upcomingAll = all
-    .filter((e) => e.status === "upcoming")
-    .sort((a, b) => a.start.localeCompare(b.start));
-
-  const upcoming = upcomingAll.filter((e) => daysBetween(e.start) <= upcomingDays);
-
-  const closed = all
-    .filter((e) => e.status === "closed" && -daysBetween(e.end) <= closedDays)
-    .sort((a, b) => b.end.localeCompare(a.end));
-
-  const acceptingList = fill("accepting", "accepting-count", accepting, "accepting");
-  document.querySelectorAll("#bulletin .empty").forEach((n) => n.remove());
-  if (!accepting.length) emptyAccepting(acceptingList, upcomingAll);
-
-  fill("upcoming", "upcoming-count", upcoming, "upcoming");
-
-  // The rest of the schedule is not on another page any more, it is one
-  // filter away on this one.
-  const note = document.getElementById("upcoming-note");
-  const later = upcomingAll.length - upcoming.length;
-  clear(note);
-  note.append(document.createTextNode(`Exams opening in the next ${upcomingDays} days. `));
-  if (later > 0) {
-    note.append(el("a", {
-      href: "?status=upcoming",
-      text: `${count(later)} more are scheduled further out.`,
-    }));
-  }
-
-  fill("closed", "closed-count", closed, "closed");
-}
-
-/* --------------------------------------------------------------------------
-   Search results
-   -------------------------------------------------------------------------- */
-
-function matches(e) {
-  if (state.status && e.status !== state.status) return false;
+function matchesSearch(e) {
   if (state.type && e.type !== state.type) return false;
   if (!state.q) return true;
   return e._n.includes(state.q) || e.exam_no.startsWith(state.q);
 }
 
-/* Accepting first, then upcoming, then closed newest first. Within a group,
-   by the date that is still ahead of you. */
-function compare(a, b) {
-  const rank = { accepting: 0, upcoming: 1, closed: 2 };
-  const ra = rank[a.status] ?? 3, rb = rank[b.status] ?? 3;
-  if (ra !== rb) return ra - rb;
-  if (a.status === "closed") return b.end.localeCompare(a.end);
-  const key = a.status === "accepting" ? "end" : "start";
-  return a[key].localeCompare(b[key]);
+/* The date windows, applied only while reading the bulletin. */
+function inWindow(e) {
+  if (filtering()) return true;
+  if (e.status === "upcoming") {
+    return daysBetween(e.start) <= (windows.upcoming_days ?? 60);
+  }
+  if (e.status === "closed") {
+    return -daysBetween(e.end) <= (windows.recently_closed_days ?? 45);
+  }
+  return true;
 }
 
-function renderResults() {
-  state.rows = all.filter(matches).sort(compare);
-  const slice = state.rows.slice(0, state.shown);
-  const total = state.rows.length;
+function rowsFor(key) {
+  const rows = all.filter((e) => e.status === key && matchesSearch(e) && inWindow(e));
+  if (key === "closed") rows.sort((a, b) => b.end.localeCompare(a.end));
+  else if (key === "accepting") rows.sort((a, b) => a.end.localeCompare(b.end));
+  else rows.sort((a, b) => a.start.localeCompare(b.start));
+  return rows;
+}
 
-  const list = document.getElementById("results");
-  clear(list);
-  slice.forEach((e) => list.append(row(e, "results")));
+/* --------------------------------------------------------------------------
+   Notes under each section. These carry the scope, so the reader always knows
+   whether they are seeing a window or everything.
+   -------------------------------------------------------------------------- */
 
-  document.getElementById("results-count").textContent = count(total);
+function noteFor(key, shownCount, totalInGroup) {
+  const wide = filtering();
 
-  // "All exams" would be a lie the moment a filter is on, and this section
-  // only ever appears with a filter on.
-  document.getElementById("results-heading").textContent =
-    state.q ? `Exams matching “${document.getElementById("q").value.trim()}”`
-            : "Matching exams";
-
-  const summary = document.getElementById("result-summary");
-  if (!total) {
-    summary.textContent = "No exams match. Try clearing a filter.";
-  } else if (total > slice.length) {
-    summary.textContent = `Showing ${count(slice.length)} of ${count(total)} exams`;
-  } else {
-    summary.textContent = `${count(total)} exam${total === 1 ? "" : "s"}`;
+  if (key === "upcoming") {
+    if (wide) {
+      return totalInGroup
+        ? [document.createTextNode("Every upcoming exam on the published schedule, not only the next few weeks.")]
+        : [];
+    }
+    const beyond = all.filter((e) => e.status === "upcoming" && !inWindow(e)).length;
+    const parts = [document.createTextNode(
+      `Exams opening in the next ${windows.upcoming_days ?? 60} days. `)];
+    if (beyond > 0) {
+      parts.push(el("a", {
+        href: "?status=upcoming",
+        text: `${count(beyond)} more are scheduled further out.`,
+      }));
+    }
+    return parts;
   }
 
-  document.getElementById("more-row").hidden = total <= slice.length;
+  if (key === "closed") {
+    const meaning = "An exam that has closed still matters: the list it " +
+                    "produces is how the City hires for that title for the " +
+                    "next few years.";
+    if (wide) {
+      const floor = windows.archive_floor;
+      return [document.createTextNode(
+        `${meaning} Everything back to ` +
+        `${floor ? fmtDate(floor, { alwaysYear: true }) : "the archive floor"}. ` +
+        `The City never published its fiscal 2025 schedule as open data, so ` +
+        `the record stops there rather than showing a partial archive that ` +
+        `would look complete.`)];
+    }
+    return [document.createTextNode(
+      `Exams that closed in the last ${windows.recently_closed_days ?? 45} days. ${meaning}`)];
+  }
+
+  return [];
+}
+
+/* The empty line for a section. Never a blank space: a section with nothing in
+   it says why, and the accepting one says when that changes. */
+function emptyFor(key) {
+  if (filtering()) {
+    const what = state.q
+      ? `match “${document.getElementById("q").value.trim()}”`
+      : "match those filters";
+    return [document.createTextNode(
+      `${GROUPS.find((g) => g.key === key).nothing} ${what}.`)];
+  }
+
+  if (key === "accepting") {
+    const next = all
+      .filter((e) => e.status === "upcoming")
+      .sort((a, b) => a.start.localeCompare(b.start))[0];
+    const parts = [el("strong", { text: "No exams are accepting applications today. " })];
+    parts.push(document.createTextNode(next
+      ? `The City opens most application periods on the first Wednesday of the ` +
+        `month. The next one is ${next.title}, opening ` +
+        `${fmtDate(next.start, { alwaysYear: true })}.`
+      : "There is nothing scheduled to open in the published schedule either, " +
+        "which usually means DCAS has not posted the coming year yet."));
+    return parts;
+  }
+
+  return [document.createTextNode("Nothing here right now.")];
+}
+
+/* --------------------------------------------------------------------------
+   Render
+   -------------------------------------------------------------------------- */
+
+function renderGroup(key) {
+  const rows = rowsFor(key);
+  const slice = rows.slice(0, state.shown[key]);
+
+  const list = document.getElementById(`list-${key}`);
+  clear(list);
+  slice.forEach((e) => list.append(row(e)));
+
+  document.getElementById(`count-${key}`).textContent = count(rows.length);
+
+  const empty = document.getElementById(`empty-${key}`);
+  clear(empty);
+  empty.hidden = rows.length > 0;
+  if (!rows.length) emptyFor(key).forEach((n) => empty.append(n));
+
+  const note = document.getElementById(`note-${key}`);
+  clear(note);
+  const parts = noteFor(key, slice.length, rows.length);
+  parts.forEach((n) => note.append(n));
+  note.hidden = parts.length === 0;
+
+  const moreRow = document.getElementById(`more-row-${key}`);
+  moreRow.hidden = rows.length <= slice.length;
+  if (!moreRow.hidden) {
+    document.getElementById(`more-${key}`).textContent =
+      `Show the remaining ${count(rows.length - slice.length)}`;
+  }
+
+  // A section only leaves the page when the Show control asks for one group.
+  document.getElementById(`section-${key}`).hidden =
+    Boolean(state.status) && state.status !== key;
+
+  return rows.length;
+}
+
+function render() {
+  const totals = {};
+  GROUPS.forEach((g) => { totals[g.key] = renderGroup(g.key); });
+
+  // One line above everything saying what the page is currently showing, so
+  // the state is legible without reading three section headings.
+  const summary = document.getElementById("summary");
+  const visible = GROUPS
+    .filter((g) => !state.status || state.status === g.key)
+    .reduce((n, g) => n + totals[g.key], 0);
+
+  if (!filtering()) {
+    summary.textContent =
+      `${count(totals.accepting)} exam${totals.accepting === 1 ? "" : "s"} ` +
+      `accepting applications right now. Search or filter to see the whole schedule.`;
+    return;
+  }
+
+  // Built as a sentence rather than a list of clauses. The exam type is an
+  // adjective ("100 promotion exams"), not a trailing fragment, because
+  // "100 exams promotion" is what you get if you just join everything.
+  const kind = state.type ? `${typeLabel(state.type).toLowerCase()} ` : "";
+  const qualifiers = [];
+  if (state.q) qualifiers.push(`matching “${document.getElementById("q").value.trim()}”`);
+  if (state.status) qualifiers.push(GROUPS.find((g) => g.key === state.status).label);
+  const tail = qualifiers.length ? ` ${qualifiers.join(", ")}` : "";
+
+  summary.textContent = visible
+    ? `${count(visible)} ${kind}exam${visible === 1 ? "" : "s"}${tail}.`
+    : `No ${kind}exams${tail}.`;
 }
 
 /* --------------------------------------------------------------------------
    Wiring
    -------------------------------------------------------------------------- */
 
-function apply({ push = true } = {}) {
-  const on = searching();
-  document.getElementById("bulletin").hidden = on;
-  document.getElementById("search").hidden = !on;
+function resetPaging() {
+  GROUPS.forEach((g) => { state.shown[g.key] = PAGE; });
+}
 
-  if (on) renderResults();
-  else renderBulletin();
-
-  if (!push) return;
+function pushUrl() {
   const params = new URLSearchParams();
   if (state.q) params.set("q", document.getElementById("q").value.trim());
   if (state.status) params.set("status", state.status);
@@ -237,7 +307,7 @@ function readUrl(controls) {
   state.type = params.get("type") || "";
   controls.status.value = state.status;
   controls.type.value = state.type;
-  state.shown = PAGE;
+  resetPaging();
 }
 
 async function main() {
@@ -263,51 +333,35 @@ async function main() {
       controls.type.append(el("option", { value, text: typeLabel(value, "who") }));
     });
 
-    if (windows.archive_floor) {
-      document.getElementById("archive-note").textContent =
-        `Everything on the City's published schedule since ` +
-        `${fmtDate(windows.archive_floor, { alwaysYear: true })}. The City never ` +
-        `published its fiscal 2025 schedule as open data, so there is a twelve ` +
-        `month hole before that and we do not show a partial archive that would ` +
-        `look complete.`;
-    }
+    const change = (fn) => () => { fn(); resetPaging(); render(); pushUrl(); };
+    controls.q.addEventListener("input", change(() => { state.q = norm(controls.q.value); }));
+    controls.status.addEventListener("change", change(() => { state.status = controls.status.value; }));
+    controls.type.addEventListener("change", change(() => { state.type = controls.type.value; }));
 
-    controls.q.addEventListener("input", () => {
-      state.q = norm(controls.q.value);
-      state.shown = PAGE;
-      apply();
-    });
-    controls.status.addEventListener("change", () => {
-      state.status = controls.status.value;
-      state.shown = PAGE;
-      apply();
-    });
-    controls.type.addEventListener("change", () => {
-      state.type = controls.type.value;
-      state.shown = PAGE;
-      apply();
-    });
-    document.getElementById("more").addEventListener("click", () => {
-      state.shown += PAGE;
-      renderResults();
+    GROUPS.forEach((g) => {
+      document.getElementById(`more-${g.key}`).addEventListener("click", () => {
+        // Reveal the rest of that section in one go. Paging twice through the
+        // same list is a worse experience than one longer page.
+        state.shown[g.key] = Infinity;
+        renderGroup(g.key);
+      });
     });
 
-    // The "more are scheduled further out" link is a plain href to ?status=…
-    // on this same page, so it has to be caught rather than followed. A real
-    // navigation would work too, but it would reload 77 KB of JSON to show
-    // rows the page is already holding.
+    // The "more are scheduled further out" link points at ?status=upcoming on
+    // this same page. Handled here rather than followed, so it does not
+    // refetch JSON the page is already holding.
     document.addEventListener("click", (e) => {
       const link = e.target.closest('a[href^="?"]');
       if (!link) return;
       e.preventDefault();
       history.replaceState(null, "", link.getAttribute("href"));
       readUrl(controls);
-      apply({ push: false });
-      document.getElementById("search").scrollIntoView({ block: "start" });
+      render();
+      document.getElementById("section-upcoming").scrollIntoView({ block: "start" });
     });
 
     readUrl(controls);
-    apply({ push: false });
+    render();
   } catch (err) {
     failure(host, err);
   }

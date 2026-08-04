@@ -27,11 +27,13 @@
 
   <main id="main">
 
-    <!-- One page, two states.
-         Untouched, it is a bulletin: what you can apply for today, what is
-         coming, what just closed. Search or filter and the same page becomes
-         the full list of every exam we publish. These used to be two pages
-         that showed the same rows at different scopes. -->
+    <!-- The page has one shape and keeps it.
+         Three sections, always in this order, always present. Searching or
+         filtering changes which rows are in them and how far the list reaches,
+         never the structure and never how a row is drawn. An earlier build
+         swapped the whole page for a flat list the moment anything was typed,
+         which meant the same exam appeared two different ways depending on
+         what you had clicked. -->
 
     <div class="controls">
       <div class="field">
@@ -40,9 +42,9 @@
                autocomplete="off" spellcheck="false">
       </div>
       <div class="field" style="flex: 0 1 14rem;">
-        <label for="status">Status</label>
+        <label for="status">Show</label>
         <select id="status">
-          <option value="">Any status</option>
+          <option value="">All three groups</option>
           <option value="accepting">Accepting applications</option>
           <option value="upcoming">Upcoming</option>
           <option value="closed">Closed</option>
@@ -58,43 +60,37 @@
       </div>
     </div>
 
-    <!-- The bulletin. Shown when nothing is being searched or filtered. -->
-    <div id="bulletin">
+    <p class="result-count" id="summary" role="status"></p>
 
-      <section class="section">
-        <h2>Accepting applications <span class="count" id="accepting-count"></span></h2>
-        <ul class="bulletin" id="accepting"></ul>
-      </section>
+    <section class="section" id="section-accepting">
+      <h2>Accepting applications <span class="count" id="count-accepting"></span></h2>
+      <ul class="bulletin" id="list-accepting"></ul>
+      <p class="empty" id="empty-accepting" hidden></p>
+      <p class="note" id="note-accepting" hidden></p>
+      <div class="btn-row" id="more-row-accepting" hidden>
+        <button class="btn" id="more-accepting" type="button">Show the rest</button>
+      </div>
+    </section>
 
-      <section class="section">
-        <h2>Opening soon <span class="count" id="upcoming-count"></span></h2>
-        <ul class="bulletin" id="upcoming"></ul>
-        <p class="note" id="upcoming-note"></p>
-      </section>
+    <section class="section" id="section-upcoming">
+      <h2>Upcoming <span class="count" id="count-upcoming"></span></h2>
+      <ul class="bulletin" id="list-upcoming"></ul>
+      <p class="empty" id="empty-upcoming" hidden></p>
+      <p class="note" id="note-upcoming"></p>
+      <div class="btn-row" id="more-row-upcoming" hidden>
+        <button class="btn" id="more-upcoming" type="button">Show the rest</button>
+      </div>
+    </section>
 
-      <section class="section">
-        <h2>Recently closed <span class="count" id="closed-count"></span></h2>
-        <ul class="bulletin" id="closed"></ul>
-        <p class="note">
-          An exam that has closed still matters: the list it produces is how the
-          City hires for that title for the next few years.
-        </p>
-      </section>
-
-    </div>
-
-    <!-- The full list. Shown as soon as anything is typed or picked above. -->
-    <div id="search" hidden>
-      <section class="section">
-        <h2><span id="results-heading">Search results</span> <span class="count" id="results-count"></span></h2>
-        <ul class="bulletin" id="results"></ul>
-        <p class="result-count" id="result-summary" role="status"></p>
-        <div class="btn-row" id="more-row" hidden>
-          <button class="btn" id="more" type="button">Show more</button>
-        </div>
-        <p class="note" id="archive-note"></p>
-      </section>
-    </div>
+    <section class="section" id="section-closed">
+      <h2>Closed <span class="count" id="count-closed"></span></h2>
+      <ul class="bulletin" id="list-closed"></ul>
+      <p class="empty" id="empty-closed" hidden></p>
+      <p class="note" id="note-closed"></p>
+      <div class="btn-row" id="more-row-closed" hidden>
+        <button class="btn" id="more-closed" type="button">Show the rest</button>
+      </div>
+    </section>
 
     <div id="freshness"></div>
 
