@@ -100,6 +100,16 @@ It measures every pair in both themes and exits non-zero if anything drops
 below WCAG AA. The ratios in the CSS comments come from it. Do not hand-edit
 those numbers.
 
+**After changing anything in `docs/js/`**, run:
+
+```bash
+python3 tools/checkjs.py
+```
+
+There is no build step and no compiler, so a helper used without being
+imported fails only in the browser, only on the pages that reach that line.
+This catches it. Both checks also run in the refresh workflow.
+
 ## When a source dataset changes
 
 The City occasionally renames a column or republishes a dataset under a new

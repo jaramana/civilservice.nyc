@@ -26,7 +26,7 @@
    ========================================================================== */
 
 import {
-  load, el, clear, tag, typeLabel, fmtRange, money, count,
+  load, el, clear, tag, typeLabel, fmtDate, fmtRange, money, count,
   freshness, markNav, failure, param,
 } from "./common.js";
 

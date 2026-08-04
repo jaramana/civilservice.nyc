@@ -51,6 +51,9 @@ jobs:
         # Cheap, and it fails before the network work rather than after.
         run: python tools/contrast.py
 
+      - name: Check the browser modules
+        run: python tools/checkjs.py
+
       - name: Run the pipeline
         env:
           # Optional. Raises the Socrata rate limit if the secret exists, and
