@@ -39,10 +39,11 @@ import {
   freshness, markNav, failure, count,
 } from "./common.js";
 
-/* Rows put in the document per section before the "Show the rest" button
-   appears. Long enough that the button is rare, short enough that an old
-   phone is not asked to lay out 198 rows nobody scrolled to. */
-const PAGE = 50;
+/* No paging on this page. Rendering all 345 exams at once, layout included,
+   measures at 11ms here and a few times that on a slow phone, which is not
+   worth a button, a shown-count per section, and the state that goes with
+   them. The title directory is a different case: 2,632 rows there do need it.
+*/
 
 const GROUPS = [
   // `label` reads after a count ("9 exams accepting applications"), `nothing`
@@ -53,10 +54,7 @@ const GROUPS = [
   { key: "closed",    label: "closed",                 nothing: "No closed exams" },
 ];
 
-const state = {
-  q: "", status: "", type: "",
-  shown: { accepting: PAGE, upcoming: PAGE, closed: PAGE },
-};
+const state = { q: "", status: "", type: "" };
 let all = [];
 let windows = {};
 
@@ -142,7 +140,7 @@ function rowsFor(key) {
    whether they are seeing a window or everything.
    -------------------------------------------------------------------------- */
 
-function noteFor(key, shownCount, totalInGroup) {
+function noteFor(key, totalInGroup) {
   const wide = filtering();
 
   if (key === "upcoming") {
@@ -217,11 +215,10 @@ function emptyFor(key) {
 
 function renderGroup(key) {
   const rows = rowsFor(key);
-  const slice = rows.slice(0, state.shown[key]);
 
   const list = document.getElementById(`list-${key}`);
   clear(list);
-  slice.forEach((e) => list.append(row(e)));
+  rows.forEach((e) => list.append(row(e)));
 
   document.getElementById(`count-${key}`).textContent = count(rows.length);
 
@@ -232,16 +229,9 @@ function renderGroup(key) {
 
   const note = document.getElementById(`note-${key}`);
   clear(note);
-  const parts = noteFor(key, slice.length, rows.length);
+  const parts = noteFor(key, rows.length);
   parts.forEach((n) => note.append(n));
   note.hidden = parts.length === 0;
-
-  const moreRow = document.getElementById(`more-row-${key}`);
-  moreRow.hidden = rows.length <= slice.length;
-  if (!moreRow.hidden) {
-    document.getElementById(`more-${key}`).textContent =
-      `Show the remaining ${count(rows.length - slice.length)}`;
-  }
 
   // A section only leaves the page when the Show control asks for one group.
   document.getElementById(`section-${key}`).hidden =
@@ -286,10 +276,6 @@ function render() {
    Wiring
    -------------------------------------------------------------------------- */
 
-function resetPaging() {
-  GROUPS.forEach((g) => { state.shown[g.key] = PAGE; });
-}
-
 function pushUrl() {
   const params = new URLSearchParams();
   if (state.q) params.set("q", document.getElementById("q").value.trim());
@@ -307,7 +293,6 @@ function readUrl(controls) {
   state.type = params.get("type") || "";
   controls.status.value = state.status;
   controls.type.value = state.type;
-  resetPaging();
 }
 
 async function main() {
@@ -333,19 +318,10 @@ async function main() {
       controls.type.append(el("option", { value, text: typeLabel(value, "who") }));
     });
 
-    const change = (fn) => () => { fn(); resetPaging(); render(); pushUrl(); };
+    const change = (fn) => () => { fn(); render(); pushUrl(); };
     controls.q.addEventListener("input", change(() => { state.q = norm(controls.q.value); }));
     controls.status.addEventListener("change", change(() => { state.status = controls.status.value; }));
     controls.type.addEventListener("change", change(() => { state.type = controls.type.value; }));
-
-    GROUPS.forEach((g) => {
-      document.getElementById(`more-${g.key}`).addEventListener("click", () => {
-        // Reveal the rest of that section in one go. Paging twice through the
-        // same list is a worse experience than one longer page.
-        state.shown[g.key] = Infinity;
-        renderGroup(g.key);
-      });
-    });
 
     // The "more are scheduled further out" link points at ?status=upcoming on
     // this same page. Handled here rather than followed, so it does not

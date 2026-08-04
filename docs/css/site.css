@@ -112,6 +112,15 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* The `hidden` attribute is only a UA-stylesheet `display: none`, so any
+   author rule that sets `display` beats it. `.btn-row { display: flex }` did
+   exactly that, and a "Show the rest" button stayed on screen with hidden=true
+   set, looking clickable and doing nothing because there was nothing left to
+   show. Anything that hides itself with the attribute needs this line to hold.
+   Scoped to the attribute rather than fixed on .btn-row alone, because the
+   next component to set `display` would hit the same trap silently. */
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
