@@ -243,6 +243,22 @@ a:hover { text-decoration-thickness: 2px; }
   justify-content: space-between;
   gap: 1rem;
 }
+
+/* A status heading is the status tag, at heading size. The same chip in the
+   same color means the same thing wherever it appears: the group heading here,
+   the exam page, the list of exams on a title page. One component, one
+   meaning. A heading that named a status in plain type while the exam page
+   used a colored chip for it was two vocabularies for one idea. */
+.section > h2 .tag {
+  font-size: var(--t-sm);
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  /* Cancels the heading's uppercase. The same chip has to read the same way
+     here as it does on an exam page, and it is the heading rule that has to
+     give way, not the component. */
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
 .section > h2 .count {
   font-family: var(--face-mono);
   font-weight: 400;
