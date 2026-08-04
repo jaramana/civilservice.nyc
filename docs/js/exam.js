@@ -104,8 +104,11 @@ function facts(exam, title) {
     "The City reuses exam numbers roughly every ten years, so a number on its own does not identify an exam forever.");
 
   if (exam.fiscal_year) {
+    // Spell out the year actually on screen. A fixed example meant an exam in
+    // fiscal 2027 sat under a sentence explaining fiscal 2026.
     fact(dl, "Fiscal year", exam.fiscal_year,
-      "The City's fiscal year runs July to June, so fiscal 2026 means July 2025 through June 2026.");
+      `The City's fiscal year runs July to June, so fiscal ${exam.fiscal_year} ` +
+      `means July ${exam.fiscal_year - 1} through June ${exam.fiscal_year}.`);
   }
 
   if (title) {
