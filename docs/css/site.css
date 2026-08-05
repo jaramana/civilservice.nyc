@@ -571,7 +571,12 @@ input[type="search"]:focus, select:focus { border-color: var(--focus); }
   font-size: var(--t-sm);
   color: var(--ink-soft);
 }
-.foot p { margin: 0 0 0.5rem; max-width: var(--measure); }
+/* No prose measure here. --measure keeps reading text to a comfortable line
+   length, but the footer is reference matter, not something anyone reads a
+   paragraph at a time, and capping it at 34rem inside a 62rem sheet made it
+   look squeezed against a much wider page. It runs to the same gutters as the
+   content above instead. */
+.foot p { margin: 0 0 0.5rem; max-width: none; }
 .foot p:last-child { margin-bottom: 0; }
 
 /* --------------------------------------------------------------------------
