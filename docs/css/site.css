@@ -24,7 +24,11 @@
      color change: python3 tools/contrast.py */
   --ink:          #16161a;   /* on --paper: 18.0:1  AAA */
   --ink-soft:     #55555f;   /* on --paper:  7.4:1  AAA */
-  --ink-faint:    #6e6e78;   /* on --paper:  5.0:1  AA   smallest we allow */
+  --ink-faint:    #66666f;   /* on --paper: 5.7:1, on --board: 5.0:1  AA
+                                Darkened when the footer moved onto the board:
+                                the old value passed on paper at 5.0 and failed
+                                on the board at 4.4. One token that clears both
+                                surfaces beats an exception for one of them. */
 
   --rule:         #16161a;   /* the hard rules under headings */
   --rule-hair:    #d8d5cf;   /* row hairlines. Decorative: they separate rows
@@ -131,7 +135,13 @@ body {
   font-size: var(--t-base);
   line-height: 1.55;
   /* The sheet sits on the board with a hairline, not a shadow. A drop shadow
-     is the polished-app look this project is deliberately outside of. */
+     is the polished-app look this project is deliberately outside of.
+
+     Column layout so the sheet grows to fill a short viewport and the footer
+     sits below it on the board rather than floating. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Skip link. Visible the moment it is focused, invisible otherwise. */
@@ -164,14 +174,19 @@ a:hover { text-decoration-thickness: 2px; }
    3. The sheet
    -------------------------------------------------------------------------- */
 
+/* The notice itself. Everything inside is the thing pinned to the board;
+   the footer is the board. Now that the footer sits outside, the sheet needs
+   a bottom edge so it reads as a piece of paper rather than a column that
+   runs out. */
 .sheet {
   max-width: var(--sheet);
+  width: 100%;
   margin: 0 auto;
   background: var(--paper);
-  border-left: 1px solid var(--rule-hair);
-  border-right: 1px solid var(--rule-hair);
-  padding: 0 clamp(1rem, 4vw, 3rem) 4rem;
-  min-height: 100vh;
+  border: 1px solid var(--rule-hair);
+  border-top: 0;
+  padding: 0 clamp(1rem, 4vw, 3rem) 3rem;
+  flex: 1 0 auto;
 }
 
 /* --- masthead ----------------------------------------------------------- */
@@ -542,13 +557,22 @@ input[type="search"]:focus, select:focus { border-color: var(--focus); }
    -------------------------------------------------------------------------- */
 
 .foot {
-  margin-top: 3.5rem;
-  padding-top: 1rem;
-  border-top: 3px solid var(--rule);
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: var(--sheet);
+  margin: 0 auto;
+  /* Same gutters as the sheet, so the footer text sits on the same left edge
+     as the text above it even though it is on a different surface. The
+     transparent border matches the sheet's hairline: without it the footer
+     text sits one pixel left of everything above it. */
+  padding: 1.6rem clamp(1rem, 4vw, 3rem) 3rem;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
   font-size: var(--t-sm);
   color: var(--ink-soft);
 }
 .foot p { margin: 0 0 0.5rem; max-width: var(--measure); }
+.foot p:last-child { margin-bottom: 0; }
 
 /* --------------------------------------------------------------------------
    12. Motion
@@ -564,8 +588,10 @@ input[type="search"]:focus, select:focus { border-color: var(--focus); }
 /* Print. The page is already a sheet of paper, so this is mostly getting the
    board and the navigation out of the way. */
 @media print {
-  body { background: #fff; }
+  body { background: #fff; display: block; }
   .sheet { border: 0; max-width: none; }
+  /* On paper there is no board, so the footer needs a rule to separate it. */
+  .foot { max-width: none; border-top: 1px solid #000; padding-top: 0.6rem; }
   .nav, .controls, .btn-row { display: none; }
   a { color: #000; }
 }

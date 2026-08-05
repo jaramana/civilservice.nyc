@@ -38,6 +38,15 @@ PAIRS = [
     ("paper",      "accent",      4.5),   # the primary button, text on fill
     ("field",      "paper",       3.0),   # a form field's border is a component
     ("focus",      "paper",       3.0),   # focus ring against the sheet
+
+    # The footer sits on the board rather than on the sheet, so every colour
+    # used in it needs checking against that background too. Adding a surface
+    # means adding its pairs: text on --board was never measured before the
+    # footer moved out there.
+    ("ink-soft",   "board",       4.5),   # footer body text
+    ("ink-faint",  "board",       4.5),   # the freshness line
+    ("accent",     "board",       4.5),   # footer links
+    ("focus",      "board",       3.0),   # focus ring on a footer link
     # --rule-hair is deliberately not here. It separates rows that whitespace
     # already separates and carries no information, so it is decorative under
     # WCAG 1.4.11 and exempt. --field, which is what tells you an input exists,
