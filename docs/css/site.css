@@ -423,23 +423,47 @@ h1.page-title {
    8. Controls: search, filters
    -------------------------------------------------------------------------- */
 
+/* Search on its own line, filters side by side beneath it. They used to share
+   a row with align-items: flex-end, which was fine when every control was one
+   input tall and pushed the search box halfway down the block once the
+   filters became three-line checkbox groups. */
 .controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1rem;
-  align-items: flex-end;
-  margin: 1.2rem 0 0.4rem;
+  gap: 1.1rem 2rem;
+  align-items: flex-start;
+  margin: 1.2rem 0 1.6rem;
+}
+.controls > .field:first-child { flex: 1 1 100%; }
+
+/* A field is a labelled control, whether that control is one input or a group
+   of checkboxes. fieldset needs its browser defaults cleared to sit in the
+   flex row like the others. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 18rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
 }
 
-.field { display: flex; flex-direction: column; gap: 0.3rem; flex: 1 1 18rem; }
-
-.field label {
+/* Scoped to the field's own label, not to labels nested inside it. The
+   checkbox labels in a group are values, not field names, and were picking up
+   the uppercase treatment meant for the name above them. */
+.field > label,
+.field > legend {
   font-size: var(--t-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--ink-soft);
   font-weight: 600;
+  padding: 0;
 }
+
+.controls > .field:first-child input { max-width: 30rem; }
 
 input[type="search"], select {
   font: inherit;
@@ -453,7 +477,10 @@ input[type="search"], select {
 }
 input[type="search"]:focus, select:focus { border-color: var(--focus); }
 
-.checks { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+/* Stacked inside a field so each value reads as its own line, but wrapping
+   into a row where they are used as standalone toggles. */
+.checks { display: flex; flex-wrap: wrap; gap: 0 0.9rem; align-items: center; }
+.field > .checks { flex-direction: column; align-items: flex-start; gap: 0; }
 .check {
   display: inline-flex;
   align-items: center;

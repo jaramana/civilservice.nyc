@@ -28,18 +28,16 @@ const GROUPS = [
   { key: "closed", nothing: "No closed exams" },
 ];
 
-/* Which groups each Show option puts on the page. "" is the default: what you
-   can act on and what is coming. Closed exams are reference rather than news,
-   so they are one choice away instead of on the page by default. */
-const SHOWS = {
-  "": ["accepting", "upcoming"],
-  accepting: ["accepting"],
-  upcoming: ["upcoming"],
-  closed: ["closed"],
-  all: ["accepting", "upcoming", "closed"],
-};
+/* Both filters are sets, because both are questions of the form "which of
+   these values do I want", and a set of checkboxes says that exactly. The
+   dropdown this replaces could only offer named combinations, which meant
+   five of the seven possible ones and two invented names.
 
-const state = { q: "", show: "", type: "" };
+   Defaults: what you can act on and what is coming. Closed exams are
+   reference rather than news, so that box starts unchecked. */
+const DEFAULT_SHOW = ["accepting", "upcoming"];
+
+const state = { q: "", show: new Set(DEFAULT_SHOW), type: new Set() };
 let all = [];
 let archiveFloor = null;
 
@@ -83,8 +81,11 @@ function row(exam) {
    Render
    -------------------------------------------------------------------------- */
 
+/* An empty type set means no type filter, the same way an empty search box
+   means no search. Selecting every type is the same thing said the long way,
+   and both land here as "everything passes". */
 function matches(e) {
-  if (state.type && e.type !== state.type) return false;
+  if (state.type.size && !state.type.has(e.type)) return false;
   if (!state.q) return true;
   return e._n.includes(state.q) || e.exam_no.startsWith(state.q);
 }
@@ -100,7 +101,7 @@ function rowsFor(key) {
    next opening date saves checking back daily. */
 function emptyText(key) {
   const group = GROUPS.find((g) => g.key === key);
-  if (state.q || state.type) return `${group.nothing} match your search.`;
+  if (state.q || state.type.size) return `${group.nothing} match your search.`;
 
   if (key === "accepting") {
     const next = all
@@ -132,8 +133,12 @@ function renderGroup(key, visible) {
 }
 
 function render() {
-  const visible = SHOWS[state.show] || SHOWS[""];
-  GROUPS.forEach((g) => renderGroup(g.key, visible.includes(g.key)));
+  GROUPS.forEach((g) => renderGroup(g.key, state.show.has(g.key)));
+
+  // Every box unchecked is a legitimate thing to do and leaves the page blank,
+  // which looks broken unless it says otherwise.
+  const nothingChosen = document.getElementById("nothing-chosen");
+  nothingChosen.hidden = state.show.size > 0;
 
   const note = document.getElementById("note-closed");
   note.textContent = archiveFloor
@@ -149,9 +154,9 @@ function render() {
   // line announcing 198 of them is noise on every visit.
   const hint = document.getElementById("hint");
   clear(hint);
-  const searching = Boolean(state.q || state.type);
+  const searching = Boolean(state.q || state.type.size);
   const hiddenMatches = !searching ? [] : GROUPS
-    .filter((g) => !visible.includes(g.key))
+    .filter((g) => !state.show.has(g.key))
     .map((g) => ({ key: g.key, n: rowsFor(g.key).length }))
     .filter((g) => g.n > 0);
 
@@ -161,9 +166,13 @@ function render() {
     const where = hiddenMatches.map((g) => g.key === "closed" ? "closed" : g.key).join(" and ");
     hint.append(document.createTextNode(
       `${count(total)} ${where} exam${total === 1 ? " also matches" : "s also match"}. `));
+    // Ticks exactly the boxes that are hiding something, rather than turning
+    // everything on.
     hint.append(el("button", {
       class: "linky", type: "button", id: "show-everything",
-      text: "Show all exams",
+      text: hiddenMatches.length === 1
+        ? `Show ${hiddenMatches[0].key === "closed" ? "closed" : hiddenMatches[0].key} exams too`
+        : "Show those too",
     }));
   }
 }
@@ -172,11 +181,16 @@ function render() {
    Wiring
    -------------------------------------------------------------------------- */
 
+/* Sets travel as comma-separated lists. The show parameter is written only
+   when it differs from the default, so an untouched page keeps a clean URL. */
 function pushUrl() {
   const params = new URLSearchParams();
   if (state.q) params.set("q", document.getElementById("q").value.trim());
-  if (state.show) params.set("show", state.show);
-  if (state.type) params.set("type", state.type);
+
+  const show = [...state.show].sort().join(",");
+  if (show !== [...DEFAULT_SHOW].sort().join(",")) params.set("show", show);
+  if (state.type.size) params.set("type", [...state.type].sort().join(","));
+
   history.replaceState(null, "", params.toString() ? `?${params}` : location.pathname);
 }
 
@@ -194,40 +208,67 @@ async function main() {
     all = exams.map((e) => ({ ...e, _n: norm(e.title) }));
 
     const q = document.getElementById("q");
-    const show = document.getElementById("status");
-    const type = document.getElementById("type");
 
+    // One checkbox per exam type actually present in the data.
+    const typeChecks = document.getElementById("type-checks");
     [...new Set(exams.map((e) => e.type))].sort().forEach((value) => {
-      type.append(el("option", { value, text: typeLabel(value) }));
+      const box = el("input", { type: "checkbox", value });
+      const label = el("label", { class: "check" }, [box]);
+      label.append(document.createTextNode(" " + typeLabel(value)));
+      typeChecks.append(label);
     });
 
+    const showBoxes = GROUPS.map((g) => document.getElementById(`show-${g.key}`));
+    const typeBoxes = [...typeChecks.querySelectorAll("input")];
+
+    /* Read the address bar into the two sets.
+
+       `show` and `type` now carry comma-separated lists. The single values the
+       old dropdown wrote, and the even older `status` parameter, are still
+       understood, so a link someone saved or shared before this change opens
+       the view it always did. "all" was a name for every group. */
     const params = new URLSearchParams(location.search);
     q.value = params.get("q") || "";
     state.q = norm(q.value);
-    // `status` is still read so links shared before the control was renamed
-    // keep working.
-    state.show = params.get("show") ?? params.get("status") ?? "";
-    if (!(state.show in SHOWS)) state.show = "";
-    state.type = params.get("type") || "";
-    show.value = state.show;
-    type.value = state.type;
 
-    const on = (node, event, fn) => node.addEventListener(event, () => {
-      fn();
+    const rawShow = params.get("show") ?? params.get("status");
+    if (rawShow !== null) {
+      const wanted = rawShow === "all"
+        ? GROUPS.map((g) => g.key)
+        : rawShow.split(",").map((s) => s.trim()).filter(Boolean);
+      state.show = new Set(wanted.filter((k) => GROUPS.some((g) => g.key === k)));
+    }
+    const rawType = params.get("type");
+    if (rawType) {
+      const known = new Set(exams.map((e) => e.type));
+      state.type = new Set(rawType.split(",").map((s) => s.trim()).filter((v) => known.has(v)));
+    }
+
+    showBoxes.forEach((box, i) => { box.checked = state.show.has(GROUPS[i].key); });
+    typeBoxes.forEach((box) => { box.checked = state.type.has(box.value); });
+
+    const sync = () => {
+      state.show = new Set(GROUPS.filter((g, i) => showBoxes[i].checked).map((g) => g.key));
+      state.type = new Set(typeBoxes.filter((b) => b.checked).map((b) => b.value));
+      render();
+      pushUrl();
+    };
+
+    q.addEventListener("input", () => {
+      state.q = norm(q.value);
       render();
       pushUrl();
     });
-    on(q, "input", () => { state.q = norm(q.value); });
+    [...showBoxes, ...typeBoxes].forEach((box) => box.addEventListener("change", sync));
 
     document.getElementById("hint").addEventListener("click", (e) => {
       if (e.target.id !== "show-everything") return;
-      state.show = "all";
-      show.value = "all";
-      render();
-      pushUrl();
+      // Tick the boxes for the groups that were hiding matches.
+      GROUPS.forEach((g, i) => {
+        if (!state.show.has(g.key) && rowsFor(g.key).length) showBoxes[i].checked = true;
+      });
+      sync();
     });
-    on(show, "change", () => { state.show = show.value; });
-    on(type, "change", () => { state.type = type.value; });
 
     render();
   } catch (err) {

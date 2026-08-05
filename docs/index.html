@@ -43,24 +43,26 @@
         <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
                autocomplete="off" spellcheck="false">
       </div>
-      <div class="field" style="flex: 0 1 14rem;">
-        <label for="status">Show</label>
-        <select id="status">
-          <option value="">Accepting and upcoming</option>
-          <option value="accepting">Accepting applications</option>
-          <option value="upcoming">Upcoming</option>
-          <option value="closed">Closed</option>
-          <option value="all">All exams</option>
-        </select>
-      </div>
-      <!-- Exam types are filled in from the data, so a type that turns up in a
-           future schedule cannot end up unreachable behind a hardcoded list. -->
-      <div class="field" style="flex: 0 1 16rem;">
-        <label for="type">Who can apply</label>
-        <select id="type">
-          <option value="">All exam types</option>
-        </select>
-      </div>
+      <!-- Checkboxes, not a dropdown. Three groups have seven combinations and
+           a list of options can only enumerate some of them: the old control
+           offered five, so "accepting plus closed" could not be asked for at
+           all, while "All exams" and "Accepting and upcoming" were names
+           invented for combinations these boxes express without naming. -->
+      <fieldset class="field" style="flex: 0 1 16rem;">
+        <legend>Show</legend>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="show-accepting" checked> Accepting applications</label>
+          <label class="check"><input type="checkbox" id="show-upcoming" checked> Upcoming</label>
+          <label class="check"><input type="checkbox" id="show-closed"> Closed</label>
+        </div>
+      </fieldset>
+
+      <!-- Filled in from the data, so a type that turns up in a future
+           schedule cannot end up unreachable behind a hardcoded list. -->
+      <fieldset class="field" style="flex: 0 1 16rem;">
+        <legend>Who can apply</legend>
+        <div class="checks" id="type-checks"></div>
+      </fieldset>
     </div>
 
     <section class="section" id="section-accepting">
@@ -81,6 +83,11 @@
       <p class="empty" id="empty-closed" hidden></p>
       <p class="note" id="note-closed"></p>
     </section>
+
+    <!-- Unchecking every Show box is allowed, and leaves nothing to draw. -->
+    <p class="empty" id="nothing-chosen" hidden>
+      Nothing is selected under Show. Tick a box above to see exams.
+    </p>
 
     <!-- Says when a search matched exams that the current Show is hiding.
          Without it, searching "Sanitation Worker" on the default view looks
