@@ -85,7 +85,7 @@ async function main() {
   try {
     const [dict, meta] = await Promise.all([
       load("dictionary.json"),
-      freshness(document.getElementById("freshness")),
+      freshness(),
     ]);
 
     renderSources(meta);

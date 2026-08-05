@@ -384,11 +384,13 @@ h1.page-title {
    7. Freshness and warnings
    -------------------------------------------------------------------------- */
 
-.asof {
+/* Small mono line: the freshness note in the footer, an exam number, a title
+   code. A look, not a meaning, so it is named for what it is. */
+.smallprint {
   font-family: var(--face-mono);
   font-size: var(--t-xs);
   color: var(--ink-faint);
-  margin-top: 0.9rem;
+  margin: 0.9rem 0 0;
 }
 
 .banner {
@@ -396,7 +398,7 @@ h1.page-title {
   background: var(--warn-soft);
   color: var(--ink);
   padding: 0.8rem 1rem;
-  margin: 1.2rem 0 0;
+  margin: 0 0 1.6rem;
   font-size: var(--t-sm);
   border-radius: var(--radius);
 }

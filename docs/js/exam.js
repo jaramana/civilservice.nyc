@@ -167,7 +167,7 @@ async function main() {
     const [exams, titles, meta] = await Promise.all([
       load("exams.json"),
       load("titles.json"),
-      freshness(document.getElementById("freshness")),
+      freshness(),
     ]);
 
     // Exam numbers repeat across fiscal years as the City recycles them, so

@@ -156,28 +156,40 @@ export function tag(status) {
    keeps showing April's exams looks exactly like a page that is up to date.
    The date comes from the dataset's own data_current_as_of, not the build
    time, so it stays honest even if the refresh workflow keeps running while
-   DCAS stops publishing. */
+   DCAS stops publishing.
 
-export async function freshness(node) {
+   Two pieces, and they belong in different places. The date is provenance: it
+   applies to the whole site, it is the same on every page, and it belongs with
+   the other provenance in the footer. The staleness banner is a warning, and a
+   warning at the bottom of a long page is not a warning, so it goes at the top
+   of the content.
+
+   This finds its own two slots rather than taking a node, because every page
+   wants both in the same place and passing the position in from five call
+   sites is how they drift apart. */
+
+export async function freshness() {
   const meta = await load("meta.json");
   const asof = meta.schedule_current_as_of || meta.as_of;
 
-  node.append(el("p", {
-    class: "asof",
-    text: `Exam schedule current as of ${fmtDate(asof, { alwaysYear: true })}` +
-          `, checked ${fmtDate(meta.generated_at, { alwaysYear: true })}.`,
-  }));
+  const line = document.getElementById("asof");
+  if (line) {
+    line.textContent =
+      `Exam schedule current as of ${fmtDate(asof, { alwaysYear: true })}, ` +
+      `checked ${fmtDate(meta.generated_at, { alwaysYear: true })}.`;
+  }
 
-  if (meta.staleness_warning || meta.staleness_notice) {
+  const slot = document.getElementById("alert");
+  if (slot && (meta.staleness_warning || meta.staleness_notice)) {
     const banner = el("div", { class: "banner", role: "status" });
     banner.append(el("strong", {
       text: meta.staleness_warning ? "This page may be out of date. " : "Heads up. ",
     }));
     banner.append(document.createTextNode(
       `The source data has not been updated in ${meta.source_age_days} days. ` +
-      `Application dates below may have changed. Check nyc.gov before you rely on one.`
+      `Application dates may have changed. Check nyc.gov before you rely on one.`
     ));
-    node.prepend(banner);
+    slot.append(banner);
   }
   return meta;
 }

@@ -141,11 +141,16 @@ function render() {
       `published its fiscal 2025 schedule, so the record stops there.`
     : "";
 
-  // Matches sitting in a group the current Show is hiding. Silence here reads
+  // Matches sitting in a group the current Show is hiding. Silence there reads
   // as "no such exam", which is a different and wrong answer.
+  //
+  // Only while searching. With nothing typed there is no "also": the Show
+  // control already says the page is not listing closed exams, and a standing
+  // line announcing 198 of them is noise on every visit.
   const hint = document.getElementById("hint");
   clear(hint);
-  const hiddenMatches = GROUPS
+  const searching = Boolean(state.q || state.type);
+  const hiddenMatches = !searching ? [] : GROUPS
     .filter((g) => !visible.includes(g.key))
     .map((g) => ({ key: g.key, n: rowsFor(g.key).length }))
     .filter((g) => g.n > 0);
@@ -182,7 +187,7 @@ async function main() {
   try {
     const [exams, meta] = await Promise.all([
       load("exams.json"),
-      freshness(document.getElementById("freshness")),
+      freshness(),
     ]);
 
     archiveFloor = (meta.windows || {}).archive_floor || null;

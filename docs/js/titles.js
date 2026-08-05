@@ -105,7 +105,7 @@ async function main() {
   try {
     const [index] = await Promise.all([
       load("titles-index.json"),
-      freshness(document.getElementById("freshness")),
+      freshness(),
     ]);
 
     // Precompute the searchable string once. Doing it inside the filter meant

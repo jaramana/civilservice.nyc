@@ -156,7 +156,7 @@ async function main() {
     const [titles, exams] = await Promise.all([
       load("titles.json"),
       load("exams.json"),
-      freshness(document.getElementById("freshness")),
+      freshness(),
     ]);
 
     const t = titles.find((x) => x.slug === slug);
