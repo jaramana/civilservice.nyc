@@ -43,26 +43,38 @@
         <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
                autocomplete="off" spellcheck="false">
       </div>
-      <!-- Checkboxes, not a dropdown. Three groups have seven combinations and
-           a list of options can only enumerate some of them: the old control
-           offered five, so "accepting plus closed" could not be asked for at
-           all, while "All exams" and "Accepting and upcoming" were names
-           invented for combinations these boxes express without naming. -->
-      <fieldset class="field" style="flex: 0 1 16rem;">
-        <legend>Show</legend>
-        <div class="checks">
-          <label class="check"><input type="checkbox" id="show-accepting" checked> Accepting applications</label>
-          <label class="check"><input type="checkbox" id="show-upcoming" checked> Upcoming</label>
-          <label class="check"><input type="checkbox" id="show-closed"> Closed</label>
-        </div>
-      </fieldset>
+      <!-- A dropdown that holds checkboxes, built from details/summary.
+           A native <select multiple> would need modifier-key clicking, offers
+           no checkboxes and renders as an inline list box that is taller than
+           the menu it replaces. This closes to one line, opens to the values,
+           and needs no library.
 
-      <!-- Filled in from the data, so a type that turns up in a future
+           Both menus work the same way: every box is a value you want kept.
+           Unticking all of them asks for nothing, and the page says so. -->
+      <div class="field" style="flex: 0 1 17rem;">
+        <span class="fieldname" id="show-name">Show</span>
+        <details class="menu" id="show-menu">
+          <summary aria-describedby="show-name"><span id="show-summary"></span></summary>
+          <fieldset class="menu-panel">
+            <legend class="sr-only">Show which exams</legend>
+            <label class="check"><input type="checkbox" id="show-accepting" checked> Accepting applications</label>
+            <label class="check"><input type="checkbox" id="show-upcoming" checked> Upcoming</label>
+            <label class="check"><input type="checkbox" id="show-closed"> Closed</label>
+          </fieldset>
+        </details>
+      </div>
+
+      <!-- Values come from the data, so a type that turns up in a future
            schedule cannot end up unreachable behind a hardcoded list. -->
-      <fieldset class="field" style="flex: 0 1 16rem;">
-        <legend>Who can apply</legend>
-        <div class="checks" id="type-checks"></div>
-      </fieldset>
+      <div class="field" style="flex: 0 1 17rem;">
+        <span class="fieldname" id="type-name">Who can apply</span>
+        <details class="menu" id="type-menu">
+          <summary aria-describedby="type-name"><span id="type-summary"></span></summary>
+          <fieldset class="menu-panel" id="type-checks">
+            <legend class="sr-only">Which exam types</legend>
+          </fieldset>
+        </details>
+      </div>
     </div>
 
     <section class="section" id="section-accepting">
@@ -85,9 +97,7 @@
     </section>
 
     <!-- Unchecking every Show box is allowed, and leaves nothing to draw. -->
-    <p class="empty" id="nothing-chosen" hidden>
-      Nothing is selected under Show. Tick a box above to see exams.
-    </p>
+    <p class="empty" id="nothing-chosen" hidden></p>
 
     <!-- Says when a search matched exams that the current Show is hiding.
          Without it, searching "Sanitation Worker" on the default view looks

@@ -39,7 +39,18 @@ const DEFAULT_SHOW = ["accepting", "upcoming"];
 
 const state = { q: "", show: new Set(DEFAULT_SHOW), type: new Set() };
 let all = [];
+let allTypes = [];
 let archiveFloor = null;
+
+/* What a closed menu says it is holding. A count rather than a list once more
+   than one value is ticked, because "Accepting applications, Upcoming" does
+   not fit on one line and truncating it would hide which values are on. */
+function summarize(chosen, values, labelFor) {
+  if (chosen.size === 0) return "None";
+  if (chosen.size === values.length) return "All";
+  if (chosen.size === 1) return labelFor([...chosen][0]);
+  return `${chosen.size} of ${values.length}`;
+}
 
 function norm(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
@@ -81,11 +92,12 @@ function row(exam) {
    Render
    -------------------------------------------------------------------------- */
 
-/* An empty type set means no type filter, the same way an empty search box
-   means no search. Selecting every type is the same thing said the long way,
-   and both land here as "everything passes". */
+/* Both sets read the same way: a value is kept only if it is ticked. Type used
+   to treat an empty set as "no filter", which made the two menus behave
+   differently from each other at the one moment a person is most likely to
+   notice, when they have just unticked the last box. */
 function matches(e) {
-  if (state.type.size && !state.type.has(e.type)) return false;
+  if (!state.type.has(e.type)) return false;
   if (!state.q) return true;
   return e._n.includes(state.q) || e.exam_no.startsWith(state.q);
 }
@@ -101,7 +113,7 @@ function rowsFor(key) {
    next opening date saves checking back daily. */
 function emptyText(key) {
   const group = GROUPS.find((g) => g.key === key);
-  if (state.q || state.type.size) return `${group.nothing} match your search.`;
+  if (state.q || state.type.size < allTypes.length) return `${group.nothing} match your search.`;
 
   if (key === "accepting") {
     const next = all
@@ -135,10 +147,18 @@ function renderGroup(key, visible) {
 function render() {
   GROUPS.forEach((g) => renderGroup(g.key, state.show.has(g.key)));
 
-  // Every box unchecked is a legitimate thing to do and leaves the page blank,
-  // which looks broken unless it says otherwise.
+  // Every box in either menu unticked is a legitimate thing to do and leaves
+  // the page blank, which looks broken unless it says otherwise. Name the menu
+  // that is empty, since the fix is in a panel that is probably closed.
   const nothingChosen = document.getElementById("nothing-chosen");
-  nothingChosen.hidden = state.show.size > 0;
+  const emptyMenus = [];
+  if (!state.show.size) emptyMenus.push("Show");
+  if (!state.type.size) emptyMenus.push("Who can apply");
+  nothingChosen.hidden = emptyMenus.length === 0;
+  nothingChosen.textContent = emptyMenus.length
+    ? `Nothing is ticked under ${emptyMenus.join(" or ")}. Open ` +
+      `${emptyMenus.length > 1 ? "those menus" : "that menu"} and choose at least one.`
+    : "";
 
   const note = document.getElementById("note-closed");
   note.textContent = archiveFloor
@@ -154,7 +174,7 @@ function render() {
   // line announcing 198 of them is noise on every visit.
   const hint = document.getElementById("hint");
   clear(hint);
-  const searching = Boolean(state.q || state.type.size);
+  const searching = Boolean(state.q || state.type.size < allTypes.length);
   const hiddenMatches = !searching ? [] : GROUPS
     .filter((g) => !state.show.has(g.key))
     .map((g) => ({ key: g.key, n: rowsFor(g.key).length }))
@@ -187,9 +207,16 @@ function pushUrl() {
   const params = new URLSearchParams();
   if (state.q) params.set("q", document.getElementById("q").value.trim());
 
-  const show = [...state.show].sort().join(",");
-  if (show !== [...DEFAULT_SHOW].sort().join(",")) params.set("show", show);
-  if (state.type.size) params.set("type", [...state.type].sort().join(","));
+  // Written only when it differs from the default, so an untouched page keeps
+  // a clean address. For type the default is every value, which is why a full
+  // set is silence here rather than a list of everything.
+  const asList = (set) => [...set].sort().join(",");
+  if (asList(state.show) !== [...DEFAULT_SHOW].sort().join(",")) {
+    params.set("show", asList(state.show));
+  }
+  if (asList(state.type) !== [...allTypes].sort().join(",")) {
+    params.set("type", asList(state.type));
+  }
 
   history.replaceState(null, "", params.toString() ? `?${params}` : location.pathname);
 }
@@ -209,47 +236,53 @@ async function main() {
 
     const q = document.getElementById("q");
 
-    // One checkbox per exam type actually present in the data.
+    allTypes = [...new Set(exams.map((e) => e.type))].sort();
+
+    // One box per exam type actually present. All ticked to start: the filter
+    // is "which types do I want", and to start with, all of them.
     const typeChecks = document.getElementById("type-checks");
-    [...new Set(exams.map((e) => e.type))].sort().forEach((value) => {
-      const box = el("input", { type: "checkbox", value });
+    allTypes.forEach((value) => {
+      const box = el("input", { type: "checkbox", value, checked: "checked" });
       const label = el("label", { class: "check" }, [box]);
       label.append(document.createTextNode(" " + typeLabel(value)));
       typeChecks.append(label);
     });
+    state.type = new Set(allTypes);
 
     const showBoxes = GROUPS.map((g) => document.getElementById(`show-${g.key}`));
     const typeBoxes = [...typeChecks.querySelectorAll("input")];
 
     /* Read the address bar into the two sets.
 
-       `show` and `type` now carry comma-separated lists. The single values the
-       old dropdown wrote, and the even older `status` parameter, are still
-       understood, so a link someone saved or shared before this change opens
-       the view it always did. "all" was a name for every group. */
+       Both travel as comma-separated lists. The single values the old dropdown
+       wrote, and the older `status` parameter, are still understood, so a link
+       saved or shared before either change opens the view it always did.
+       "all" was that dropdown's name for every group. */
     const params = new URLSearchParams(location.search);
     q.value = params.get("q") || "";
     state.q = norm(q.value);
 
+    const readSet = (raw, valid) => new Set(
+      (raw === "all" ? valid : raw.split(",").map((s) => s.trim()))
+        .filter((v) => valid.includes(v)));
+
     const rawShow = params.get("show") ?? params.get("status");
-    if (rawShow !== null) {
-      const wanted = rawShow === "all"
-        ? GROUPS.map((g) => g.key)
-        : rawShow.split(",").map((s) => s.trim()).filter(Boolean);
-      state.show = new Set(wanted.filter((k) => GROUPS.some((g) => g.key === k)));
-    }
+    if (rawShow !== null) state.show = readSet(rawShow, GROUPS.map((g) => g.key));
     const rawType = params.get("type");
-    if (rawType) {
-      const known = new Set(exams.map((e) => e.type));
-      state.type = new Set(rawType.split(",").map((s) => s.trim()).filter((v) => known.has(v)));
-    }
+    if (rawType !== null) state.type = readSet(rawType, allTypes);
 
     showBoxes.forEach((box, i) => { box.checked = state.show.has(GROUPS[i].key); });
     typeBoxes.forEach((box) => { box.checked = state.type.has(box.value); });
 
+    const groupLabel = (key) => document.querySelector(`#show-${key}`).parentElement.textContent.trim();
+
     const sync = () => {
       state.show = new Set(GROUPS.filter((g, i) => showBoxes[i].checked).map((g) => g.key));
       state.type = new Set(typeBoxes.filter((b) => b.checked).map((b) => b.value));
+      document.getElementById("show-summary").textContent =
+        summarize(state.show, GROUPS.map((g) => g.key), groupLabel);
+      document.getElementById("type-summary").textContent =
+        summarize(state.type, allTypes, typeLabel);
       render();
       pushUrl();
     };
@@ -263,14 +296,28 @@ async function main() {
 
     document.getElementById("hint").addEventListener("click", (e) => {
       if (e.target.id !== "show-everything") return;
-      // Tick the boxes for the groups that were hiding matches.
       GROUPS.forEach((g, i) => {
         if (!state.show.has(g.key) && rowsFor(g.key).length) showBoxes[i].checked = true;
       });
       sync();
     });
 
-    render();
+    /* An open menu closes when you click away from it or press Escape, which
+       details/summary does not do on its own. */
+    const menus = [...document.querySelectorAll(".menu")];
+    document.addEventListener("click", (e) => {
+      menus.forEach((m) => { if (m.open && !m.contains(e.target)) m.open = false; });
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      menus.forEach((m) => {
+        if (!m.open) return;
+        m.open = false;
+        m.querySelector("summary").focus();
+      });
+    });
+
+    sync();
   } catch (err) {
     failure(host, err);
   }

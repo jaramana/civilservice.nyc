@@ -451,10 +451,11 @@ h1.page-title {
 }
 
 /* Scoped to the field's own label, not to labels nested inside it. The
-   checkbox labels in a group are values, not field names, and were picking up
+   checkbox labels in a menu are values, not field names, and were picking up
    the uppercase treatment meant for the name above them. */
 .field > label,
-.field > legend {
+.field > legend,
+.field > .fieldname {
   font-size: var(--t-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -477,10 +478,73 @@ input[type="search"], select {
 }
 input[type="search"]:focus, select:focus { border-color: var(--focus); }
 
-/* Stacked inside a field so each value reads as its own line, but wrapping
-   into a row where they are used as standalone toggles. */
 .checks { display: flex; flex-wrap: wrap; gap: 0 0.9rem; align-items: center; }
-.field > .checks { flex-direction: column; align-items: flex-start; gap: 0; }
+
+/* --- the dropdown menus -------------------------------------------------
+   details/summary gives the open and close behaviour, the keyboard handling
+   and the semantics for free. Everything below is appearance, plus a panel
+   that floats so opening a menu does not push the table down the page. */
+
+.menu { position: relative; }
+
+.menu > summary {
+  list-style: none;                 /* the default triangle, gone */
+  cursor: pointer;
+  font-size: var(--t-sm);
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--field);
+  border-radius: var(--radius);
+  padding: 0.5rem 2rem 0.5rem 0.6rem;
+  position: relative;
+  user-select: none;
+}
+.menu > summary::-webkit-details-marker { display: none; }
+
+/* A chevron drawn in CSS, so no image and no icon font. */
+.menu > summary::after {
+  content: "";
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid var(--ink-soft);
+  border-bottom: 2px solid var(--ink-soft);
+  transform: translateY(-70%) rotate(45deg);
+}
+.menu[open] > summary::after { transform: translateY(-20%) rotate(-135deg); }
+.menu[open] > summary { border-color: var(--focus); }
+
+.menu-panel {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.3rem);
+  left: 0;
+  min-width: 100%;
+  white-space: nowrap;
+  background: var(--paper);
+  border: 2px solid var(--field);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Visually hidden, still read aloud. The panel is a fieldset so the group has
+   a name for a screen reader, but the name is already on screen above it. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 .check {
   display: inline-flex;
   align-items: center;
