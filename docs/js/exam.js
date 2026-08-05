@@ -143,19 +143,19 @@ function facts(exam, title) {
       : null);
 }
 
-function whatNext(exam) {
+/* One line, not a section. Everything else that used to sit here is on the
+   How to apply page, which is in the nav on every page, and repeating it on
+   345 exam pages made each one longer without making any one of them more
+   useful. This single idea stays because it is the one someone about to pay an
+   application fee most often has wrong. */
+function whatNext() {
   const body = document.getElementById("what-next-body");
   clear(body);
-  body.append(el("p", { text:
-    "Passing puts you on a civil service list for this title, in score order. " +
-    "Agencies hire from the top of that list. For entry-level and uniformed " +
-    "jobs your number is most of the story. For professional and managerial " +
-    "titles it works more like eligibility: being reachable is what lets you " +
-    "be considered, and you still interview." }));
-  body.append(el("p", { text: "Lists usually last four years and can be extended." }));
-  body.append(el("p", {}, [
-    el("a", { href: "how-to-apply.html", text: "More on how the process works" }),
-  ]));
+  body.append(document.createTextNode(
+    "Passing puts you on a list for this title, in score order. It does not by "
+    + "itself get you a job. "));
+  body.append(el("a", { href: "how-to-apply.html", text: "How the process works" }));
+  body.append(document.createTextNode("."));
 }
 
 async function main() {
@@ -181,7 +181,7 @@ async function main() {
       document.getElementById("exam-title").textContent = "Exam not found";
       document.getElementById("exam-no").textContent = "";
       clear(document.getElementById("status-line"));
-      document.getElementById("what-next").hidden = true;
+      document.getElementById("what-next-body").hidden = true;
       document.getElementById("facts").after(el("p", { class: "empty" }, [
         document.createTextNode(
           "No published exam has that number. Exams older than the archive " +
@@ -201,7 +201,7 @@ async function main() {
     statusLine(exam);
     actions(exam, meta);
     facts(exam, title);
-    whatNext(exam);
+    whatNext();
   } catch (err) {
     failure(host, err);
   }
