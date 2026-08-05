@@ -3,12 +3,15 @@
   "configurations": [
     {
       "name": "site",
-      "runtimeExecutable": "/usr/bin/python3",
+      "runtimeExecutable": "python3",
       "runtimeArgs": [
-        "/private/tmp/claude-501/-Users-ashaibani-Desktop-jaramana-civilservice-nyc/de58f7e2-c423-4362-8e21-ee49125ae797/scratchpad/serve.py",
-        "/private/tmp/claude-501/-Users-ashaibani-Desktop-jaramana-civilservice-nyc/de58f7e2-c423-4362-8e21-ee49125ae797/scratchpad/site"
+        "-m",
+        "http.server",
+        "8000",
+        "--directory",
+        "docs"
       ],
-      "port": 8123
+      "port": 8000
     }
   ]
 }
