@@ -17,6 +17,9 @@
 
 name: Refresh data
 
+# Registered with Actions on first push. If this ever stops appearing under
+# the Actions tab, check that the default branch still has this file.
+
 on:
   schedule:
     # 07:20 UTC, which is early morning in New York. Not on the hour: GitHub's
