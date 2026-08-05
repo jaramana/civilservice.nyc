@@ -5,7 +5,12 @@ is coming, what closed recently, and what each job title actually pays.
 
 Free, no accounts, no tracking, open source. Built on data the City publishes.
 
-Live at [civilservice.nyc](https://civilservice.nyc).
+Live at [jaramana.github.io/civilservice.nyc](https://jaramana.github.io/civilservice.nyc/).
+
+The custom domain is not connected yet. When it is, add a `docs/CNAME` file
+containing `civilservice.nyc` and point the DNS at GitHub Pages. `SITE_BASE_URL`
+in `config.py` already assumes that domain, which is what the calendar files
+link to.
 
 ## What is here
 
