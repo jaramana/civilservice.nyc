@@ -86,7 +86,12 @@ function renderExams(t, exams) {
   mine.forEach((e) => {
     const link = el("a", { class: "row", href: `exam.html?exam=${e.exam_no}` });
     link.append(el("span", { class: "name", text: `Exam ${e.exam_no}` }));
-    link.append(el("span", { class: "meta", text: typeLabel(e.type, "who") }));
+    // Same short value the front page rows and the filter use.
+    link.append(el("span", { class: "meta", text: typeLabel(e.type) }));
+    // The chip appears here and not on the front page rows, and that is the
+    // one deliberate difference between the two tables: there, the group
+    // heading states the status for every row under it; here the list mixes
+    // statuses, so each row has to carry its own.
     const when = el("span", { class: "when" }, [tag(e.status)]);
     when.append(el("br"));
     when.append(document.createTextNode(fmtRange(e.start, e.end)));
@@ -167,7 +172,7 @@ async function main() {
       clear(dl);
       dl.after(el("p", { class: "empty" }, [
         document.createTextNode("No title in the City's catalog matches that address. "),
-        el("a", { href: "titles.html", text: "Search all job titles" }),
+        el("a", { href: "titles.html", text: "Search job titles" }),
         document.createTextNode("."),
       ]));
       return;

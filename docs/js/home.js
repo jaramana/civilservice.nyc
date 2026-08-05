@@ -163,7 +163,7 @@ function render() {
       `${count(total)} ${where} exam${total === 1 ? " also matches" : "s also match"}. `));
     hint.append(el("button", {
       class: "linky", type: "button", id: "show-everything",
-      text: "Show everything",
+      text: "Show all exams",
     }));
   }
 }
@@ -198,7 +198,7 @@ async function main() {
     const type = document.getElementById("type");
 
     [...new Set(exams.map((e) => e.type))].sort().forEach((value) => {
-      type.append(el("option", { value, text: typeLabel(value, "who") }));
+      type.append(el("option", { value, text: typeLabel(value) }));
     });
 
     const params = new URLSearchParams(location.search);

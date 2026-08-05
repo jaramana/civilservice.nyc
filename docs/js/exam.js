@@ -93,12 +93,14 @@ function facts(exam, title) {
 
   fact(dl, "Application period", fmtRange(exam.start, exam.end));
 
-  fact(dl, "Who can apply", typeLabel(exam.type, "who"),
+  // The value is the same short label the rows and the filter use. This is the
+  // one place the meaning is spelled out.
+  fact(dl, "Who can apply", typeLabel(exam.type),
     exam.type === "promotion"
-      ? "A promotion exam is only open to people already working for the City in a related title."
+      ? "Only people already working for the City in a related title."
       : exam.type === "qie"
-        ? "A qualified incumbent exam is for people already doing the job provisionally."
-        : "Open competitive means open to the public. You do not need to work for the City to take it.");
+        ? "Only people already doing the job provisionally."
+        : "Anyone who meets the requirements. You do not need to work for the City.");
 
   fact(dl, "Exam number", exam.exam_no);
 
@@ -186,7 +188,7 @@ async function main() {
         document.createTextNode(
           "No published exam has that number. Exams older than the archive " +
           "floor are not on this site, and the number may belong to one of those. "),
-        el("a", { href: "index.html", text: "See the current exams" }),
+        el("a", { href: "index.html", text: "See all exams" }),
         document.createTextNode("."),
       ]));
       return;

@@ -49,10 +49,13 @@ function row(t) {
 
   // Bargaining unit first, because it is what distinguishes two rows with the
   // same name. The code alone cannot answer "which one am I".
+  // The status field uses its own labels here, exactly as the exam tables and
+  // the chips do. This row used to say "exam open now" and "exam coming",
+  // which were a third set of words for a field that already has three.
   const bits = [t.u || `Title code ${t.c}`];
-  if (t.o) bits.push("exam open now");
-  else if (t.n) bits.push("exam coming");
-  else if (t.l) bits.push("active list");
+  if (t.o) bits.push("Accepting applications");
+  else if (t.n) bits.push("Upcoming");
+  else if (t.l) bits.push("Active list");
   link.append(el("span", { class: "meta", text: bits.join(" · ") }));
 
   const when = el("span", { class: "when" });
@@ -79,17 +82,18 @@ function render() {
 
   const total = state.rows.length;
   const label = document.getElementById("result-count");
-  if (!total) {
-    label.textContent = state.q
-      ? `No titles match "${document.getElementById("q").value.trim()}".`
-      : "No titles match those filters.";
-  } else if (total > slice.length) {
-    label.textContent = `Showing ${count(slice.length)} of ${count(total)} titles`;
-  } else {
-    label.textContent = `${count(total)} title${total === 1 ? "" : "s"}`;
-  }
+  label.textContent = total
+    ? `${count(total)} job title${total === 1 ? "" : "s"}`
+    : "No job titles match your search.";
 
-  document.getElementById("more-row").hidden = total <= slice.length;
+  // How many are on screen belongs on the button that changes it, not in a
+  // second line reporting the same number in a different format.
+  const remaining = total - slice.length;
+  document.getElementById("more-row").hidden = remaining <= 0;
+  if (remaining > 0) {
+    document.getElementById("more").textContent =
+      `Show ${count(Math.min(PAGE, remaining))} more`;
+  }
 }
 
 function apply() {

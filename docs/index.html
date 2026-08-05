@@ -39,18 +39,18 @@
 
     <div class="controls">
       <div class="field">
-        <label for="q">Search by job or exam number</label>
+        <label for="q">Search by job title or exam number</label>
         <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
                autocomplete="off" spellcheck="false">
       </div>
       <div class="field" style="flex: 0 1 14rem;">
         <label for="status">Show</label>
         <select id="status">
-          <option value="">Open and coming up</option>
+          <option value="">Accepting and upcoming</option>
           <option value="accepting">Accepting applications</option>
           <option value="upcoming">Upcoming</option>
           <option value="closed">Closed</option>
-          <option value="all">Everything</option>
+          <option value="all">All exams</option>
         </select>
       </div>
       <!-- Exam types are filled in from the data, so a type that turns up in a
@@ -58,7 +58,7 @@
       <div class="field" style="flex: 0 1 16rem;">
         <label for="type">Who can apply</label>
         <select id="type">
-          <option value="">Any exam type</option>
+          <option value="">All exam types</option>
         </select>
       </div>
     </div>

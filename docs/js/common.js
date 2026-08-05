@@ -42,20 +42,28 @@ export function parseDate(iso) {
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export function fmtDate(iso, opts = {}) {
+/* One format for a date, everywhere, year always included.
+   It used to drop the year when it matched the current one, which meant a
+   single column showed "Aug 7" on one row and "Jun 2, 2027" on the next. A
+   field gets one format, and exam schedules routinely span two fiscal years,
+   so the year is the part that cannot be dropped.
+
+   The opts argument is kept, and ignored, so the call sites that pass
+   { alwaysYear: true } still read correctly rather than looking like they
+   are asking for something special. */
+export function fmtDate(iso) {
   if (!iso) return "";
   const d = parseDate(iso);
-  const year = opts.alwaysYear || d.getFullYear() !== today().getFullYear();
-  return `${MONTHS[d.getMonth()]} ${d.getDate()}${year ? ", " + d.getFullYear() : ""}`;
+  return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }
 
+/* Both ends written in full. Collapsing a same-year range to "Jun 15 to Aug 7,
+   2026" would reintroduce the thing above: two renderings of one field
+   depending on the data. */
 export function fmtRange(startIso, endIso) {
   if (!startIso) return fmtDate(endIso);
   if (!endIso) return fmtDate(startIso);
-  const a = parseDate(startIso), b = parseDate(endIso);
-  const sameYear = a.getFullYear() === b.getFullYear();
-  const start = sameYear ? fmtDate(startIso) : fmtDate(startIso, { alwaysYear: true });
-  return `${start} to ${fmtDate(endIso, { alwaysYear: !sameYear })}`;
+  return `${fmtDate(startIso)} to ${fmtDate(endIso)}`;
 }
 
 /* "today" is a function rather than a constant so that a tab left open
@@ -131,19 +139,19 @@ export const STATUS = {
   closed:    { label: "Closed",                 cls: "tag-closed" },
 };
 
-/* Exam types, in DCAS's own words. "Open Competitive" is the City's term and
-   its page for those exams is headed "Open Competitive Exams for Anyone", so
-   both halves are worth saying: the label people will see on the Notice, and
-   what it actually means for who can apply. */
+/* Exam types, in DCAS's own words. One label per value, used in rows, in the
+   filter and on an exam page alike. There used to be a second, longer form
+   ("Open competitive: anyone who qualifies") shown in some of those places and
+   not others, which made one field look like two. What it means for who can
+   apply is said once, as the qualifier under Who can apply on an exam page. */
 export const EXAM_TYPE = {
-  open_competitive: { short: "Open competitive", who: "Open competitive: anyone who qualifies" },
-  promotion:        { short: "Promotion",       who: "Promotion: current City employees" },
-  qie:              { short: "Provisional",     who: "Qualified incumbent: provisional employees" },
+  open_competitive: "Open competitive",
+  promotion: "Promotion",
+  qie: "Provisional",
 };
 
-export function typeLabel(type, form = "short") {
-  const t = EXAM_TYPE[type];
-  return t ? t[form] : type;
+export function typeLabel(type) {
+  return EXAM_TYPE[type] || type;
 }
 
 export function tag(status) {
