@@ -3,3 +3,5 @@ data-raw/
 __pycache__/
 *.pyc
 .venv/
+civilservice-project-prompt.md
+working-with-claude_jaramana.md
