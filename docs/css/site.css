@@ -244,21 +244,9 @@ a:hover { text-decoration-thickness: 2px; }
   gap: 1rem;
 }
 
-/* A status heading is the status tag, at heading size. The same chip in the
-   same color means the same thing wherever it appears: the group heading here,
-   the exam page, the list of exams on a title page. One component, one
-   meaning. A heading that named a status in plain type while the exam page
-   used a colored chip for it was two vocabularies for one idea. */
-.section > h2 .tag {
-  font-size: var(--t-sm);
-  font-weight: 700;
-  padding: 0.15rem 0.5rem;
-  /* Cancels the heading's uppercase. The same chip has to read the same way
-     here as it does on an exam page, and it is the heading rule that has to
-     give way, not the component. */
-  text-transform: none;
-  letter-spacing: 0.01em;
-}
+/* A group heading is the status chip, unmodified. No size or weight override
+   here on purpose: the heading is carried by the rule beneath it and the count
+   beside it, so the chip can stay exactly the chip. */
 .section > h2 .count {
   font-family: var(--face-mono);
   font-weight: 400;
@@ -354,14 +342,24 @@ h1.page-title {
 /* Sentence case, not caps. The status words are full phrases now
    ("Accepting applications"), and caps plus letter-spacing made them wide
    enough to push the date off the row. */
+/* The status chip. Every property it needs is set here, none inherited, so it
+   renders identically wherever it lands: a group heading, an exam page, a row
+   on a title page. It used to pick up weight and size from its container,
+   which made the same status read as bold and large in a heading and regular
+   and small on an exam page. */
 .tag {
   display: inline-block;
   font-family: var(--face-mono);
   font-size: var(--t-xs);
+  font-weight: 600;
+  font-style: normal;
+  text-transform: none;
   letter-spacing: 0.01em;
-  padding: 0.1rem 0.4rem;
+  line-height: 1.4;
+  padding: 0.12rem 0.45rem;
   border-radius: var(--radius);
   white-space: normal;
+  vertical-align: baseline;
 }
 .tag-open   { background: var(--open-soft);   color: var(--open); }
 .tag-soon   { background: var(--soon-soft);   color: var(--soon); }
