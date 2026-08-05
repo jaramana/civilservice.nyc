@@ -3,7 +3,8 @@
 
    One rule, statable in a sentence:
 
-     Show picks the groups. Search filters within them. Nothing else changes.
+     The filters pick which values are kept. Search narrows within them.
+     Nothing else changes.
 
    No date windows. Every exam we publish sits in one of the three groups all
    the time, and the only thing deciding what is on screen is a control you
@@ -152,7 +153,7 @@ function render() {
   // that is empty, since the fix is in a panel that is probably closed.
   const nothingChosen = document.getElementById("nothing-chosen");
   const emptyMenus = [];
-  if (!state.show.size) emptyMenus.push("Show");
+  if (!state.show.size) emptyMenus.push("Status");
   if (!state.type.size) emptyMenus.push("Who can apply");
   nothingChosen.hidden = emptyMenus.length === 0;
   nothingChosen.textContent = emptyMenus.length

@@ -29,11 +29,11 @@
 
     <div id="alert"></div>
 
-    <!-- One rule, and it fits in a sentence: Show picks the groups, Search
-         filters within them, nothing else changes. No date windows that open
-         and close on their own. An earlier build showed 60 days of upcoming
-         exams until you typed something, then silently showed all 138, so the
-         table looked like it had changed its own mind. -->
+    <!-- One rule, and it fits in a sentence: the filters pick which values are
+         kept, search narrows within them, nothing else changes. No date windows
+         that open and close on their own. An earlier build showed 60 days of
+         upcoming exams until you typed something, then silently showed all 138,
+         so the table looked like it had changed its own mind. -->
 
     <h1 class="page-title">Exams</h1>
 
@@ -43,7 +43,13 @@
         <input type="search" id="q" placeholder="Sanitation Worker, or 6311"
                autocomplete="off" spellcheck="false">
       </div>
-      <!-- A dropdown that holds checkboxes, built from details/summary.
+      <!-- Named for the field it filters, which is the exam's status, the same
+           word the data dictionary uses and the same three values the chips
+           carry. It was called "Show" when the dropdown picked a named view;
+           once it became a multi-select over a field, "Show: 2 of 3" no longer
+           said what was being narrowed.
+
+           A dropdown that holds checkboxes, built from details/summary.
            A native <select multiple> would need modifier-key clicking, offers
            no checkboxes and renders as an inline list box that is taller than
            the menu it replaces. This closes to one line, opens to the values,
@@ -52,11 +58,11 @@
            Both menus work the same way: every box is a value you want kept.
            Unticking all of them asks for nothing, and the page says so. -->
       <div class="field" style="flex: 0 1 17rem;">
-        <span class="fieldname" id="show-name">Show</span>
+        <span class="fieldname" id="show-name">Status</span>
         <details class="menu" id="show-menu">
           <summary aria-describedby="show-name"><span id="show-summary"></span></summary>
           <fieldset class="menu-panel">
-            <legend class="sr-only">Show which exams</legend>
+            <legend class="sr-only">Filter by exam status</legend>
             <label class="check"><input type="checkbox" id="show-accepting" checked> Accepting applications</label>
             <label class="check"><input type="checkbox" id="show-upcoming" checked> Upcoming</label>
             <label class="check"><input type="checkbox" id="show-closed"> Closed</label>
