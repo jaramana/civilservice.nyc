@@ -100,7 +100,7 @@ function facts(exam, title) {
       ? "Only City employees who already hold permanent Civil Service status in a related title."
       : exam.type === "qie"
         ? "Only people already doing the job provisionally."
-        : "Anyone meeting the minimum qualifications. You do not need to work for the City.");
+        : "Anyone who meets the minimum qualifications. You do not need to already work for the City.");
 
   fact(dl, "Exam number", exam.exam_no);
 
