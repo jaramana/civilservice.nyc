@@ -194,8 +194,9 @@ export async function freshness() {
       text: meta.staleness_warning ? "This page may be out of date. " : "Heads up. ",
     }));
     banner.append(document.createTextNode(
-      `The source data has not been updated in ${meta.source_age_days} days. ` +
-      `Application dates may have changed. Check nyc.gov before you rely on one.`
+      `The information on this page has not been updated in ` +
+      `${meta.source_age_days} days. Application dates may have changed. ` +
+      `Check nyc.gov before you rely on one.`
     ));
     slot.append(banner);
   }

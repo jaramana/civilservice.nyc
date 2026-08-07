@@ -163,8 +163,9 @@ function render() {
 
   const note = document.getElementById("note-closed");
   note.textContent = archiveFloor
-    ? `Back to ${fmtDate(archiveFloor, { alwaysYear: true })}. The City never ` +
-      `published its fiscal 2025 schedule, so the record stops there.`
+    ? `This list goes back to ${fmtDate(archiveFloor, { alwaysYear: true })}. ` +
+      `The City never published its fiscal year 2025 schedule, so the ` +
+      `record stops there.`
     : "";
 
   // Matches sitting in a group the current Show is hiding. Silence there reads

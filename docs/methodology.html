@@ -32,10 +32,11 @@
 
     <div class="prose">
       <p>
-        Everything here comes from data the City publishes, plus the DCAS exam
-        pages. No numbers are estimated, modelled or filled in. Where a field is
-        missing it is left out rather than guessed at, which is why some pages
-        are shorter than others.
+        Everything here comes from data the City of New York (the City)
+        publishes, plus pages from the Department of Citywide Administrative
+        Services (DCAS), the agency that runs civil service exams. No numbers
+        on this site are estimated or guessed. If a field is missing, we
+        leave it out. That is why some pages are shorter than others.
       </p>
     </div>
 
@@ -43,29 +44,31 @@
       <h2>What this cannot tell you</h2>
       <div class="prose">
         <p>
-          <strong>Whether you will be hired.</strong> Nothing published shows how
-          far down a list an agency has reached, or where any individual sits.
-          This site has no name search and no list number lookup, by choice.
+          <strong>Whether you will be hired.</strong> No published data shows
+          how far down a list an agency has reached, or where you personally
+          sit on it. This site has no name search and no list number lookup.
+          That is by choice.
         </p>
         <p>
-          <strong>How fast a list moves.</strong> The certification data records
-          that a list was used, not how deep. Some titles are certified hundreds
-          of times because every posting pulls a few names. Uniformed titles are
-          certified a handful of times in large batches. A high count means the
-          title is hired often, not that the list moves quickly.
+          <strong>How fast a list moves.</strong> The certification data shows
+          that a list was used. It does not show how far down the list an
+          agency went. Some titles get certified hundreds of times, because
+          each job posting pulls just a few names. Uniformed titles get
+          certified only a few times, in large batches instead. A high count
+          means a title is hired often. It does not mean the list moves fast.
         </p>
         <p>
-          <strong>What you would earn.</strong> A title's salary range is what it
-          is authorized to pay across every assignment level. Where we show a
-          median it is a different statistic, from a different source, describing
-          people currently in the job.
+          <strong>What you would earn.</strong> A title's salary range is what
+          the City is allowed to pay, across every level of that job. Where we
+          show a median instead, that is a different number from a different
+          source. It describes what people currently in the job actually earn.
         </p>
         <p>
-          <strong>Anything about a person.</strong> The City publishes candidate
-          names, exact scores and credit flags in the active list dataset. This
-          site never requests those columns, never caches them and never
-          publishes them. That is enforced in the pipeline rather than promised
-          in prose.
+          <strong>Anything about a person.</strong> The City's own data
+          includes candidate names, exact scores, and credit flags. This site
+          never asks for those columns. It never stores them and never
+          publishes them. This is enforced in the code, not just promised
+          here in writing.
         </p>
       </div>
     </section>
@@ -74,28 +77,31 @@
       <h2>Known holes, stated plainly</h2>
       <div class="prose">
         <p>
-          <strong>A missing year.</strong> No exam has an application period
-          between July 2024 and June 2025. The City never published that fiscal
-          year's schedule as open data. The archive on this site starts after the
-          gap rather than showing a partial record that would look complete.
+          <strong>A missing year.</strong> No exam here has an application
+          period between July 2024 and June 2025. The City never published
+          that year's schedule as open data. Our archive starts after this
+          gap. We would rather start late than show a partial record that
+          looks complete.
         </p>
         <p>
-          <strong>The feed lags the City.</strong> When DCAS extends an
-          application period, its own pages change first and the open data
-          follows, sometimes weeks later. On one check the City's pages listed
-          eight exams open and the data listed two. The pipeline reads both every
-          day and lets the City's pages win on dates.
+          <strong>Our data lags the City's own pages.</strong> When DCAS
+          extends an application period, its web pages update first. The
+          open data can take weeks to catch up. On one check, the City's
+          pages listed eight open exams, but the open data listed only two.
+          So this site reads both sources every day, and lets the City's own
+          pages win when the two disagree.
         </p>
         <p>
-          <strong>Truncated names.</strong> The title catalog cuts names at 30
-          characters, and about half of all rows hit that limit. Where an exam or
-          a list spells a title out in full, that fuller spelling is what you see.
+          <strong>Cut-off names.</strong> The City's title catalog cuts every
+          name at 30 characters. About half of all titles hit that limit.
+          Where an exam or a list spells a title out in full, we show that
+          fuller spelling instead.
         </p>
         <p>
-          <strong>Recycled exam numbers.</strong> The City reuses exam numbers
-          roughly every ten years. Any history attached to an exam here is
-          filtered to the period after that list was established, so an old,
-          unrelated exam's record is not credited to a current one.
+          <strong>Reused exam numbers.</strong> The City reuses exam numbers
+          about every ten years. So any history shown for an exam only
+          covers the years after that specific list started. This keeps an
+          old, unrelated exam's history from being credited to a new one.
         </p>
       </div>
     </section>
@@ -109,22 +115,23 @@
       <h2>How often it updates</h2>
       <div class="prose">
         <p id="refresh-line">
-          A scheduled job runs the pipeline once a day, rebuilds the files this
-          site reads, and commits only when something actually changed.
+          A scheduled job runs the pipeline once a day. It rebuilds the files
+          this site reads, and it commits only when something actually
+          changed.
         </p>
         <p>
           Exam dates are also published as a calendar. Each exam page has a
-          button that adds that one exam to your calendar, with a reminder
-          before it closes. If you would rather have all of them,
-          <a href="exams.ics">the whole feed is here</a>, though for most people
-          one exam at a time is the useful version.
+          button to add that exam to your own calendar, with a reminder
+          before it closes. If you want every exam at once,
+          <a href="exams.ics">the whole feed is here</a>. Most people only
+          need one exam at a time, though.
         </p>
         <p>
-          The date on every page is the date the City's data says it is current
-          as of, not the date this site last ran. Those are different, and the
-          second one is the useless one: a build that runs perfectly every day on
-          data that stopped updating in April is exactly the failure this site is
-          built to make visible.
+          The date shown on every page is the date the City's data says it is
+          current as of. It is not the date this site last ran. Those are two
+          different things. A build that runs perfectly every day, using data
+          that stopped updating back in April, is exactly the failure this
+          site is built to show you.
         </p>
       </div>
     </section>
@@ -132,8 +139,8 @@
     <section class="section">
       <h2>Every published field</h2>
       <p class="note">
-        What each field in the data files means, generated from the pipeline so
-        it cannot drift from what is actually published.
+        What each field in the data means. This list comes straight from the
+        pipeline, so it cannot drift from what the site actually publishes.
       </p>
       <dl class="facts" id="dictionary"></dl>
     </section>

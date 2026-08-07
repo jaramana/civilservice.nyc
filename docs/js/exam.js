@@ -108,8 +108,9 @@ function facts(exam, title) {
     // Spell out the year actually on screen. A fixed example meant an exam in
     // fiscal 2027 sat under a sentence explaining fiscal 2026.
     fact(dl, "Fiscal year", exam.fiscal_year,
-      `The City's fiscal year runs July to June, so fiscal ${exam.fiscal_year} ` +
-      `means July ${exam.fiscal_year - 1} through June ${exam.fiscal_year}.`);
+      `The City's fiscal year runs from July to June. So fiscal ` +
+      `${exam.fiscal_year} means July ${exam.fiscal_year - 1} through June ` +
+      `${exam.fiscal_year}.`);
   }
 
   if (title) {
@@ -127,14 +128,16 @@ function facts(exam, title) {
     fact(dl, "Job title", el("a", {
       href: `titles.html?q=${encodeURIComponent(exam.title.replace(/\s*\(.*$/, ""))}`,
       text: "Search job titles",
-    }), "No exact match in the City's title catalog, usually because the exam " +
-        "is run by CUNY or Health + Hospitals.");
+    }), "No exact match in the City's title catalog. This is usually " +
+        "because the exam is run by the City University of New York " +
+        "(CUNY) or by Health + Hospitals, not by the City government " +
+        "itself.");
   }
 
   if (!exam.noe_url) {
     fact(dl, "Notice of Examination", "Not published yet",
-      "DCAS posts it when the application period opens. It carries the " +
-      "requirements, the fee and what is tested.");
+      "DCAS posts it once the application period opens. It lists the " +
+      "requirements, the fee, and what the exam tests.");
   }
 
   fact(dl, "Source", exam.source === "dcas"
@@ -154,8 +157,8 @@ function whatNext() {
   const body = document.getElementById("what-next-body");
   clear(body);
   body.append(document.createTextNode(
-    "Passing puts you on a list for this title, in score order. It does not by "
-    + "itself get you a job. "));
+    "Passing puts you on a list for this title, in score order. It does not "
+    + "get you the job by itself. "));
   body.append(el("a", { href: "how-to-apply.html", text: "How the process works" }));
   body.append(document.createTextNode("."));
 }
@@ -186,8 +189,8 @@ async function main() {
       document.getElementById("what-next-body").hidden = true;
       document.getElementById("facts").after(el("p", { class: "empty" }, [
         document.createTextNode(
-          "No published exam has that number. Exams older than the archive " +
-          "floor are not on this site, and the number may belong to one of those. "),
+          "No exam on this site has that number. Very old exams are not " +
+          "included here, and this number may belong to one of those. "),
         el("a", { href: "index.html", text: "See all exams" }),
         document.createTextNode("."),
       ]));

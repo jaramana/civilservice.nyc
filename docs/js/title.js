@@ -48,7 +48,7 @@ function renderFacts(t) {
   if (t.salary_min && t.salary_max) {
     fact(dl, "Salary range", `${money(t.salary_min)} to ${money(t.salary_max)}`,
       t.salary_bands > 1
-        ? `Spans ${t.salary_bands} assignment levels, so the bottom and the top are different jobs.`
+        ? `This range spans ${t.salary_bands} assignment levels. The bottom and the top are different jobs.`
         : "What the title is authorized to pay, not what a posting will offer.");
   }
 
@@ -129,7 +129,8 @@ function situation(t, exams) {
       : `No exam is scheduled. There are ${count(t.lists)} active lists` +
         `${t.candidates ? `, with ${count(t.candidates)} people on them` : ""}.`;
   } else {
-    text = "No exam is scheduled and there is no active list. The title exists and can be filled other ways.";
+    text = "No exam is scheduled, and there is no active list. This title " +
+           "still exists, and the City can fill it another way.";
   }
 
   line.append(document.createTextNode(text));
@@ -145,9 +146,10 @@ function renderList(t) {
 
   const one = t.lists === 1;
   body.append(el("p", { class: "note", text: t.called === "yes"
-    ? `The City has certified from ${one ? "this list" : "at least one of these lists"}, ` +
-      `so ${one ? "it is" : "they are"} being used for hiring.`
-    : `No certification on record yet, which usually means ${one ? "the list is" : "the lists are"} new.` }));
+    ? `The City has certified from ${one ? "this list" : "at least one of these lists"}. ` +
+      `${one ? "It is" : "They are"} being used for hiring.`
+    : `No certification is on record yet. This usually means ` +
+      `${one ? "the list is" : "the lists are"} new.` }));
 
   section.hidden = false;
 }

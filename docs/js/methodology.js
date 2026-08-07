@@ -32,8 +32,8 @@ function renderSources(meta) {
     });
     dd.append(el("span", {
       class: "qualifier",
-      text: "The City updates these before the open data feed, so they decide " +
-            "the application dates shown on this site when the two disagree.",
+      text: "The City updates these pages before the open data feed does. " +
+            "So when the two disagree about a date, these pages win.",
     }));
     dl.append(dd);
   }
@@ -93,12 +93,16 @@ async function main() {
 
     const windows = meta.windows || {};
     if (windows.archive_floor) {
+      // Only the archive floor is worth stating here. The day-window numbers
+      // in meta.json feed published counts, not what the front page shows:
+      // it groups exams by status with no date cutoff, so a sentence that
+      // described "the front page looks N days ahead" would describe a
+      // behavior the page no longer has.
       document.getElementById("refresh-line").textContent =
-        `A scheduled job runs the pipeline once a day, rebuilds the files this ` +
-        `site reads, and commits only when something actually changed. The ` +
-        `archive starts at ${fmtDate(windows.archive_floor, { alwaysYear: true })}, ` +
-        `the front page looks ${windows.upcoming_days} days ahead, and an exam ` +
-        `stays under "recently closed" for ${windows.recently_closed_days} days.`;
+        `A scheduled job runs the pipeline once a day. It rebuilds the files ` +
+        `this site reads, and it commits only when something actually ` +
+        `changed. The archive on this site starts at ` +
+        `${fmtDate(windows.archive_floor, { alwaysYear: true })}.`;
     }
   } catch (err) {
     failure(host, err);
