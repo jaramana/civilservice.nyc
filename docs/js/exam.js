@@ -97,10 +97,10 @@ function facts(exam, title) {
   // one place the meaning is spelled out.
   fact(dl, "Who can apply", typeLabel(exam.type),
     exam.type === "promotion"
-      ? "Only people already working for the City in a related title."
+      ? "Only City employees who already hold permanent Civil Service status in a related title."
       : exam.type === "qie"
         ? "Only people already doing the job provisionally."
-        : "Anyone who meets the requirements. You do not need to work for the City.");
+        : "Anyone meeting the minimum qualifications. You do not need to work for the City.");
 
   fact(dl, "Exam number", exam.exam_no);
 
