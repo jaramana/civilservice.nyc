@@ -203,18 +203,45 @@ TITLE_DESCR_TRUNCATION_LENGTH = 30
 
 # GitHub disables scheduled workflows after 60 days of repository inactivity.
 # If that happens the refresh stops silently, so the site says so out loud.
-STALENESS_NOTICE_DAYS = 14     # page shows a quiet "checked N days ago" note
-STALENESS_WARN_DAYS = 30       # page shows a visible warning banner
-
-# Which sources the staleness warning watches.
 #
-# Deliberately not all of them. The warning tells someone the application dates
-# below may be wrong, so it should track the datasets that carry application
-# dates. The title catalog is republished roughly monthly by its nature, and
-# including it meant a normal 32 day old catalog raised a banner claiming exam
-# dates were unreliable, which was false and would have trained people to
-# ignore the banner that matters.
-STALENESS_SOURCES = ["exam_schedule", "active_list", "certification"]
+# Thresholds are per source, not one flat number, because the watched sources
+# have genuinely different real cadences. A single 30 day threshold is a real
+# gap for a list that updates daily and a normal lull for one that updates
+# quarterly. Checked against each dataset's own metadata on
+# data.cityofnewyork.us (2026-08-07):
+#
+#   Annual Examination Schedule    Update Frequency: Annually
+#                                  Data Change Frequency: Quarterly
+#                                  last two real changes were 91 days apart
+#   Civil Service List (Active)   Update Frequency: Daily
+#   Civil Service List Cert.      Update Frequency: Weekly
+#
+# The exam schedule's own age also matters less than its slow cadence
+# suggests. DCAS's live pages are read and reconciled daily (see
+# USE_DCAS_LIVE), so a merely old OpenData snapshot does not by itself mean a
+# displayed date is wrong. If that live read ever fails outright,
+# fetch_dcas_live() raises and the whole build stops rather than publishing
+# silently, which is a faster, louder signal than any calendar threshold
+# could be. So the schedule's own threshold below only needs to catch DCAS
+# going quiet for far longer than its normal quarterly habit, not the
+# expected lull in between.
+#
+# This is the same problem that already kept the title catalog out of the
+# watched set entirely: it is republished roughly monthly by its own nature,
+# and one flat threshold meant a normal 32 day old catalog raised a banner
+# claiming application dates were unreliable, which was false and would have
+# trained people to ignore the banner that matters. Per-source thresholds fix
+# the same problem without excluding a source outright: each one is judged
+# against its own normal rhythm instead of a number borrowed from a
+# different dataset.
+#
+# (notice_days, warn_days) per source key. A new watched source needs an
+# entry here sized to its own real cadence, not a copy of an existing pair.
+STALENESS_THRESHOLDS = {
+    "exam_schedule": (60, 100),   # quarterly cadence, ~91 days between real changes
+    "active_list":   (3, 7),      # updates daily; a week untouched is a real gap
+    "certification": (10, 21),    # updates weekly; three missed weeks is real
+}
 
 # Row counts below these mean a source has changed shape or a fetch was
 # truncated. The pipeline raises rather than writing a half-empty site.

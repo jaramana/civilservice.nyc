@@ -189,14 +189,20 @@ export async function freshness() {
 
   const slot = document.getElementById("alert");
   if (slot && (meta.staleness_warning || meta.staleness_notice)) {
+    // Names the dataset that is actually behind, where the pipeline knows
+    // which one. Each source has its own normal update rhythm (see
+    // STALENESS_THRESHOLDS in config.py), so "this page" being generically
+    // out of date is a weaker, less checkable claim than naming the one
+    // thing that is actually running late.
+    const what = meta.stale_source ? meta.stale_source.name : "The information on this page";
     const banner = el("div", { class: "banner", role: "status" });
     banner.append(el("strong", {
       text: meta.staleness_warning ? "This page may be out of date. " : "Heads up. ",
     }));
     banner.append(document.createTextNode(
-      `The information on this page has not been updated in ` +
-      `${meta.source_age_days} days. Application dates may have changed. ` +
-      `Check nyc.gov before you rely on one.`
+      `${what} has not been updated in ${meta.source_age_days} days. ` +
+      `Application dates may have changed. Check nyc.gov before you rely ` +
+      `on one.`
     ));
     slot.append(banner);
   }
