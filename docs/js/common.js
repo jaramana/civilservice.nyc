@@ -166,15 +166,15 @@ export function tag(status) {
    time, so it stays honest even if the refresh workflow keeps running while
    DCAS stops publishing.
 
-   Two pieces, and they belong in different places. The date is provenance: it
-   applies to the whole site, it is the same on every page, and it belongs with
-   the other provenance in the footer. The staleness banner is a warning, and a
-   warning at the bottom of a long page is not a warning, so it goes at the top
-   of the content.
+   The date is provenance: it applies to the whole site, it is the same on
+   every page, and it sits with the other provenance in the footer.
 
-   This finds its own two slots rather than taking a node, because every page
-   wants both in the same place and passing the position in from five call
-   sites is how they drift apart. */
+   There is no conditional warning banner any more. It watched datasets that
+   carry no application dates, so its age was not evidence about the thing it
+   warned about, and a box that appears on a normal day teaches people to
+   ignore it. See the note in config.py. What protects application-date
+   accuracy now is the daily DCAS reconciliation, which fails the build rather
+   than publishing quietly, plus this always-visible date. */
 
 export async function freshness() {
   const meta = await load("meta.json");
@@ -187,25 +187,6 @@ export async function freshness() {
       `checked ${fmtDate(meta.generated_at, { alwaysYear: true })}.`;
   }
 
-  const slot = document.getElementById("alert");
-  if (slot && (meta.staleness_warning || meta.staleness_notice)) {
-    // Names the dataset that is actually behind, where the pipeline knows
-    // which one. Each source has its own normal update rhythm (see
-    // STALENESS_THRESHOLDS in config.py), so "this page" being generically
-    // out of date is a weaker, less checkable claim than naming the one
-    // thing that is actually running late.
-    const what = meta.stale_source ? meta.stale_source.name : "The information on this page";
-    const banner = el("div", { class: "banner", role: "status" });
-    banner.append(el("strong", {
-      text: meta.staleness_warning ? "This page may be out of date. " : "Heads up. ",
-    }));
-    banner.append(document.createTextNode(
-      `${what} has not been updated in ${meta.source_age_days} days. ` +
-      `Application dates may have changed. Check nyc.gov before you rely ` +
-      `on one.`
-    ));
-    slot.append(banner);
-  }
   return meta;
 }
 

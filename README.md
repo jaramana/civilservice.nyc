@@ -56,13 +56,18 @@ pipeline daily and commits only when the output changed.
 GitHub disables a scheduled workflow after 60 days with no repository
 activity, and does not send a warning. The refresh then simply stops. Nothing
 in this repository can prevent that, so the site is built to make it visible
-instead: every page shows the date the City's data says it is current as of,
-and a banner appears once any watched source is older than its own warn
-threshold in `STALENESS_THRESHOLDS` (`config.py`). Each source gets its own
-threshold rather than one shared number, because they update on genuinely
-different schedules (the exam schedule roughly quarterly, the active list
-daily). If the repository has had no activity for two months, check that the
-workflow still has a recent run.
+instead: every page shows the date the City's data says it is current as of.
+If that date looks old, the data is old.
+
+There is deliberately no conditional "this may be out of date" banner. One
+existed and was removed: it keyed off datasets that carry no application
+dates (the active list is people who already passed an exam, certification is
+who got hired off it), so its age was not evidence about the dates it warned
+on, and a warning that appears on an ordinary day teaches people to ignore
+it. Application-date accuracy is protected instead by the daily DCAS
+reconciliation, which fails the build rather than publishing quietly. If the
+repository has had no activity for two months, check that the workflow still
+has a recent run.
 
 The date shown on each page is the dataset's own `data_current_as_of` value,
 never the date of the last build. A build that runs every day against data

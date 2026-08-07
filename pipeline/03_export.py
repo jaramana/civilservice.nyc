@@ -330,52 +330,18 @@ def export_meta(exams, lists, published_exams, catalog):
     today = c.as_of()
 
     schedule_asof = exams.data_current_as_of.max()
-    thresholds = cfg.STALENESS_THRESHOLDS
-    watched = src[src.source.isin(thresholds)]
-    if watched.empty:
-        raise RuntimeError(
-            "STALENESS_THRESHOLDS in config.py matches none of the fetched "
-            f"sources {sorted(src.source)}. The staleness warning would never "
-            "fire, which is the one failure this site is built to avoid."
-        )
-    if set(thresholds) - set(src.source):
-        raise RuntimeError(
-            f"STALENESS_THRESHOLDS names a source not in the fetched data: "
-            f"{sorted(set(thresholds) - set(src.source))}. Fix the key or "
-            "remove the entry."
-        )
 
-    # Each source judged against its own threshold, not the oldest of the
-    # group against one flat number. "Most overdue" is measured relative to
-    # each source's own warn threshold, so a daily-updating list nine days
-    # stale (well past its 7 day warn line) outranks a quarterly dataset
-    # seventy days stale (nowhere near its 100 day line), even though 70 is
-    # the larger raw number.
-    # itertuples(), not iterrows(): an iterrows() row is a Series, whose own
-    # .name attribute is the row's index label, not this "name" column, which
-    # is exactly the collision the "sources" list below sidesteps with
-    # bracket access. itertuples() has no such reserved attribute, so
-    # row.name here really is the column value. Checked directly against
-    # this project's pandas rather than assumed.
-    per_source = []
-    for row in watched.itertuples():
-        notice_days, warn_days = thresholds[row.source]
-        age = (today - row.rows_updated_at).days
-        per_source.append({
-            "key": row.source, "name": row.name,
-            "age": age, "notice": age >= notice_days, "warn": age >= warn_days,
-            "overdue_ratio": age / warn_days,
-        })
-    worst = max(per_source, key=lambda s: s["overdue_ratio"])
-
+    # No calendar-threshold staleness warning. See the note in config.py: most
+    # of what it watched, the active list and certification datasets, carries
+    # no application dates at all, so its age was never evidence about the
+    # thing the banner warned about. Application-date accuracy is protected by
+    # the daily DCAS live reconciliation, which fails the build loudly rather
+    # than publishing quietly, and the "current as of" date on every page is
+    # the passive signal.
+    #
+    # This one warning stays: it is a fact about how this build ran, not
+    # arithmetic on a date.
     warnings = []
-    if worst["warn"]:
-        warnings.append(
-            f"The City has not refreshed {worst['name']} in {worst['age']} "
-            f"days, past its usual {thresholds[worst['key']][1]} day "
-            f"threshold. Application dates below may be out of date. Check "
-            f"with DCAS."
-        )
     if not cfg.USE_DCAS_LIVE:
         warnings.append(
             "This build did not check the DCAS exam pages, so an exam whose "
@@ -387,11 +353,6 @@ def export_meta(exams, lists, published_exams, catalog):
         "generated_at": c.iso(today),
         "as_of": c.iso(today),
         "schedule_current_as_of": c.iso(schedule_asof),
-        "source_age_days": int(worst["age"]),
-        "staleness_notice": bool(worst["notice"]),
-        "staleness_warning": bool(worst["warn"]),
-        "stale_source": {"key": worst["key"], "name": worst["name"]}
-                        if worst["notice"] else None,
         "warnings": warnings,
         "sources": [
             {"key": r.source, "name": r["name"], "dataset_id": r.dataset_id,
