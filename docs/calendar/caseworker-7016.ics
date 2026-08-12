@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Caseworker (Exam 7016)
@@ -12,9 +12,9 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7016-2027-open@civilservice.nyc
+UID:exam-7016-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20260701
 DTEND;VALUE=DATE:20260702
@@ -22,17 +22,17 @@ SUMMARY:Applications open: Caseworker (Exam 7016)
 DESCRIPTION:Applications open for Caseworker\, Exam 7016.\nApplication peri
  od: 2026-07-01 to 2026-08-25.\nApply through OASys: https://www.nyc.gov/ex
  amsforjobs\nNotice of Examination: https://www.nyc.gov/assets/dcas/downloa
- ds/pdf/noes/20277016000.pdf\nExam details: https://civilservice.nyc/exam.h
- tml?exam=7016\nDates come from DCAS and can be extended. Confirm on nyc.go
- v before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7016
+ ds/pdf/noes/20277016000.pdf\nExam details: https://civilservice.publicwork
+ s.nyc/exam.html?exam=7016\nDates come from DCAS and can be extended. Confi
+ rm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7016
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7016-2027-close@civilservice.nyc
+UID:exam-7016-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20260825
 DTEND;VALUE=DATE:20260826
@@ -41,9 +41,9 @@ DESCRIPTION:Today is the last day to apply for Caseworker\, Exam 7016.\nApp
  lication period: 2026-07-01 to 2026-08-25.\nApply through OASys: https://w
  ww.nyc.gov/examsforjobs\nNotice of Examination: https://www.nyc.gov/assets
  /dcas/downloads/pdf/noes/20277016000.pdf\nExam details: https://civilservi
- ce.nyc/exam.html?exam=7016\nDates come from DCAS and can be extended. Conf
- irm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7016
+ ce.publicworks.nyc/exam.html?exam=7016\nDates come from DCAS and can be ex
+ tended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7016
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

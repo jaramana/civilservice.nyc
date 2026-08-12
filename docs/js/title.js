@@ -11,7 +11,7 @@
 
      salary range   what the title is authorized to pay, from the catalog
      median         what people in the job are actually paid, from
-                    thepaygap.nyc, which is a median and is labeled as one
+                    The Pay Gap, which is a median and is labeled as one
 
    Calling either of them "the salary" would be wrong, so neither is.
 
@@ -56,7 +56,7 @@ function renderFacts(t) {
     const link = el("a", { href: t.paygap.url, text: money(t.paygap.median_salary) });
     fact(dl, "Median actually paid", link,
       `${count(t.paygap.employees)} people held this title in fiscal ` +
-      `${t.paygap.fiscal_year}. Half earned more, half less. From thepaygap.nyc.`);
+      `${t.paygap.fiscal_year}. Half earned more, half less. From The Pay Gap.`);
   }
 
   if (t.hours) fact(dl, "Standard hours", `${t.hours} a week`);
@@ -180,7 +180,7 @@ async function main() {
       return;
     }
 
-    document.title = `${t.title} | NYC civil service`;
+    document.title = `${t.title} | NYC Civil Service Exams`;
     document.getElementById("title-name").textContent =
       t.name_truncated ? t.title + "…" : t.title;
     document.getElementById("title-code").textContent = `Title code ${t.code}`;

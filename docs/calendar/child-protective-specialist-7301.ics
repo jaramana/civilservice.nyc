@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Child Protective Specialist (Exam 7301)
@@ -12,26 +12,26 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7301-2027-open@civilservice.nyc
+UID:exam-7301-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270505
 DTEND;VALUE=DATE:20270506
 SUMMARY:Applications open: Child Protective Specialist (Exam 7301)
 DESCRIPTION:Applications open for Child Protective Specialist\, Exam 7301.\
  nApplication period: 2027-05-05 to 2027-05-25.\nApply through OASys: https
- ://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.h
- tml?exam=7301\nDates come from DCAS and can be extended. Confirm on nyc.go
- v before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7301
+ ://www.nyc.gov/examsforjobs\nExam details: https://civilservice.publicwork
+ s.nyc/exam.html?exam=7301\nDates come from DCAS and can be extended. Confi
+ rm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7301
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7301-2027-close@civilservice.nyc
+UID:exam-7301-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270525
 DTEND;VALUE=DATE:20270526
@@ -39,9 +39,9 @@ SUMMARY:Last day to apply: Child Protective Specialist (Exam 7301)
 DESCRIPTION:Today is the last day to apply for Child Protective Specialist\
  , Exam 7301.\nApplication period: 2027-05-05 to 2027-05-25.\nApply through
   OASys: https://www.nyc.gov/examsforjobs\nExam details: https://civilservi
- ce.nyc/exam.html?exam=7301\nDates come from DCAS and can be extended. Conf
- irm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7301
+ ce.publicworks.nyc/exam.html?exam=7301\nDates come from DCAS and can be ex
+ tended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7301
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

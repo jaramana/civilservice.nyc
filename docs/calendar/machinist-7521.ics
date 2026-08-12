@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Machinist (Prom) (Exam 7521)
@@ -12,36 +12,36 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7521-2027-open@civilservice.nyc
+UID:exam-7521-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270407
 DTEND;VALUE=DATE:20270408
 SUMMARY:Applications open: Machinist (Prom) (Exam 7521)
 DESCRIPTION:Applications open for Machinist (Prom)\, Exam 7521.\nApplicatio
  n period: 2027-04-07 to 2027-04-27.\nApply through OASys: https://www.nyc.
- gov/examsforjobs\nExam details: https://civilservice.nyc/exam.html?exam=75
- 21\nDates come from DCAS and can be extended. Confirm on nyc.gov before re
- lying on this.
-URL:https://civilservice.nyc/exam.html?exam=7521
+ gov/examsforjobs\nExam details: https://civilservice.publicworks.nyc/exam.
+ html?exam=7521\nDates come from DCAS and can be extended. Confirm on nyc.g
+ ov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7521
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7521-2027-close@civilservice.nyc
+UID:exam-7521-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270427
 DTEND;VALUE=DATE:20270428
 SUMMARY:Last day to apply: Machinist (Prom) (Exam 7521)
 DESCRIPTION:Today is the last day to apply for Machinist (Prom)\, Exam 7521
  .\nApplication period: 2027-04-07 to 2027-04-27.\nApply through OASys: htt
- ps://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam
- .html?exam=7521\nDates come from DCAS and can be extended. Confirm on nyc.
- gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7521
+ ps://www.nyc.gov/examsforjobs\nExam details: https://civilservice.publicwo
+ rks.nyc/exam.html?exam=7521\nDates come from DCAS and can be extended. Con
+ firm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7521
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

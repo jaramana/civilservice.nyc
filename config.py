@@ -25,6 +25,20 @@ DATA_DIR = DOCS_DIR / "data"       # the JSON the browser fetches
 
 
 # ---------------------------------------------------------------------------
+# Identity
+# ---------------------------------------------------------------------------
+#
+# The hostname follows the publicworks.nyc filing convention,
+# <shortest-unambiguous-noun>.publicworks.nyc, with the repository named exactly
+# for the hostname. That is a filing decision, not a brand: the visitor reads
+# SITE_NAME, and the hostname appears only where a machine needs it.
+
+SITE_NAME = "NYC Civil Service Exams"
+SITE_DOMAIN = "civilservice.publicworks.nyc"
+SITE_REPO = "https://github.com/jaramana/civilservice.publicworks.nyc"
+
+
+# ---------------------------------------------------------------------------
 # Sources
 # ---------------------------------------------------------------------------
 
@@ -42,21 +56,16 @@ DATASET_TITLES = "nzjr-3966"          # NYC Civil Service Titles, the full catal
 # environment (the GitHub Action passes it through as a secret if present).
 SOCRATA_APP_TOKEN_ENV = "SOCRATA_APP_TOKEN"
 
-# Salary context comes from thepaygap.nyc. We read the raw file from GitHub
-# rather than the custom domain, because the custom domain currently has no
-# working HTTPS certificate and a plain-HTTP fetch would be a bad dependency.
+# Salary context comes from The Pay Gap, the sibling site at
+# paygap.publicworks.nyc. We read the raw file from GitHub rather than the site
+# itself, so a redesign there cannot break this pipeline.
 PAYGAP_TITLES_URL = (
-    "https://raw.githubusercontent.com/jaramana/thepaygap.nyc/master/docs/data/titles-index.json"
+    "https://raw.githubusercontent.com/jaramana/paygap.publicworks.nyc"
+    "/master/docs/data/titles-index.json"
 )
-# Deep link into thepaygap.nyc for a single title. This is that site's actual
-# URL convention, taken from docs/js/lookup.js there, not a guess.
-#
-# Plain http on purpose, for now. thepaygap.nyc has no valid HTTPS certificate
-# for its custom domain: https://thepaygap.nyc fails with a subject name
-# mismatch. Linking over https would give every salary link on this site a
-# certificate error. Switch this to https the moment that is fixed on the other
-# repository, which is a GitHub Pages setting rather than a code change.
-PAYGAP_TITLE_URL_TEMPLATE = "http://thepaygap.nyc/lookup.html?title={slug}"
+# Deep link into The Pay Gap for a single title. This is that site's actual URL
+# convention, taken from docs/js/lookup.js there, not a guess.
+PAYGAP_TITLE_URL_TEMPLATE = "https://paygap.publicworks.nyc/lookup.html?title={slug}"
 
 # --- The fourth source, added deliberately. Read this before turning it off. --
 #
@@ -88,7 +97,7 @@ DCAS_LIVE_PAGES = {
 # So this is a plain browser string with the project named in front, which is
 # the most honest form nyc.gov will actually serve. Three page loads a day.
 HTTP_USER_AGENT = (
-    "civilservice.nyc pipeline"
+    f"{SITE_DOMAIN} pipeline"
     " Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
     " (KHTML, like Gecko) Chrome/126 Safari/537.36"
 )
@@ -273,7 +282,7 @@ FORBIDDEN_COLUMNS = [
 # file: the reminder fires from the reader's own phone, we never learn who
 # subscribed, and there is nothing to run.
 
-SITE_BASE_URL = "https://civilservice.nyc"
+SITE_BASE_URL = f"https://{SITE_DOMAIN}"
 
 # Where the calendar files go, relative to docs/.
 CALENDAR_FEED_FILENAME = "exams.ics"    # the whole feed, meant to be subscribed to
@@ -281,7 +290,9 @@ CALENDAR_DIR_NAME = "calendar"          # one file per exam, meant to be downloa
 
 # UIDs must be globally unique and must never change for a given event, or a
 # subscriber gets a duplicate instead of an update. This is the domain part.
-CALENDAR_UID_DOMAIN = "civilservice.nyc"
+# It moved with the rename from civilservice.nyc, which the site had never
+# actually been served from, so no subscription existed to break.
+CALENDAR_UID_DOMAIN = SITE_DOMAIN
 
 # What the subscribed feed carries. Closed exams are left out on purpose: a
 # calendar full of deadlines that have already passed is noise, and the reader

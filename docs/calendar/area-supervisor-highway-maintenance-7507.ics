@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Area Supervisor (Highway Maintenance) (Prom) (Exam 7507)
@@ -12,9 +12,9 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7507-2027-open@civilservice.nyc
+UID:exam-7507-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20260902
 DTEND;VALUE=DATE:20260903
@@ -23,16 +23,16 @@ SUMMARY:Applications open: Area Supervisor (Highway Maintenance) (Prom) (Ex
 DESCRIPTION:Applications open for Area Supervisor (Highway Maintenance) (Pr
  om)\, Exam 7507.\nApplication period: 2026-09-02 to 2026-09-22.\nApply thr
  ough OASys: https://www.nyc.gov/examsforjobs\nExam details: https://civils
- ervice.nyc/exam.html?exam=7507\nDates come from DCAS and can be extended. 
- Confirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7507
+ ervice.publicworks.nyc/exam.html?exam=7507\nDates come from DCAS and can b
+ e extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7507
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7507-2027-close@civilservice.nyc
+UID:exam-7507-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20260922
 DTEND;VALUE=DATE:20260923
@@ -41,9 +41,9 @@ SUMMARY:Last day to apply: Area Supervisor (Highway Maintenance) (Prom) (Ex
 DESCRIPTION:Today is the last day to apply for Area Supervisor (Highway Mai
  ntenance) (Prom)\, Exam 7507.\nApplication period: 2026-09-02 to 2026-09-2
  2.\nApply through OASys: https://www.nyc.gov/examsforjobs\nExam details: h
- ttps://civilservice.nyc/exam.html?exam=7507\nDates come from DCAS and can 
- be extended. Confirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7507
+ ttps://civilservice.publicworks.nyc/exam.html?exam=7507\nDates come from D
+ CAS and can be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7507
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

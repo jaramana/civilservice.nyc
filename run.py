@@ -16,7 +16,7 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 STAGES = [
-    ("01_fetch.py", "Fetching from NYC OpenData, DCAS and thepaygap.nyc"),
+    ("01_fetch.py", "Fetching from NYC OpenData, DCAS and The Pay Gap"),
     ("02_prepare.py", "Preparing"),
     ("03_export.py", "Exporting to docs/data/"),
     ("04_calendar.py", "Writing the calendar feed"),

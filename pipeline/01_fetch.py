@@ -288,11 +288,11 @@ def fetch_dcas_live():
 
 
 # ---------------------------------------------------------------------------
-# 6. Salary context from thepaygap.nyc
+# 6. Salary context from The Pay Gap
 # ---------------------------------------------------------------------------
 
 def fetch_paygap():
-    c.stage("Salary context from thepaygap.nyc")
+    c.stage("Salary context from The Pay Gap")
     rows = c.get(cfg.PAYGAP_TITLES_URL)
     df = pd.DataFrame(rows)
     c.log(f"{len(df):,} payroll titles, fiscal year "

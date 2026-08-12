@@ -244,7 +244,7 @@ def export_titles(exams, lists, catalog, paygap):
             if len(hiring):
                 entry["salary_hiring"] = int(round(hiring.mean()))
 
-        # A payroll title with no median is one thepaygap.nyc suppressed for
+        # A payroll title with no median is one The Pay Gap suppressed for
         # small headcount. A match with no number is not salary context, so we
         # drop it rather than showing an empty field.
         if key in paygap.index and pd.notna(paygap.loc[key].median_salary):
@@ -460,7 +460,7 @@ def export_dictionary():
             "investigation": "True where the City requires a background investigation before appointment.",
             "salary_hiring": "Mean salary the City reported when hiring off this title's list, across certifications in the last CERT_LOOKBACK_YEARS years. Exported for anyone reading this file directly and deliberately not shown on the title page: it is an average of past hires, some of them several years old and none adjusted since, so it describes what the job paid then rather than what it pays now.",
             "exam_nos": "The exam numbers we publish for this title, newest first. Present so a title page can link to its exams directly. About one exam in six has no title here at all: CUNY and Health + Hospitals run exams for titles the City catalog does not carry, and the catalog's 30 character name limit means some longer exam names have nothing to match. We leave those unlinked rather than attaching pay to a guess.",
-            "paygap": "Median salary for the matching payroll title from thepaygap.nyc, where an exact title match exists. This is what people already in the title earn, which is a third thing again, separate from both the title's range and the hiring salary. Many titles have no match: MTA titles such as Conductor and Train Operator are absent because the MTA is a State authority and does not appear in City payroll data at all.",
+            "paygap": "Median salary for the matching payroll title from The Pay Gap, where an exact title match exists. This is what people already in the title earn, which is a third thing again, separate from both the title's range and the hiring salary. Many titles have no match: MTA titles such as Conductor and Train Operator are absent because the MTA is a State authority and does not appear in City payroll data at all.",
         },
         "titles-index.json": {
             "_description": "The same titles as titles.json, cut down to what the directory page draws so a phone does not download 800 KB to render an index. Keys are single letters here and only here, because one script reads this file and nothing else does. Every field below also exists in titles.json under its full name.",

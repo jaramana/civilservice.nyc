@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Police Officer (Exam 7316)
@@ -12,36 +12,36 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7316-2027-open@civilservice.nyc
+UID:exam-7316-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20261201
 DTEND;VALUE=DATE:20261202
 SUMMARY:Applications open: Police Officer (Exam 7316)
 DESCRIPTION:Applications open for Police Officer\, Exam 7316.\nApplication 
  period: 2026-12-01 to 2026-12-14.\nApply through OASys: https://www.nyc.go
- v/examsforjobs\nExam details: https://civilservice.nyc/exam.html?exam=7316
- \nDates come from DCAS and can be extended. Confirm on nyc.gov before rely
- ing on this.
-URL:https://civilservice.nyc/exam.html?exam=7316
+ v/examsforjobs\nExam details: https://civilservice.publicworks.nyc/exam.ht
+ ml?exam=7316\nDates come from DCAS and can be extended. Confirm on nyc.gov
+  before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7316
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7316-2027-close@civilservice.nyc
+UID:exam-7316-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20261214
 DTEND;VALUE=DATE:20261215
 SUMMARY:Last day to apply: Police Officer (Exam 7316)
 DESCRIPTION:Today is the last day to apply for Police Officer\, Exam 7316.\
  nApplication period: 2026-12-01 to 2026-12-14.\nApply through OASys: https
- ://www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.h
- tml?exam=7316\nDates come from DCAS and can be extended. Confirm on nyc.go
- v before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7316
+ ://www.nyc.gov/examsforjobs\nExam details: https://civilservice.publicwork
+ s.nyc/exam.html?exam=7316\nDates come from DCAS and can be extended. Confi
+ rm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7316
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

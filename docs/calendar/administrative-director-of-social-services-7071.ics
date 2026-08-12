@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Administrative Director of Social Services (Exam 7071)
@@ -12,9 +12,9 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7071-2027-open@civilservice.nyc
+UID:exam-7071-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270602
 DTEND;VALUE=DATE:20270603
@@ -23,16 +23,16 @@ SUMMARY:Applications open: Administrative Director of Social Services (Exam
 DESCRIPTION:Applications open for Administrative Director of Social Service
  s\, Exam 7071.\nApplication period: 2027-06-02 to 2027-06-22.\nApply throu
  gh OASys: https://www.nyc.gov/examsforjobs\nExam details: https://civilser
- vice.nyc/exam.html?exam=7071\nDates come from DCAS and can be extended. Co
- nfirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7071
+ vice.publicworks.nyc/exam.html?exam=7071\nDates come from DCAS and can be 
+ extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7071
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7071-2027-close@civilservice.nyc
+UID:exam-7071-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270622
 DTEND;VALUE=DATE:20270623
@@ -41,9 +41,9 @@ SUMMARY:Last day to apply: Administrative Director of Social Services (Exam
 DESCRIPTION:Today is the last day to apply for Administrative Director of S
  ocial Services\, Exam 7071.\nApplication period: 2027-06-02 to 2027-06-22.
  \nApply through OASys: https://www.nyc.gov/examsforjobs\nExam details: htt
- ps://civilservice.nyc/exam.html?exam=7071\nDates come from DCAS and can be
-  extended. Confirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7071
+ ps://civilservice.publicworks.nyc/exam.html?exam=7071\nDates come from DCA
+ S and can be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7071
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

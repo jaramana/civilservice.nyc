@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Assistant Superintendent of Welfare Shelters (Exam 7072)
@@ -12,9 +12,9 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7072-2027-open@civilservice.nyc
+UID:exam-7072-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270407
 DTEND;VALUE=DATE:20270408
@@ -23,16 +23,16 @@ SUMMARY:Applications open: Assistant Superintendent of Welfare Shelters (Ex
 DESCRIPTION:Applications open for Assistant Superintendent of Welfare Shelt
  ers\, Exam 7072.\nApplication period: 2027-04-07 to 2027-04-27.\nApply thr
  ough OASys: https://www.nyc.gov/examsforjobs\nExam details: https://civils
- ervice.nyc/exam.html?exam=7072\nDates come from DCAS and can be extended. 
- Confirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7072
+ ervice.publicworks.nyc/exam.html?exam=7072\nDates come from DCAS and can b
+ e extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7072
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7072-2027-close@civilservice.nyc
+UID:exam-7072-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20270427
 DTEND;VALUE=DATE:20270428
@@ -41,9 +41,9 @@ SUMMARY:Last day to apply: Assistant Superintendent of Welfare Shelters (Ex
 DESCRIPTION:Today is the last day to apply for Assistant Superintendent of 
  Welfare Shelters\, Exam 7072.\nApplication period: 2027-04-07 to 2027-04-2
  7.\nApply through OASys: https://www.nyc.gov/examsforjobs\nExam details: h
- ttps://civilservice.nyc/exam.html?exam=7072\nDates come from DCAS and can 
- be extended. Confirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7072
+ ttps://civilservice.publicworks.nyc/exam.html?exam=7072\nDates come from D
+ CAS and can be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7072
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

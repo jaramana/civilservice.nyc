@@ -197,7 +197,7 @@ async function main() {
       return;
     }
 
-    document.title = `${exam.title}, Exam ${exam.exam_no} | NYC civil service`;
+    document.title = `${exam.title}, Exam ${exam.exam_no} | NYC Civil Service Exams`;
     document.getElementById("exam-no").textContent = `Exam ${exam.exam_no}`;
     document.getElementById("exam-title").textContent = exam.title;
 

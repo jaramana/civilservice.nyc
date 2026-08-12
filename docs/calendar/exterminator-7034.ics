@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Exterminator (Exam 7034)
@@ -12,36 +12,36 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7034-2027-open@civilservice.nyc
+UID:exam-7034-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20260902
 DTEND;VALUE=DATE:20260903
 SUMMARY:Applications open: Exterminator (Exam 7034)
 DESCRIPTION:Applications open for Exterminator\, Exam 7034.\nApplication pe
  riod: 2026-09-02 to 2026-09-22.\nApply through OASys: https://www.nyc.gov/
- examsforjobs\nExam details: https://civilservice.nyc/exam.html?exam=7034\n
- Dates come from DCAS and can be extended. Confirm on nyc.gov before relyin
- g on this.
-URL:https://civilservice.nyc/exam.html?exam=7034
+ examsforjobs\nExam details: https://civilservice.publicworks.nyc/exam.html
+ ?exam=7034\nDates come from DCAS and can be extended. Confirm on nyc.gov b
+ efore relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7034
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7034-2027-close@civilservice.nyc
+UID:exam-7034-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20260922
 DTEND;VALUE=DATE:20260923
 SUMMARY:Last day to apply: Exterminator (Exam 7034)
 DESCRIPTION:Today is the last day to apply for Exterminator\, Exam 7034.\nA
  pplication period: 2026-09-02 to 2026-09-22.\nApply through OASys: https:/
- /www.nyc.gov/examsforjobs\nExam details: https://civilservice.nyc/exam.htm
- l?exam=7034\nDates come from DCAS and can be extended. Confirm on nyc.gov 
- before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7034
+ /www.nyc.gov/examsforjobs\nExam details: https://civilservice.publicworks.
+ nyc/exam.html?exam=7034\nDates come from DCAS and can be extended. Confirm
+  on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7034
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT

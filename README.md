@@ -1,13 +1,9 @@
-# civilservice.nyc
+# NYC Civil Service Exams
 
 A website for New York City civil service exams and job titles.
 
-Live at [jaramana.github.io/civilservice.nyc](https://jaramana.github.io/civilservice.nyc/).
-
-The custom domain is not connected yet. When it is, add a `docs/CNAME` file
-containing `civilservice.nyc` and point the DNS at GitHub Pages. `SITE_BASE_URL`
-in `config.py` already assumes that domain, which is what the calendar files
-link to.
+The site is at
+[civilservice.publicworks.nyc](https://civilservice.publicworks.nyc).
 
 ## Background
 
@@ -18,8 +14,7 @@ The site is for anyone who wants to apply for a City civil service job, or who
 wants to check what a job title pays. Each exam shows its current status: open
 for applications, coming soon, or closed. Each job title shows its pay range.
 
-The site does not need an account. It does not track visitors. The code is
-open source.
+The site does not need an account and it does not track visitors.
 
 ## Data sources
 
@@ -30,7 +25,7 @@ open source.
 | [Civil Service List Certification](https://data.cityofnewyork.us/d/a9md-ynri) | Whether a list has been called, and hiring salaries |
 | [NYC Civil Service Titles](https://data.cityofnewyork.us/d/nzjr-3966) | Every title, with hours, salary range and union |
 | The DCAS exam pages | Application dates. The City updates these before its own open data. |
-| [thepaygap.nyc](http://thepaygap.nyc) | Median salary actually paid, as separate context |
+| [The Pay Gap](https://paygap.publicworks.nyc) | Median salary actually paid, as separate context |
 
 ## Analysis
 
@@ -196,8 +191,13 @@ docs/                    the website itself, served by GitHub Pages
 Nothing in `docs/data/` or `docs/calendar/` is written by hand. Both are
 regenerated from scratch on every run.
 
-## Credits
+## License
+
+Code is released under the
+[BSD 3-Clause license](https://opensource.org/licenses/BSD-3-Clause). The
+generated files under `docs/data/` and `docs/calendar/` are free to reuse with
+attribution.
 
 Data from [NYC Open Data](https://opendata.cityofnewyork.us/) and the New York
-City Department of Citywide Administrative Services. Salary context from
-[thepaygap.nyc](http://thepaygap.nyc).
+City Department of Citywide Administrative Services, which carry their own
+terms. Salary context from [The Pay Gap](https://paygap.publicworks.nyc).

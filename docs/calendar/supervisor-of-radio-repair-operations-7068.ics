@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//civilservice.nyc//NYC civil service exams//EN
+PRODID:-//civilservice.publicworks.nyc//NYC civil service exams//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 NAME:Supervisor of Radio Repair Operations (Exam 7068)
@@ -12,9 +12,9 @@ X-WR-CALDESC:Application periods for New York City civil service exams. Dat
 X-WR-TIMEZONE:America/New_York
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
-SOURCE;VALUE=URI:https://civilservice.nyc/exams.ics
+SOURCE;VALUE=URI:https://civilservice.publicworks.nyc/exams.ics
 BEGIN:VEVENT
-UID:exam-7068-2027-open@civilservice.nyc
+UID:exam-7068-2027-open@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20261202
 DTEND;VALUE=DATE:20261203
@@ -23,16 +23,16 @@ SUMMARY:Applications open: Supervisor of Radio Repair Operations (Exam 7068
 DESCRIPTION:Applications open for Supervisor of Radio Repair Operations\, E
  xam 7068.\nApplication period: 2026-12-02 to 2026-12-22.\nApply through OA
  Sys: https://www.nyc.gov/examsforjobs\nExam details: https://civilservice.
- nyc/exam.html?exam=7068\nDates come from DCAS and can be extended. Confirm
-  on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7068
+ publicworks.nyc/exam.html?exam=7068\nDates come from DCAS and can be exten
+ ded. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7068
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:exam-7068-2027-close@civilservice.nyc
+UID:exam-7068-2027-close@civilservice.publicworks.nyc
 DTSTAMP:20260722T000000Z
 DTSTART;VALUE=DATE:20261222
 DTEND;VALUE=DATE:20261223
@@ -41,9 +41,9 @@ SUMMARY:Last day to apply: Supervisor of Radio Repair Operations (Exam 7068
 DESCRIPTION:Today is the last day to apply for Supervisor of Radio Repair O
  perations\, Exam 7068.\nApplication period: 2026-12-02 to 2026-12-22.\nApp
  ly through OASys: https://www.nyc.gov/examsforjobs\nExam details: https://
- civilservice.nyc/exam.html?exam=7068\nDates come from DCAS and can be exte
- nded. Confirm on nyc.gov before relying on this.
-URL:https://civilservice.nyc/exam.html?exam=7068
+ civilservice.publicworks.nyc/exam.html?exam=7068\nDates come from DCAS and
+  can be extended. Confirm on nyc.gov before relying on this.
+URL:https://civilservice.publicworks.nyc/exam.html?exam=7068
 CATEGORIES:NYC Civil Service Exams
 SEQUENCE:2394
 TRANSP:TRANSPARENT
